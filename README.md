@@ -1,2 +1,1 @@
-# dashboard-nvim
-neovim dashboard 
+# Dashboard-nvim
