@@ -10,6 +10,7 @@ if !get(g:, 'dashboard_disable_at_vimenter') && (!has('nvim') || has('nvim-0.3.5
   set shortmess+=I
 endif
 
+" Use clap and fzf as executive
 let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
 
 augroup dashboard
