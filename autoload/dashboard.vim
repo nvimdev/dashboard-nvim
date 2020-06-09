@@ -4,6 +4,11 @@ if exists('g:autoloaded_dashboard') || &compatible
 endif
 let g:autoloaded_dashboard = 1
 
+function! dashboard#get_lastline() abort
+  let b:dashboard.lastline = line('$')
+  return b:dashboard.lastline + 1
+endfunction
+
 let s:header = [
       \ '',
       \ '',
@@ -17,18 +22,13 @@ let s:header = [
       \ '',
       \ ]
 
-let s:footer = [
-      \ '      Have fun with Dashboard ^_^       ',
-      \ '',
-      \ ]
-
 let s:section = [
       \ '',
       \ 'Reload  last  session                          SPC s l',
       \ '',
       \ 'Recently opened files                          SPC f h',
       \ '',
-      \ 'Jump   to   bookmarkd                          SPC f b',
+      \ 'Jump   to   bookmark                           SPC f b',
       \ '',
       \ '',]
 
@@ -64,6 +64,7 @@ function! dashboard#insane_in_the_membrane(on_vimenter) abort
         \ signcolumn=no
         \ synmaxcol&
         \ laststauts=0
+  setlocal showtabline=0
 
   call append('$'," ")
 
@@ -90,10 +91,10 @@ function! dashboard#insane_in_the_membrane(on_vimenter) abort
   normal! zb
   set filetype=dashboard
 
+  let b:dashboard.lastline = line('$')
+
   " Set footer
-  let footer = exists('g:dashboard_custom_footer')
-        \ ? s:set_custom_section(s:set_drawer_center(g:dashboard_custom_footer))
-        \ : s:set_custom_section(s:set_drawer_center(s:footer))
+  let footer = s:set_custom_section(s:set_drawer_center(s:print_plugins_message()))
   if !empty(footer)
     let footer = [''] + footer
   endif
@@ -131,9 +132,10 @@ endfunction
 
 function! s:print_plugins_message() abort
   let l:total_plugins = len(dein#get())
-  return 'Load' . l:total_plugins . ' plugins in'
-
-
+  let l:footer=[]
+  let footer_string='load  ' . l:total_plugins . ' plugins  in times'
+  call insert(l:footer,footer_string)
+  return l:footer
 endfunction
 
 " vim: et sw=2 sts=2
