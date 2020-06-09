@@ -24,9 +24,12 @@ let s:footer = [
 
 let s:section = [
       \ '',
-      \ 'Reload  last  session          SPC s l',
-      \ 'Recently opened files          SPC f h',
-      \ 'Jump   to   bookmarkd          SPC f b',
+      \ 'Reload  last  session                          SPC s l',
+      \ '',
+      \ 'Recently opened files                          SPC f h',
+      \ '',
+      \ 'Jump   to   bookmarkd                          SPC f b',
+      \ '',
       \ '',]
 
 " Function: #insane_in_the_membrane {{{1
@@ -124,6 +127,13 @@ function! s:set_custom_section(section) abort
     return empty(a:section) ? [] : eval(a:section)
   endif
   return []
+endfunction
+
+function! s:print_plugins_message() abort
+  let l:total_plugins = len(dein#get())
+  return 'Load' . l:total_plugins . ' plugins in'
+
+
 endfunction
 
 " vim: et sw=2 sts=2
