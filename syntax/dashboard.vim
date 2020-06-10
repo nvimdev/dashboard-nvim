@@ -5,7 +5,7 @@ endif
 
 syntax sync fromstart
 
-execute 'syntax region DashboardHeader start=/\%1l/ end=/\%'. (len(g:dashboard_header) + 2) .'l/'
+execute 'syntax region DashboardHeader start=/\%1l/ end=/\%'. (len(g:dashboard_header) + 3) .'l/'
 
 execute 'syntax region DashboardFooter start=/\%'. dashboard#get_lastline() .'l/ end=/\_.*/'
 
