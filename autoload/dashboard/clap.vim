@@ -14,3 +14,8 @@ endfunction
 function! dashboard#clap#find_word() abort
   Clap grep2
 endfunction
+
+function! dashboard#clap#book_marks() abort
+  Clap marks
+endfunction
+

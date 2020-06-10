@@ -31,6 +31,7 @@ let s:Section = {
   \ 'find_file'            :[' Find  File                            SPC f f'],
   \ 'change_colorscheme'   :[' Change Colorscehme                    SPC t c'],
   \ 'find_word'            :[' Find  word                            SPC f a'],
+  \ 'book_marks'           :[' Jump to book marks                    SPC f a'],
   \ }
 
 " Function: #insane_in_the_membrane {{{1
@@ -105,10 +106,16 @@ function! dashboard#instance(on_vimenter) abort
   call s:register(line('$'), 'change_colorscheme', 'change_colorscheme')
   call append('$', empty_lines)
 
-  " Dashboard center section: book marks
+  " Dashboard center section: find words
   let dashboard_find_word = s:set_custom_section(s:set_drawer_center(s:Section['find_word']))
   call append('$',dashboard_find_word)
   call s:register(line('$'), 'find_word', 'find_word')
+  call append('$', empty_lines)
+
+  " Dashboard center section: book marks
+  let dashboard_book_marks = s:set_custom_section(s:set_drawer_center(s:Section['book_marks']))
+  call append('$',dashboard_book_marks)
+  call s:register(line('$'), 'book_marks', 'book_marks')
   call append('$', empty_lines)
 
   " Set footer
@@ -120,8 +127,9 @@ function! dashboard#instance(on_vimenter) abort
   call append('$', footer)
 
   setlocal nomodifiable nomodified
-
   call s:set_mappings()
+  call cursor(b:dashboard.centerline+1,38)
+
   silent! %foldopen!
   normal! zb
   set filetype=dashboard
@@ -172,11 +180,11 @@ function! s:register(line, index, cmd )
 endfunction
 
 " Function: s:set_mappings {{{1
-function! s:set_mappings() abort
+function! s:set_mappings()
   nnoremap <buffer><nowait><silent> <cr>      :call <sid>call_line_function()<CR>
 endfunction
 
-function s:call_line_function() abort
+function! s:call_line_function()
   let l:current_line = getpos('.')[1]
   if has_key(b:dashboard.entries, l:current_line)
     let l:method = b:dashboard.entries[l:current_line]['cmd']
@@ -184,4 +192,7 @@ function s:call_line_function() abort
   endif
 endfunction
 
+function! s:set_cursor()
+  call cursor(b:startify.firstline, 5)
+endfunction
 " vim: et sw=2 sts=2
