@@ -75,14 +75,11 @@ function! dashboard#insane_in_the_membrane(on_vimenter) abort
 
   let b:dashboard = {
         \ 'entries':   {},
-        \ 'indices':   [],
-        \ 'leftmouse': 0,
-        \ 'tick':      0,
         \ }
 
   let dashboard_center = s:set_custom_section(s:set_drawer_center(s:section))
   call append('$',dashboard_center)
-  call s:register(line('$'),'q' , 'special', 'call s:open_clap()', '')
+  call s:register(line('$'), 'find_file', 'find_file')
 
   let b:dashboard.lastline = line('$')
   " Set footer
@@ -137,20 +134,25 @@ function! s:print_plugins_message() abort
 endfunction
 
 " Function: s:register {{{1
-function! s:register(line, index, type, cmd, path)
+function! s:register(line, index, cmd )
   let b:dashboard.entries[a:line] = {
         \ 'index':  a:index,
-        \ 'type':   a:type,
         \ 'line':   a:line,
         \ 'cmd':    a:cmd,
-        \ 'path':   a:path,
-        \ 'marked': 0,
         \ }
 endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
-  nnoremap <buffer><nowait><silent> <cr>          :call dashboard#{g:dashboard_executive}#find_file()<CR>
+  nnoremap <buffer><nowait><silent> <cr>      :call <sid>call_line_function()<CR>
+endfunction
+
+function s:call_line_function() abort
+  let l:current_line = getpos('.')[1]
+  if has_key(b:dashboard.entries, l:current_line)
+    let l:method = b:dashboard.entries[l:current_line]['cmd']
+    call dashboard#{g:dashboard_executive}#{l:method}()
+  endif
 endfunction
 
 " vim: et sw=2 sts=2
