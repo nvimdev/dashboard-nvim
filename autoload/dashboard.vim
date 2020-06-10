@@ -6,7 +6,12 @@ let g:autoloaded_dashboard = 1
 
 function! dashboard#get_lastline() abort
   let b:dashboard.lastline = line('$')
-  return b:dashboard.lastline + 1
+  return b:dashboard.lastline
+endfunction
+
+function! dashboard#get_centerline() abort
+  let b:dashboard.centerline = line('$')
+  return b:dashboard.centerline
 endfunction
 
 let s:header = [
@@ -22,11 +27,15 @@ let s:header = [
       \ '',
       \ ]
 
-let s:section = [
-      \ 'Quick Find File                       SPC s l']
+let s:Section = {
+  \ 'find_history'         :['Recently opened files                 SPC f h'],
+  \ 'find_file'            :['Find  File                            SPC f f'],
+  \ 'change_colorscheme'   :['Change Colorscehme                    SPC t c'],
+  \ 'find_word'            :['Find  word                            SPC f a'],
+  \ }
 
 " Function: #insane_in_the_membrane {{{1
-function! dashboard#insane_in_the_membrane(on_vimenter) abort
+function! dashboard#instance(on_vimenter) abort
   " Handle vim -y, vim -M.
   if a:on_vimenter && (&insertmode || !&modifiable)
     return
@@ -64,6 +73,7 @@ function! dashboard#insane_in_the_membrane(on_vimenter) abort
   for i in repeat([0],(winheight(0) / 4) - 5)
     call append('$', empty_lines)
   endfor
+
   " Set Header
   let g:dashboard_header = exists('g:dashboard_custom_header')
         \ ? s:set_custom_section(s:set_drawer_center(g:dashboard_custom_header))
@@ -76,18 +86,37 @@ function! dashboard#insane_in_the_membrane(on_vimenter) abort
   let b:dashboard = {
         \ 'entries':   {},
         \ }
+  let b:dashboard.centerline = line('$')
+  " Dashboard center section: find history file
+  let dashboard_find_history = s:set_custom_section(s:set_drawer_center(s:Section['find_history']))
+  call append('$',dashboard_find_history)
+  call s:register(line('$'), 'find_history', 'find_history')
+  call append('$', empty_lines)
 
-  let dashboard_center = s:set_custom_section(s:set_drawer_center(s:section))
-  call append('$',dashboard_center)
+  " Dashboard center section: find file
+  let dashboard_find_file = s:set_custom_section(s:set_drawer_center(s:Section['find_file']))
+  call append('$',dashboard_find_file)
   call s:register(line('$'), 'find_file', 'find_file')
+  call append('$', empty_lines)
 
-  let b:dashboard.lastline = line('$')
+  " Dashboard center section: Change Colorscheme
+  let dashboard_change_colorscheme = s:set_custom_section(s:set_drawer_center(s:Section['change_colorscheme']))
+  call append('$',dashboard_change_colorscheme)
+  call s:register(line('$'), 'change_colorscheme', 'change_colorscheme')
+  call append('$', empty_lines)
+
+  " Dashboard center section: book marks
+  let dashboard_find_word = s:set_custom_section(s:set_drawer_center(s:Section['find_word']))
+  call append('$',dashboard_find_word)
+  call s:register(line('$'), 'find_word', 'find_word')
+  call append('$', empty_lines)
+
   " Set footer
+  let b:dashboard.lastline = line('$')
   let footer = s:set_custom_section(s:set_drawer_center(s:print_plugins_message()))
   if !empty(footer)
     let footer = [''] + footer
   endif
-  call append('$', empty_lines)
   call append('$', footer)
 
   setlocal nomodifiable nomodified
