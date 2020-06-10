@@ -10,7 +10,6 @@ function! dashboard#get_lastline() abort
 endfunction
 
 function! dashboard#get_centerline() abort
-  let b:dashboard.centerline = line('$')
   return b:dashboard.centerline
 endfunction
 
@@ -28,10 +27,10 @@ let s:header = [
       \ ]
 
 let s:Section = {
-  \ 'find_history'         :['Recently opened files                 SPC f h'],
-  \ 'find_file'            :['Find  File                            SPC f f'],
-  \ 'change_colorscheme'   :['Change Colorscehme                    SPC t c'],
-  \ 'find_word'            :['Find  word                            SPC f a'],
+  \ 'find_history'         :['ﭯ Recently opened files                 SPC f h'],
+  \ 'find_file'            :[' Find  File                            SPC f f'],
+  \ 'change_colorscheme'   :[' Change Colorscehme                    SPC t c'],
+  \ 'find_word'            :[' Find  word                            SPC f a'],
   \ }
 
 " Function: #insane_in_the_membrane {{{1
@@ -82,6 +81,7 @@ function! dashboard#instance(on_vimenter) abort
     let g:dashboard_header += ['']  " add blank line
   endif
   call append('$', g:dashboard_header)
+  call append('$', empty_lines)
 
   let b:dashboard = {
         \ 'entries':   {},
