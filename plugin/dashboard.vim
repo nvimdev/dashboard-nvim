@@ -21,7 +21,7 @@ augroup END
 function! s:loaded_dashboard() abort
   if !argc() && line2byte('$') == -1
     if !get(g:, 'dashboard_disable_at_vimenter')
-      call dashboard#insane_in_the_membrane(1)
+      call dashboard#instance(1)
     endif
   endif
   autocmd! dashboard VimEnter
