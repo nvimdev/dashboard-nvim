@@ -10,8 +10,14 @@ if !get(g:, 'dashboard_disable_at_vimenter') && (!has('nvim') || has('nvim-0.3.5
   set shortmess+=I
 endif
 
-" Use clap and fzf as executive
+let s:home_dir = getenv('HOME')
+
+" Use clap  fzf denite  as executive
 let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
+
+" Options
+let g:session_directory = get(g:, 'session_directory',  s:home_dir . '/.cache/vim/session')
+let g:session_enable = get(g:,'dashboard_enable_session',1)
 
 augroup dashboard
   autocmd!
@@ -27,5 +33,24 @@ function! s:loaded_dashboard() abort
   autocmd! dashboard VimEnter
 endfunction
 
+if g:session_enable
+  " Save and persist session
+  command! -nargs=? -complete=customlist,sessions#session#session_list SessionSave
+    \ call sessions#session#session_save(<q-args>)
+
+  " Load and persist session
+  command! -nargs=? -complete=customlist,sessions#session#session_list SessionLoad
+    \ call sessions#session#session_load(<q-args>)
+
+  " Save session on quit if one is loaded
+  augroup plugin_sessions
+    autocmd!
+    " If session is loaded, write session file on quit
+    autocmd VimLeavePre *
+      \ if ! empty(v:this_session) && ! exists('g:SessionLoad')
+      \ |   execute 'mksession! ' . fnameescape(v:this_session)
+      \ | endif
+  augroup END
+endif
 
 " vim: et sw=2 sts=2
