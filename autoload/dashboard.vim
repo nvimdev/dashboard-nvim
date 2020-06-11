@@ -29,6 +29,7 @@ let s:header = [
       \ ]
 
 let s:Section = {
+  \ 'last_session'         :[' Recently lase session                 SPC s l'],
   \ 'find_history'         :['ﭯ Recently opened files                 SPC f h'],
   \ 'find_file'            :[' Find  File                            SPC f f'],
   \ 'change_colorscheme'   :[' Change Colorscehme                    SPC t c'],
@@ -90,6 +91,15 @@ function! dashboard#instance(on_vimenter) abort
         \ 'entries':   {},
         \ }
   let b:dashboard.centerline = line('$')
+
+  if g:session_enable
+    " Dashboard center section: last session
+    let dashboard_last_session = s:set_custom_section(s:set_drawer_center(s:Section['last_session']))
+    call append('$',dashboard_last_session)
+    call s:register(line('$'), 'last_session', 'last_session')
+    call append('$', empty_lines)
+  endif
+
   " Dashboard center section: find history file
   let dashboard_find_history = s:set_custom_section(s:set_drawer_center(s:Section['find_history']))
   call append('$',dashboard_find_history)
@@ -221,7 +231,7 @@ function! s:set_cursor() abort
   endif
 
   " don't go beyond first or last entry
-  let b:dashboard.newline = max([b:dashboard.centerline+1, min([b:dashboard.centerline+9, b:dashboard.newline])])
+  let b:dashboard.newline = max([b:dashboard.centerline+1, min([b:dashboard.centerline+11, b:dashboard.newline])])
 
   call cursor(b:dashboard.newline, s:fixed_column)
 endfunction
