@@ -1,3 +1,6 @@
+" Plugin:      https://github.com/hardcoreplayers/vim-dashboard
+" Description: A fancy start screen for Vim.
+" Maintainer:  Glepnir <http://github.com/glepnir>
 
 if exists('g:loaded_dashboard') || &cp
   finish
