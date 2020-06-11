@@ -32,13 +32,26 @@ let s:header = [
       \ '',
       \ ]
 
+let s:dashboard_shutcut={}
+
+if exists('g:dashboard_custom_shutcut')
+  let s:dashboard_shutcut=copy(g:dashboard_custom_shutcut)
+else
+  let s:dashboard_shutcut['last_session'] = 'SPC s l'
+  let s:dashboard_shutcut['find_history'] = 'SPC f h'
+  let s:dashboard_shutcut['find_file'] = 'SPC f f'
+  let s:dashboard_shutcut['change_colorscheme'] = 'SPC t c'
+  let s:dashboard_shutcut['find_word'] = 'SPC f a'
+  let s:dashboard_shutcut['book_marks'] = 'SPC f b'
+endif
+
 let s:Section = {
-  \ 'last_session'         :[' Recently lase session                 SPC s l'],
-  \ 'find_history'         :['ﭯ Recently opened files                 SPC f h'],
-  \ 'find_file'            :[' Find  File                            SPC f f'],
-  \ 'change_colorscheme'   :[' Change Colorscehme                    SPC t c'],
-  \ 'find_word'            :[' Find  word                            SPC f a'],
-  \ 'book_marks'           :[' Jump to book marks                    SPC f a'],
+  \ 'last_session'         :[' Recently lase session                 '.s:dashboard_shutcut['last_session']],
+  \ 'find_history'         :['ﭯ Recently opened files                 '.s:dashboard_shutcut['find_history']],
+  \ 'find_file'            :[' Find  File                            '.s:dashboard_shutcut['find_file']],
+  \ 'change_colorscheme'   :[' Change Colorscehme                    '.s:dashboard_shutcut['change_colorscheme']],
+  \ 'find_word'            :[' Find  word                            '.s:dashboard_shutcut['find_word']],
+  \ 'book_marks'           :[' Jump to book marks                    '.s:dashboard_shutcut['book_marks']],
   \ }
 
 " Function: #insane_in_the_membrane {{{1
