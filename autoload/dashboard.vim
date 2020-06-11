@@ -25,6 +25,7 @@ let s:header = [
       \ ' ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ',
       \ ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
       \ '',
+      \ '                     [ Dashboard version : '. g:dashboard_version .' ]     ',
       \ '',
       \ ]
 
@@ -73,7 +74,7 @@ function! dashboard#instance(on_vimenter) abort
 
   " config the header margin-top
   let empty_lines = ['']
-  for i in repeat([0],(winheight(0) / 4) - 5)
+  for i in repeat([0],(winheight(0) / 4) - 6)
     call append('$', empty_lines)
   endfor
 
@@ -85,6 +86,7 @@ function! dashboard#instance(on_vimenter) abort
     let g:dashboard_header += ['']  " add blank line
   endif
   call append('$', g:dashboard_header)
+  call append('$', empty_lines)
   call append('$', empty_lines)
 
   let b:dashboard = {
@@ -131,12 +133,19 @@ function! dashboard#instance(on_vimenter) abort
   call append('$', empty_lines)
 
   " Set footer
+  for i in repeat([0],3)
+    call append('$', empty_lines)
+  endfor
+
   let b:dashboard.lastline = line('$')
-  let footer = s:set_custom_section(s:set_drawer_center(s:print_plugins_message()))
+  let footer = exists('g:startify_custom_footer')
+    \ ? s:set_custom_section(s:set_drawer_center(g:dashboard_custom_footer))
+    \ : s:set_custom_section(s:set_drawer_center(s:print_plugins_message()))
   if !empty(footer)
     let footer = [''] + footer
   endif
   call append('$', footer)
+
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
@@ -178,9 +187,14 @@ function! s:set_custom_section(section) abort
 endfunction
 
 function! s:print_plugins_message() abort
+  if has('nvim')
+    let l:vim = 'neovim'
+  else
+    let l:vim = 'vim'
+  endif
   let l:total_plugins = len(dein#get())
   let l:footer=[]
-  let footer_string='load  ' . l:total_plugins . ' plugins  in times'
+  let footer_string= l:vim .' loaded ' . l:total_plugins . ' plugins '
   call insert(l:footer,footer_string)
   return l:footer
 endfunction
