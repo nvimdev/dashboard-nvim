@@ -2,10 +2,6 @@
 " Description: A fancy start screen for Vim.
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
-function! sessions#session#load_session()
-  SessionLoad
-endfunction
-
 function! sessions#session#session_save(name)
   if ! isdirectory(g:session_directory)
     call mkdir(g:session_directory, 'p')
