@@ -12,10 +12,9 @@ endif
 
 let s:home_dir = getenv('HOME')
 
-" Use clap  fzf denite  as executive
-let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
-
 " Options
+let g:dashboard_version = '0.0.1'
+let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
 let g:session_directory = get(g:, 'session_directory',  s:home_dir . '/.cache/vim/session')
 let g:session_enable = get(g:,'dashboard_enable_session',1)
 
