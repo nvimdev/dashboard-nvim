@@ -233,11 +233,7 @@ function! s:call_line_function()
   let l:current_line = getpos('.')[1]
   if has_key(b:dashboard.entries, l:current_line)
     let l:method = b:dashboard.entries[l:current_line]['cmd']
-    if l:method == 'load_session'
-      call sessions#session#{l:method}()
-    else
-      call dashboard#{g:dashboard_executive}#{l:method}()
-    endif
+    call dashboard#handler#{l:method}()
   endif
 endfunction
 
