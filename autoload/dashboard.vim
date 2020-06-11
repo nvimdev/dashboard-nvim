@@ -90,7 +90,7 @@ function! dashboard#instance(on_vimenter) abort
 
   " config the header margin-top
   let empty_lines = ['']
-  for i in repeat([0],(winheight(0) / 4) - 6)
+  for i in repeat([0],(winheight(0) / 4) - 8)
     call append('$', empty_lines)
   endfor
 
