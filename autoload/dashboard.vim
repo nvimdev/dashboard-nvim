@@ -208,7 +208,11 @@ function! s:print_plugins_message() abort
   else
     let l:vim = 'vim'
   endif
-  let l:total_plugins = len(dein#get())
+  if stridx(&runtimepath,'dein.vim')
+    let l:total_plugins = len(dein#get())
+  elseif stridx(&runtimepath, 'plug.vim')
+    let l:total_plugins = len(g:plugs)
+  endif
   let l:footer=[]
   let footer_string= l:vim .' loaded ' . l:total_plugins . ' plugins '
   call insert(l:footer,footer_string)

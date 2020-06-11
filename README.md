@@ -69,6 +69,14 @@
   you can disable dashboard session by `g:dashboard_enable_session`. `0` means disable session.
   set the `dashboard_session_directory` to change the session folder
   default is `~/.cache/vim/session`
+- Highlight group
+  ```VimL
+  DashboardHeader
+  DashboardCenter
+  DashboardShutCut
+  DashboardFooter
+  ```
+- Autocmd `Dashboard` `DashboardReady` same as vim-startify
 
 ## MinialVimrc
 
