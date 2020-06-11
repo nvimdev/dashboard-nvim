@@ -149,10 +149,7 @@ function! dashboard#instance(on_vimenter) abort
   call append('$', empty_lines)
 
   " Set footer
-  for i in repeat([0],3)
-    call append('$', empty_lines)
-  endfor
-
+  call append('$', empty_lines)
   let b:dashboard.lastline = line('$')
   let footer = exists('g:startify_custom_footer')
     \ ? s:set_custom_section(s:set_drawer_center(g:dashboard_custom_footer))
