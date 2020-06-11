@@ -4,6 +4,8 @@ if exists('g:autoloaded_dashboard') || &compatible
 endif
 let g:autoloaded_dashboard = 1
 
+let s:fixed_column = 0
+
 function! dashboard#get_lastline() abort
   let b:dashboard.lastline = line('$')
   return b:dashboard.lastline
@@ -128,7 +130,10 @@ function! dashboard#instance(on_vimenter) abort
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
-  call cursor(b:dashboard.centerline+1,38)
+  call cursor(b:dashboard.centerline+1,0)
+  normal! ^ w
+  let s:fixed_column = getpos('.')[2]
+  autocmd dashboard CursorMoved <buffer> call s:set_cursor()
 
   silent! %foldopen!
   normal! zb
@@ -192,7 +197,32 @@ function! s:call_line_function()
   endif
 endfunction
 
-function! s:set_cursor()
-  call cursor(b:startify.firstline, 5)
+" Function: s:set_cursor {{{1
+function! s:set_cursor() abort
+  let b:dashboard.oldline = exists('b:dashboard.newline') ? b:dashboard.newline : 2 + s:fixed_column
+  let b:dashboard.newline = line('.')
+
+  " going up (-1) or down (1)
+  if b:dashboard.oldline == b:dashboard.newline
+        \ && col('.') != s:fixed_column
+        \ && !b:dashboard.leftmouse
+    let movement = 2 * (col('.') > s:fixed_column) - 1
+    let b:dashboard.newline += movement
+  else
+    let movement = 2 * (b:dashboard.newline > b:dashboard.oldline) - 1
+    let b:dashboard.leftmouse = 0
+  endif
+
+  let b:dashboard.newline += movement
+
+  " skip blank lines between lists
+  if empty(getline(b:dashboard.newline))
+    let b:dashboard.newline += movement
+  endif
+
+  " don't go beyond first or last entry
+  let b:dashboard.newline = max([b:dashboard.centerline+1, min([b:dashboard.centerline+9, b:dashboard.newline])])
+
+  call cursor(b:dashboard.newline, s:fixed_column)
 endfunction
 " vim: et sw=2 sts=2
