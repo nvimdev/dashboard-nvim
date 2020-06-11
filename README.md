@@ -8,15 +8,15 @@
 
 - vim-plug
 
-```vim
-Plug 'hardcoreplayers/dashboard-nvim'
-```
+  ```vim
+  Plug 'hardcoreplayers/dashboard-nvim'
+  ```
 
 - dein
 
-```vim
-call dein#add('hardcoreplayers/dashboard-nvim')
-```
+  ```vim
+  call dein#add('hardcoreplayers/dashboard-nvim')
+  ```
 
 ## Options
 
