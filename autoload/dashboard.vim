@@ -1,3 +1,6 @@
+" Plugin:      https://github.com/hardcoreplayers/vim-dashboard
+" Description: A fancy start screen for Vim.
+" Maintainer:  Glepnir <http://github.com/glepnir>
 
 if exists('g:autoloaded_dashboard') || &compatible
   finish
@@ -98,7 +101,7 @@ function! dashboard#instance(on_vimenter) abort
     " Dashboard center section: last session
     let dashboard_last_session = s:set_custom_section(s:set_drawer_center(s:Section['last_session']))
     call append('$',dashboard_last_session)
-    call s:register(line('$'), 'last_session', 'last_session')
+    call s:register(line('$'), 'load_session', 'load_session')
     call append('$', empty_lines)
   endif
 
@@ -217,7 +220,11 @@ function! s:call_line_function()
   let l:current_line = getpos('.')[1]
   if has_key(b:dashboard.entries, l:current_line)
     let l:method = b:dashboard.entries[l:current_line]['cmd']
-    call dashboard#{g:dashboard_executive}#{l:method}()
+    if l:method == 'load_session'
+      call sessions#session#{l:method}()
+    else
+      call dashboard#{g:dashboard_executive}#{l:method}()
+    endif
   endif
 endfunction
 
