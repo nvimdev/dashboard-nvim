@@ -55,4 +55,5 @@ if g:session_enable
   augroup END
 endif
 
+command! -nargs=0 -bar Dashboard call dashboard#instance(0)
 " vim: et sw=2 sts=2
