@@ -115,3 +115,7 @@ call dein#add('hardcoreplayers/dashboard-nvim')
 - Inspired by [doom emacs](https://github.com/hlissner/doom-emacs)
 
 - [vim-startify](https://github.com/mhinz/vim-startify)
+
+## LICENSE
+
+- MIT
