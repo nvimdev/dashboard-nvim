@@ -34,9 +34,9 @@
   let g:dashboard_executive ='clap' --default
   ```
 
-- The `g:dashboard_custom_shutcut` means that what keymaps used for these commands,Just a tip like `whichkey`.
+- The `g:dashboard_custom_shortcut` means that what keymaps used for these commands,Just a tip like `whichkey`.
   On the dashboard, you only need to trigger it by pressing Enter on line.
-  if you already define these commands keymaps just set it into `g:dashboard_custom_shutcut`,
+  if you already define these commands keymaps just set it into `g:dashboard_custom_shortcut`,
 
   ```
   dashboard-nvim: SessionSave
@@ -48,12 +48,12 @@
 
   ```viml
   eg :
-    let g:dashboard_custon_shutcut['last_session'] = 'SPC s l'
-    let g:dashboard_custon_shutcut['find_history'] = 'SPC f h'
-    let g:dashboard_custon_shutcut['find_file'] = 'SPC f f'
-    let g:dashboard_custon_shutcut['change_colorscheme'] = 'SPC t c'
-    let g:dashboard_custon_shutcut['find_word'] = 'SPC f a'
-    let g:dashboard_custon_shutcut['book_marks'] = 'SPC f b'
+    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
@@ -73,7 +73,7 @@
   ```VimL
   DashboardHeader
   DashboardCenter
-  DashboardShutCut
+  DashboardShortcut
   DashboardFooter
   ```
 - Autocmd `Dashboard` `DashboardReady` same as vim-startify
@@ -94,12 +94,12 @@
   nnoremap <silent> <Leader>fa :<C-u>Clap grep2<CR>
   nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
 
-  let g:dashboard_custon_shutcut['last_session'] = 'SPC s l'
-  let g:dashboard_custon_shutcut['find_history'] = 'SPC f h'
-  let g:dashboard_custon_shutcut['find_file'] = 'SPC f f'
-  let g:dashboard_custon_shutcut['change_colorscheme'] = 'SPC t c'
-  let g:dashboard_custon_shutcut['find_word'] = 'SPC f a'
-  let g:dashboard_custon_shutcut['book_marks'] = 'SPC f b'
+  let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+  let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+  let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+  let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+  let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+  let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
 - dashboard-nvim with fzf.vim
@@ -116,12 +116,12 @@
   nnoremap <silent> <Leader>fa :Rg<CR>
   nnoremap <silent> <Leader>fb :Marks<CR>
 
-  let g:dashboard_custon_shutcut['last_session'] = 'SPC s l'
-  let g:dashboard_custon_shutcut['find_history'] = 'SPC f h'
-  let g:dashboard_custon_shutcut['find_file'] = 'SPC f f'
-  let g:dashboard_custon_shutcut['change_colorscheme'] = 'SPC t c'
-  let g:dashboard_custon_shutcut['find_word'] = 'SPC f a'
-  let g:dashboard_custon_shutcut['book_marks'] = 'SPC f b'
+  let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+  let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+  let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+  let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+  let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+  let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
 ## Donate
