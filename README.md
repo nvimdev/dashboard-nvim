@@ -138,6 +138,10 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
+## TODO
+
+- [ ] Support custom center section
+
 ## FAQ
 
 - What is it different from vim-startify ?
