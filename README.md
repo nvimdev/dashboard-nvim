@@ -7,7 +7,7 @@
 <p align="center">
   <b><a href="https://github.com/hardcoreplayers/dashboard-nvim/wiki">Demo Screenshots</a></b>
   |
-  <b><a href="/docs">docs</a></b>
+  <b><a href="/doc/dashboard.txt">doc</a></b>
 </p>
 
 ## Install
@@ -34,17 +34,29 @@
   let g:dashboard_executive ='clap' --default
   ```
 
-- The `g:dashboard_custom_shortcut` means that what keymaps used for these commands,Just a tip like `whichkey`.
-  On the dashboard, you only need to trigger it by pressing Enter on line.
-  if you already define these commands keymaps just set it into `g:dashboard_custom_shortcut`,
+- Dashboard wrap some `vim-clap` and `fzf.vim` commands with window config, And
+  the dashboard commands execute tool depends on what plugin you used
 
-  ```
-  dashboard-nvim: SessionSave
-  fzf.vim : History Files Colors Rg Marks
+  - DashboardFindFile same as
+    - vim-clap: `Clap history Clap files ++finder=rg --ignore --hidden --files`
+    - fzf.vim : `Files`
+  - DashboardFindHistory same as
+    - vim-clap: `Clap history`
+    - fzf.vim : `History`
+  - DashboardChangeColorscheme same as
+    - vim-clap: `Clap colors`
+    - fzf.vim : `Colors`
+  - DashboardFindWord same as
+    - vim-clap: `Clap grep2`
+    - fzf.vim : `Rg`
+  - DashboardJumpMark same as
+    - vim-clap: `Clap marks`
+    - fzf.vim : `Marks`
 
-  vim-clap : Clap history Clap files ++finder=rg --ignore --hidden --files
-  Clap colors Clap grep2 Clap marks
-  ```
+  If you already define the vim-clap and fzf commands, just set your keymaps
+  into the `g:dashboard_custom_shortcut`.
+  If you want use the Dashboard wrap commands. you can define the dashboard
+  commands keymap then set it into `g:dashboard_custom_shutcut`
 
   ```viml
   eg :
@@ -78,7 +90,9 @@
   ```
 - Autocmd `Dashboard` `DashboardReady` same as vim-startify
 
-## MinialVimrc
+## Minial vimrc
+
+you can replace the vim-clap or fzf.vim commands by dashboard commands
 
 - dashboard-nvim with vim-clap
 
