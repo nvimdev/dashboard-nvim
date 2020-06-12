@@ -23,13 +23,6 @@ COMMANDS                                                     *dashboard-commands
     :Dashboard
 <
 Open the dashboard buffer.
-                                                             *dashboard-:SessionSave*
-                                                             *dashboard-:SsessionLoad*
->
-    :SessionSave
-    :SessionLoad
-<
-Save or Load a session
                                                               *dashboard-:SessionSave*
 >
     :SessionSave
