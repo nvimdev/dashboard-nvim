@@ -169,7 +169,3 @@ Do you like dashboard-nvim? [buy me a coffe](https://salt.bountysource.com/teams
 ## LICENSE
 
 - MIT
-
-```
-
-```
