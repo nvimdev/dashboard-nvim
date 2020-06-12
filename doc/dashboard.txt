@@ -1,0 +1,240 @@
+*dashboard.txt*  The fancy start screen.
+*dashboard*
+==============================================================================
+CONTENTS                                                     *dashboard-contents*
+
+    INTRO .......................................... |dashboard-intro|
+    COMMANDS ....................................... |dashboard-commands|
+    OPTIONS ........................................ |dashboard-options|
+    AUTOCMD ........................................ |dashboard-autocmd|
+    COLORS ......................................... |dashboard-colors|
+    EXAMPLE ........................................ |dashboard-example|
+
+==============================================================================
+INTRO                                                           *dashboard-intro*
+
+dashboard is a plugin that shows recently used files, bookmarks, commands and
+sessions that were saved to a certain directory.
+
+==============================================================================
+COMMANDS                                                     *dashboard-commands*
+
+>
+    :Dashboard
+<
+Open the dashboard buffer.
+                                                             *dashboard-:SessionSave*
+                                                             *dashboard-:SsessionLoad*
+>
+    :SessionSave
+    :SessionLoad
+<
+Save or Load a session
+                                                              *dashboard-:SessionSave*
+>
+    :SessionSave
+<
+Save a session to session folder.
+
+NOTE: This command is affected by |g:dashboard_session_directory|.
+
+                                                              *dashboard-:SessionLoad*
+>
+    :SessionLoad
+<
+Load a session from |g:dashboard_session_directory|
+
+                                                              *dashboard-:DashboardFindFile*
+>
+    :DashboardFindFile
+<
+Search File wraped the vim-clap:`Clap history Clap files ++finder=rg --ignore --hidden --files`
+                       fzf.vim :`Files`
+                                                              *dashboard-:DashboardFindHistory*
+>
+    :DashboardFindHistory
+<
+Search the history File wraped the vim-clap:`Clap history`
+                                    fzf.vim: `History`
+
+                                                              *dashboard-:DashboardChangeColorscheme*
+>
+    :DashboardChangeColorscheme
+<
+Search vim colorscheme wraped the vim-clap:`Clap colors`
+                                   fzf.vim:`Colors`
+
+                                                              *dashboard-:DashboardFindWord*
+>
+    :DashboardFindWord
+<
+Search the word wraped the vim-clap:`Clap grep2`
+                            fzf.vim:`Rg`
+
+                                                              *dashboard-:DashboardJumpMarks*
+>
+    :DashboardJumpMarks
+<
+Jump to marks wraped the vim-clap:`Clap marks`
+                          fzf.vim:`Marks`
+==============================================================================
+
+OPTIONS                                                       *dashboard-options*
+
+Put these variables into your vimrc. The shown assignments are also the
+default values.
+
+    Most used options:~
+    |g:dashboard_custom_header|
+    |g:dashboard_custom_footer|
+    |g:dashboard_enable_session|
+    |g:dashboard_session_directory|
+    |g:dashboard_custom_shortcut|
+
+------------------------------------------------------------------------------
+                                                      *g:dashboard_custom_header*
+>
+    let g:dashboard_custom_header = 'dashboard#pad(dashboard#fortune#cowsay())'
+<
+Define your own header.
+
+This option takes a `list of strings`, whereas each string will be put on its
+own line. If it is a simple `string`, it should evaluate to a list of strings.
+
+Example #1:~
+>
+  let g:dashboard_custom_header = [
+        \ '',
+        \ '   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠞⠉⢉⣭⣿⣿⠿⣳⣤⠴⠖⠛⣛⣿⣿⡷⠖⣶⣤⡀⠀⠀⠀   ',
+        \ '    ⠀⠀⠀⠀⠀⠀⠀⣼⠁⢀⣶⢻⡟⠿⠋⣴⠿⢻⣧⡴⠟⠋⠿⠛⠠⠾⢛⣵⣿⠀⠀⠀⠀  ',
+        \ '    ⣼⣿⡿⢶⣄⠀⢀⡇⢀⡿⠁⠈⠀⠀⣀⣉⣀⠘⣿⠀⠀⣀⣀⠀⠀⠀⠛⡹⠋⠀⠀⠀⠀  ',
+        \ '    ⣭⣤⡈⢑⣼⣻⣿⣧⡌⠁⠀⢀⣴⠟⠋⠉⠉⠛⣿⣴⠟⠋⠙⠻⣦⡰⣞⠁⢀⣤⣦⣤⠀  ',
+        \ '    ⠀⠀⣰⢫⣾⠋⣽⠟⠑⠛⢠⡟⠁⠀⠀⠀⠀⠀⠈⢻⡄⠀⠀⠀⠘⣷⡈⠻⣍⠤⢤⣌⣀  ',
+        \ '    ⢀⡞⣡⡌⠁⠀⠀⠀⠀⢀⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⢿⡀⠀⠀⠀⠸⣇⠀⢾⣷⢤⣬⣉  ',
+        \ '    ⡞⣼⣿⣤⣄⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠸⣿⣇⠈⠻  ',
+        \ '    ⢰⣿⡿⢹⠃⠀⣠⠤⠶⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠀⣿⠛⡄⠀  ',
+        \ '    ⠈⠉⠁⠀⠀⠀⡟⡀⠀⠈⡗⠲⠶⠦⢤⣤⣤⣄⣀⣀⣸⣧⣤⣤⠤⠤⣿⣀⡀⠉⣼⡇⠀  ',
+        \ '    ⣿⣴⣴⡆⠀⠀⠻⣄⠀⠀⠡⠀⠀⠀⠈⠛⠋⠀⠀⠀⡈⠀⠻⠟⠀⢀⠋⠉⠙⢷⡿⡇⠀  ',
+        \ '    ⣻⡿⠏⠁⠀⠀⢠⡟⠀⠀⠀⠣⡀⠀⠀⠀⠀⠀⢀⣄⠀⠀⠀⠀⢀⠈⠀⢀⣀⡾⣴⠃⠀  ',
+        \ '    ⢿⠛⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠈⠢⠄⣀⠠⠼⣁⠀⡱⠤⠤⠐⠁⠀⠀⣸⠋⢻⡟⠀⠀  ',
+        \ '    ⠈⢧⣀⣤⣶⡄⠘⣆⠀⠀⠀⠀⠀⠀⠀⢀⣤⠖⠛⠻⣄⠀⠀⠀⢀⣠⡾⠋⢀⡞⠀⠀⠀  ',
+        \ '    ⠀⠀⠻⣿⣿⡇⠀⠈⠓⢦⣤⣤⣤⡤⠞⠉⠀⠀⠀⠀⠈⠛⠒⠚⢩⡅⣠⡴⠋⠀⠀⠀⠀  ',
+        \ '    ⠀⠀⠀⠈⠻⢧⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣻⠿⠋⠀⠀⠀⠀⠀⠀  ',
+        \ '    ⠀⠀⠀⠀⠀⠀⠉⠓⠶⣤⣄⣀⡀⠀⠀⠀⠀⠀⢀⣀⣠⡴⠖⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀  ',
+        \ '                                       ',
+        \ '',
+        \ ]
+<
+------------------------------------------------------------------------------
+                                                      *g:dashboard_custom_footer*
+>
+    let g:dashboard_custom_footer = ''
+<
+Same as the custom header, but shown at the bottom of the dashboard buffer.
+
+------------------------------------------------------------------------------
+                                                      *g:dashboard_enable_session*
+>
+    let g:dashboard_enable_session = 1
+<
+set to `0` to disable session
+------------------------------------------------------------------------------
+                                                        *g:dashboard_session_directory*
+>
+    let g:dashboard_session_directory = '~/.cache/vim/session'
+<
+The directory to save/load sessions to/from.
+
+Defaults: `$HOME/.cahce/vim/session`
+------------------------------------------------------------------------------
+                                                      *g:dashboard_custom_shortcut*
+>
+    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+<
+The keymap that config for vim-clap or fzf.vim or dashboard commands
+
+==============================================================================
+AUTOCMD                                                       *dashboard-autocmd*
+
+In certain situations dashboard emits events which can be hooked into via
+|autocmd|s. Those can be used for further customization.
+
+dashboardReady~
+
+  When the dashboard buffer is ready.
+
+Example:
+>
+    autocmd User dashboardReady let &l:stl = ' This statusline rocks!'
+<
+
+==============================================================================
+COLORS                                                         *dashboard-colors*
+
+You can overwrite the highlight groups used by dashboard. The plugin defines
+these groups:
+
+    Highlight group   |  Description             |  Default
+    ------------------------------------------------------------------
+                      |                          |
+    dashboardFooter   |  the custom footer       |  linked to Boolean
+    dashboardHeader   |  the custom header       |  linked to Type
+    dashboardCenter   |  the section describe    |  linked to Function
+    dashboardShortCut |  the custom shortcut     |  linked to Error
+
+Example: (my terminal emulator supports 256 colors)
+>
+    highlight dashboardFooter    ctermfg=240
+    highlight dashboardHeader    ctermfg=114
+    highlight dashboardCenter    ctermfg=215
+    highlight dashboardShortCut  ctermfg=245
+<
+==============================================================================
+Example                                                          *dashboard-example*
+
+For users who use the vim-clap
+>
+    Plug 'hardcoreplayers/dashboard-nvim'
+    Plug 'liuchengxu/vim-clap'
+
+    nmap <Leader>ss :<C-u>SessionSave<CR>
+    nmap <Leader>sl :<C-u>SessionLoad<CR>
+    nnoremap <silent> <Leader>fh :<C-u>Clap history<CR>
+    nnoremap <silent> <Leader>ff :<C-u>Clap files ++finder=rg --ignore --hidden --files<cr>
+    nnoremap <silent> <Leader>tc :<C-u>Clap colors<CR>
+    nnoremap <silent> <Leader>fa :<C-u>Clap grep2<CR>
+    nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
+
+    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+<
+For users who use the fzf.vim
+>
+    Plug 'hardcoreplayers/dashboard-nvim'
+    Plug 'junegunn/fzf.vim'
+
+    nmap <Leader>ss :<C-u>SessionSave<CR>
+    nmap <Leader>sl :<C-u>SessionLoad<CR>
+    nnoremap <silent> <Leader>fh :History<CR>
+    nnoremap <silent> <Leader>ff :Files<CR>
+    nnoremap <silent> <Leader>tc :Colors<CR>
+    nnoremap <silent> <Leader>fa :Rg<CR>
+    nnoremap <silent> <Leader>fb :Marks<CR>
+
+    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
+    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
+    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
+    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
+    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
+    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+<
+==============================================================================
