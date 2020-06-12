@@ -138,6 +138,14 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
+## FAQ
+
+- What is it different from vim-startify ?
+  dashbaord is inspired by doom-emacs, startify provides a list of many files,
+  Mru oldfile, etc., but do we really need this list, we will only open one file,
+  and the file list takes up a lot of space, the dashboard uses fuzzy search plugin
+  pop-up menu, it saves a lot of space, and provides more functions.
+
 ## Donate
 
 Do you like dashboard-nvim? [buy me a coffe](https://salt.bountysource.com/teams/thinkvim-taigacute)😘!
