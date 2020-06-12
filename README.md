@@ -59,7 +59,7 @@
   commands keymap then set it into `g:dashboard_custom_shutcut`
 
   ```viml
-  eg :
+  eg : "SPC mean the leaderkey
     let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
     let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
     let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
@@ -103,6 +103,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   Plug 'hardcoreplayers/dashboard-nvim'
   Plug 'liuchengxu/vim-clap'
 
+  let g:mapleader="\<Space>"
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
   nnoremap <silent> <Leader>fh :<C-u>Clap history<CR>
@@ -125,6 +126,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   Plug 'hardcoreplayers/dashboard-nvim'
   Plug 'junegunn/fzf.vim'
 
+  let g:mapleader="\<Space>"
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
   nnoremap <silent> <Leader>fh :History<CR>
