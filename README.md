@@ -68,6 +68,9 @@
     let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
   ```
 
+  - what does the shortcut do? just a tip like `whichkey`,on dashboard you just
+    move the cursor and press `enter`
+
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
 
 - `g:dashboard_custom_footer` custom the dashboard footer (same as startify)
