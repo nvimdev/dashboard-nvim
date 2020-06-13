@@ -26,12 +26,12 @@
 
 ## Options
 
-- Config your excute tool by `g:dashboard_executive`,This option mean what fuzzy
+- Config your excute tool by `g:dashboard_default_executive`,This option mean what fuzzy
   search plugins that you used. [vim-clap](https://github.com/liuchengxu/vim-clap)
   and [fzf.vim](https://github.com/junegunn/fzf.vim)
 
   ```viml
-  let g:dashboard_executive ='clap' --default
+  let g:dashboard_default_executive ='clap' --default
   ```
 
 - Dashboard wrap some `vim-clap` and `fzf.vim` commands with window config, And
