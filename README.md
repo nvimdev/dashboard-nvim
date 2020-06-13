@@ -64,9 +64,9 @@
         \ 'last_session'       : 'SPC s l',
         \ 'find_history'       : 'SPC f h',
         \ 'find_file'          : 'SPC f f',
-        \ 'change_colorscheme' : '; t c',
-        \ 'find_word'          : '; f a',
-        \ 'book_marks'         : '; f b',
+        \ 'change_colorscheme' : 'SPC t c',
+        \ 'find_word'          : 'SPC f a',
+        \ 'book_marks'         : 'SPC f b',
         \ }
   ```
 
@@ -115,12 +115,12 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
 
   let g:dashboard_custom_shortcut={
-    \ 'last_session' : '; s l',
-    \ 'find_history' : '; f h',
-    \ 'find_file' : '; f f',
-    \ 'change_colorscheme' : '; t c',
-    \ 'find_word' : '; f a',
-    \ 'book_marks' : '; f b',
+    \ 'last_session' : 'SPC s l',
+    \ 'find_history' : 'SPC f h',
+    \ 'find_file' : 'SPC f f',
+    \ 'change_colorscheme' : 'SPC t c',
+    \ 'find_word' : 'SPC f a',
+    \ 'book_marks' : 'SPC f b',
     \ }
 
   ```
@@ -144,9 +144,9 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
     \ 'last_session'       : 'SPC s l',
     \ 'find_history'       : 'SPC f h',
     \ 'find_file'          : 'SPC f f',
-    \ 'change_colorscheme' : '; t c',
-    \ 'find_word'          : '; f a',
-    \ 'book_marks'         : '; f b',
+    \ 'change_colorscheme' : 'SPC t c',
+    \ 'find_word'          : 'SPC f a',
+    \ 'book_marks'         : 'SPC f b',
     \ }
   ```
 
