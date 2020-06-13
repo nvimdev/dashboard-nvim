@@ -60,12 +60,14 @@
 
   ```viml
   eg : "SPC mean the leaderkey
-    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+      let g:dashboard_custom_shortcut={
+        \ 'last_session'       : 'SPC s l',
+        \ 'find_history'       : 'SPC f h',
+        \ 'find_file'          : 'SPC f f',
+        \ 'change_colorscheme' : '; t c',
+        \ 'find_word'          : '; f a',
+        \ 'book_marks'         : '; f b',
+        \ }
   ```
 
   - what does the shortcut do? just a tip like `whichkey`,on dashboard you just
@@ -112,12 +114,15 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   nnoremap <silent> <Leader>fa :<C-u>Clap grep2<CR>
   nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
 
-  let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-  let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-  let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-  let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-  let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-  let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+  let g:dashboard_custom_shortcut={
+    \ 'last_session' : '; s l',
+    \ 'find_history' : '; f h',
+    \ 'find_file' : '; f f',
+    \ 'change_colorscheme' : '; t c',
+    \ 'find_word' : '; f a',
+    \ 'book_marks' : '; f b',
+    \ }
+
   ```
 
 - dashboard-nvim with fzf.vim
@@ -135,12 +140,14 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   nnoremap <silent> <Leader>fa :Rg<CR>
   nnoremap <silent> <Leader>fb :Marks<CR>
 
-  let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-  let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-  let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-  let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-  let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-  let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+  let g:dashboard_custom_shortcut={
+    \ 'last_session'       : 'SPC s l',
+    \ 'find_history'       : 'SPC f h',
+    \ 'find_file'          : 'SPC f f',
+    \ 'change_colorscheme' : '; t c',
+    \ 'find_word'          : '; f a',
+    \ 'book_marks'         : '; f b',
+    \ }
   ```
 
 ## TODO

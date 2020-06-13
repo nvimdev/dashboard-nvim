@@ -203,12 +203,14 @@ For users who use the vim-clap
     nnoremap <silent> <Leader>fa :<C-u>Clap grep2<CR>
     nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
 
-    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+    let g:dashboard_custom_shortcut={
+      \ 'last_session' : '; s l',
+      \ 'find_history' : '; f h',
+      \ 'find_file' : '; f f',
+      \ 'change_colorscheme' : '; t c',
+      \ 'find_word' : '; f a',
+      \ 'book_marks' : '; f b',
+      \ }
 <
 For users who use the fzf.vim
 >
@@ -223,11 +225,13 @@ For users who use the fzf.vim
     nnoremap <silent> <Leader>fa :Rg<CR>
     nnoremap <silent> <Leader>fb :Marks<CR>
 
-    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+    let g:dashboard_custom_shortcut={
+      \ 'last_session' : '; s l',
+      \ 'find_history' : '; f h',
+      \ 'find_file' : '; f f',
+      \ 'change_colorscheme' : '; t c',
+      \ 'find_word' : '; f a',
+      \ 'book_marks' : '; f b',
+      \ }
 <
 ==============================================================================
