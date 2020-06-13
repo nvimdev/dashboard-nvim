@@ -7,51 +7,21 @@ function! dashboard#handler#load_session()
 endfunction
 
 function! dashboard#handler#find_file() abort
-  if g:dashboard_executive == 'clap'
-    call dashboard#clap#find_file()
-  elseif g:dashboard_executive == 'leaderf'
-    call dashboard#leaderf#find_file()
-  else
-    call dashboard#fzf#find_file()
-  endif
+  call dashboard#{g:dashboard_executive}#find_file()
 endfunction
 
 function! dashboard#handler#find_history() abort
-  if g:dashboard_executive == 'clap'
-    call dashboard#clap#find_history()
-  elseif g:dashboard_executive == 'leaderf' 
-    call dashboard#leaderf#find_history()
-  else
-    call dashboard#fzf#find_history()
-  endif
+  call dashboard#{g:dashboard_executive}#find_history()
 endfunction
 
 function! dashboard#handler#change_colorscheme() abort
-  if g:dashboard_executive == 'clap'
-    call dashboard#clap#change_colorscheme()
-  elseif g:dashboard_executive == 'leaderf'
-    call dashboard#leaderf#change_colorscheme()
-  else
-    call dashboard#fzf#change_colorscheme()
-  endif
+  call dashboard#{g:dashboard_executive}#change_colorscheme()
 endfunction
 
 function! dashboard#handler#find_word() abort
-  if g:dashboard_executive == 'clap'
-    call dashboard#clap#find_word()
-  elseif g:dashboard_executive == 'leaderf'
-    call dashboard#leaderf#find_word()
-  else
-    call dashboard#fzf#find_word()
-  endif
+  call dashboard#{g:dashboard_executive}#find_word()
 endfunction
 
 function! dashboard#handler#book_marks() abort
-  if g:dashboard_executive == 'clap'
-    call dashboard#clap#book_marks()
-  elseif g:dashboard_executive == 'leaderf'
-    call dashboard#leaderf#book_marks()
-  else
-    call dashboard#fzf#book_marks()
-  endif
+  call dashboard#{g:dashboard_executive}#book_marks()
 endfunction
