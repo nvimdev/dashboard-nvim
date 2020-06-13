@@ -35,7 +35,7 @@ let s:header = [
 let s:dashboard_shortcut={}
 
 if exists('g:dashboard_custom_shortcut')
-  let s:dashboard_shortcut=copy(g:dashboard_custom_shutcut)
+  call extend(s:dashboard_shortcut, g:dashboard_custom_shortcut)
 else
   let s:dashboard_shortcut['last_session'] = 'SPC s l'
   let s:dashboard_shortcut['find_history'] = 'SPC f h'
@@ -207,7 +207,7 @@ function! s:print_plugins_message() abort
   endif
   if stridx(&runtimepath,'dein.vim')
     let l:total_plugins = len(dein#get())
-  elseif stridx(&runtimepath, 'plug.vim')
+  elseif stridx(&runtimepath, 'plug')
     let l:total_plugins = len(g:plugs)
   endif
   let l:footer=[]
