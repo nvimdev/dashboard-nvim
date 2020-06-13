@@ -29,7 +29,7 @@ endfunction
 function! dashboard#handler#change_colorscheme() abort
   if g:dashboard_executive == 'clap'
     call dashboard#clap#change_colorscheme()
-  elseif g:dashboard_executive =='leaderf'
+  elseif g:dashboard_executive == 'leaderf'
     call dashboard#leaderf#change_colorscheme()
   else
     call dashboard#fzf#change_colorscheme()
@@ -39,7 +39,7 @@ endfunction
 function! dashboard#handler#find_word() abort
   if g:dashboard_executive == 'clap'
     call dashboard#clap#find_word()
-  elseif g:dashboard_executive =='leaderf'
+  elseif g:dashboard_executive == 'leaderf'
     call dashboard#leaderf#find_word()
   else
     call dashboard#fzf#find_word()
@@ -49,7 +49,7 @@ endfunction
 function! dashboard#handler#book_marks() abort
   if g:dashboard_executive == 'clap'
     call dashboard#clap#book_marks()
-  elseif g:dashboard_executive =='leaderf'
+  elseif g:dashboard_executive == 'leaderf'
     call dashboard#leaderf#book_marks()
   else
     call dashboard#fzf#book_marks()
