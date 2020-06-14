@@ -126,11 +126,23 @@ Example #1:~
 Same as the custom header, but shown at the bottom of the dashboard buffer.
 
 ------------------------------------------------------------------------------
-                                                      *g:dashboard_enable_session*
+                                                      *g:dashboard_custom_section*
 >
-    let g:dashboard_enable_session = 1
+    let g:dashboard_enable_session = {}
 <
-set to `0` to disable session
+It's a dict for custom section .
+
+Example #2:
+>
+
+	let g:dashboard_custom_section={
+	\ 'buffer_list': [' Recently lase session                 SPC b b'],
+	\ }
+
+	function! BUFFER_LIST()
+	Clap buffers
+	endfunction
+<
 ------------------------------------------------------------------------------
                                                         *g:dashboard_session_directory*
 >
@@ -236,6 +248,9 @@ For users who use the fzf.vim
 <
 ==============================================================================
 CHANGELOG
+
+2020-06-14
+* Support custom section
 
 2020-06-13
 * Add leaderf support
