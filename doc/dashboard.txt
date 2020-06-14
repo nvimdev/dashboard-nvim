@@ -241,3 +241,4 @@ CHANGELOG
 * Add leaderf support
 
 ==============================================================================
+vim:tw=78:sw=4:ts=8:ft=help:norl:noet:
