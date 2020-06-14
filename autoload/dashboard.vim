@@ -69,9 +69,7 @@ function! dashboard#instance(on_vimenter) abort
   setlocal showtabline=0
 
   " config the header margin-top
-  for i in repeat([0],(winheight(0) / 4) - 8)
-    call append('$', s:empty_lines)
-  endfor
+  call append('$', s:empty_lines)
 
   " Set Header
   let g:dashboard_header = exists('g:dashboard_custom_header')
@@ -81,7 +79,6 @@ function! dashboard#instance(on_vimenter) abort
     let g:dashboard_header += ['']  " add blank line
   endif
   call append('$', g:dashboard_header)
-  call append('$', s:empty_lines)
   call append('$', s:empty_lines)
 
   let b:dashboard = {
