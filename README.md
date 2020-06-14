@@ -84,7 +84,6 @@
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
   ```
-  you can disable dashboard session by `g:dashboard_enable_session`. `0` means disable session.
   set the `dashboard_session_directory` to change the session folder
   default is `~/.cache/vim/session`
 - Highlight group
@@ -95,6 +94,19 @@
   DashboardFooter
   ```
 - Autocmd `Dashboard` `DashboardReady` same as vim-startify
+
+- `g:dashboard_custom_section` custom section, it's very easy to custom. like
+  example.
+
+  ```viml
+  let g:dashboard_custom_section={
+    \ 'buffer_list': [' Recently lase session                 SPC b b'],
+    \ }
+
+  function! BUFFER_LIST()
+    Clap buffers
+  endfunction
+  ```
 
 ## Minial vimrc
 
@@ -150,10 +162,6 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
     \ 'book_marks'         : 'SPC f b',
     \ }
   ```
-
-## TODO
-
-- [ ] Support custom center section
 
 ## FAQ
 
