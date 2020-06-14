@@ -18,7 +18,7 @@ syntax region DashboardCenter start=/\S/ end=/\s\{1,3}/
 syntax region DashboardShortCut start=/\s\s\w\+\s[a-z]\+/ end=/$/
 
 highlight default link DashboardHeader  Type
-highlight default link DashboardCenter  Function
+highlight default link DashboardCenter  String
 highlight default link DashboardShortCut Error
 highlight default link DashboardFooter  Boolean
 
