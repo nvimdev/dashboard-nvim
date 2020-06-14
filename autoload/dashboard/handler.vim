@@ -2,7 +2,7 @@
 " Description: A fancy start screen for Vim.
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
-function! dashboard#handler#load_session()
+function! dashboard#handler#last_session()
   SessionLoad
 endfunction
 
