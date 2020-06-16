@@ -19,7 +19,7 @@ syntax region DashboardShortCut start=/\s\s\w\+\s[a-z]\+/ end=/$/
 
 highlight default link DashboardHeader  Type
 highlight default link DashboardCenter  String
-highlight default link DashboardShortCut Error
+highlight default link DashboardShortCut Keyword
 highlight default link DashboardFooter  Boolean
 
 let b:current_syntax = 'dashboard'
