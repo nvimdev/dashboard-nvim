@@ -1,5 +1,6 @@
-## <div align="center"> Start Screen Plugin For Vim/Neovim </div>
-
+<div align="center">
+<img src="https://user-images.githubusercontent.com/41671631/84760810-26c02480-affb-11ea-903a-d8796189e58a.png">
+</div>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/41671631/84384273-4f71a400-ac20-11ea-8806-8052ed64f28b.png" width="704" height="507">
 </div>
