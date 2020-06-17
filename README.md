@@ -33,7 +33,8 @@
   [leaderf](https://github.com/Yggdroot/LeaderF)
 
   ```viml
-  let g:dashboard_default_executive ='clap' --default
+  " Default value is clap
+  let g:dashboard_default_executive ='clap'
   ```
 
 - Dashboard wrap some `vim-clap` and `fzf.vim` commands with window config, And
