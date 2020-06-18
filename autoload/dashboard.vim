@@ -162,7 +162,7 @@ endfunction
 function! s:set_cursor() abort
   let b:dashboard.oldline = exists('b:dashboard.newline') ? b:dashboard.newline : 2 + s:fixed_column
   let b:dashboard.newline = line('.')
-  let l:height = dashboard#section#height()
+  let l:height = dashboard#section#height() + 1
 
   " going up (-1) or down (1)
   if b:dashboard.oldline == b:dashboard.newline
