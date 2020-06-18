@@ -31,7 +31,7 @@ else
 endif
 
 function! dashboard#section#height()
-  return len(s:Section)+5
+  return len(s:Section)+(len(s:Section)-1)
 endfunction
 
 function! dashboard#section#instance()
