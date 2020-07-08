@@ -21,7 +21,7 @@ if exists('g:dashboard_custom_section')
   call extend(s:Section, g:dashboard_custom_section)
 else
   let s:Section = {
-    \ 'last_session'         :[' Recently lase session                 '.s:dashboard_shortcut['last_session']],
+    \ 'last_session'         :[' Recently last session                 '.s:dashboard_shortcut['last_session']],
     \ 'find_history'         :['ﭯ Recently opened files                 '.s:dashboard_shortcut['find_history']],
     \ 'find_file'            :[' Find  File                            '.s:dashboard_shortcut['find_file']],
     \ 'change_colorscheme'   :[' Change Colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
