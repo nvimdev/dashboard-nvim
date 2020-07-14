@@ -65,7 +65,6 @@ function! dashboard#instance(on_vimenter) abort
         \ noswapfile
         \ signcolumn=no
         \ synmaxcol&
-        \ laststauts=0
   setlocal showtabline=0
 
   " config the header margin-top
