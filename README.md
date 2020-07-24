@@ -75,6 +75,10 @@
   - what does the shortcut do? just a tip like `whichkey`,on dashboard you just
     move the cursor and press `enter`
 
+- `g:dashboard_default_header` set the default header,dashboard provide some
+  headers. you can choose the header that you like. defaule headers:
+  `default evil skull superman garfield doraemon transformer bull sunshine clockmachine commicgirl pikachu orangutan`
+
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
 
 - `g:dashboard_custom_footer` custom the dashboard footer (same as startify)

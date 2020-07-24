@@ -19,21 +19,6 @@ function! dashboard#get_centerline() abort
   return b:dashboard.centerline
 endfunction
 
-let s:header = [
-      \ '',
-      \ '',
-      \ ' ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  ',
-      \ ' ██╔══██╗██╔══██╗██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██╔══██╗ ',
-      \ ' ██║  ██║███████║███████╗███████║██████╔╝██║   ██║███████║██████╔╝██║  ██║ ',
-      \ ' ██║  ██║██╔══██║╚════██║██╔══██║██╔══██╗██║   ██║██╔══██║██╔══██╗██║  ██║ ',
-      \ ' ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ',
-      \ ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
-      \ '',
-      \ '                     [ Dashboard version : '. g:dashboard_version .' ]     ',
-      \ '',
-      \ ]
-
-
 " Function: #insane_in_the_membrane {{{1
 function! dashboard#instance(on_vimenter) abort
   " Handle vim -y, vim -M.
@@ -73,7 +58,7 @@ function! dashboard#instance(on_vimenter) abort
   " Set Header
   let g:dashboard_header = exists('g:dashboard_custom_header')
         \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_header))
-        \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(s:header))
+        \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(dashboard#header#get_header()))
   if !empty(g:dashboard_header)
     let g:dashboard_header += ['']  " add blank line
   endif
