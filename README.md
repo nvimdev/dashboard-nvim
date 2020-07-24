@@ -77,8 +77,16 @@
 
 - `g:dashboard_default_header` set the default header,dashboard provide some
   headers. you can choose the header that you like. defaule headers:
-  `default evil skull superman garfield doraemon transformer bull sunshine clockmachine commicgirl pikachu orangutan`
-  [Preview](https://github.com/hardcoreplayers/dashboard-nvim/wiki/Header-Preview)
+
+  ```
+  default evil skull superman garfield doraemon transformer bull sunshine clockmachine pikachu orangutan
+  cres lambada commicgirl commicgirl2 commicgirl3 commicgirl4 commicgirl5
+  commicgirl6 commicgirl7 commicgirl8 commicgirl9 commicgirl10 commicgirl11
+  commicgirl12 commicgirl13 commicgirl14 commicgirl15 commicgirl16 commicgirl17
+  commicgirl18 commicgirl19
+  ```
+
+  [Preview Headers](https://github.com/hardcoreplayers/dashboard-nvim/wiki/Header-Preview)
 
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
 
