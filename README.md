@@ -78,6 +78,7 @@
 - `g:dashboard_default_header` set the default header,dashboard provide some
   headers. you can choose the header that you like. defaule headers:
   `default evil skull superman garfield doraemon transformer bull sunshine clockmachine commicgirl pikachu orangutan`
+  [Preview](https://github.com/hardcoreplayers/dashboard-nvim/wiki/Header-Preview)
 
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
 
