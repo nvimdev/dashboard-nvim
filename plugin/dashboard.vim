@@ -26,6 +26,7 @@ augroup dashboard
   autocmd!
   autocmd VimEnter * nested call s:loaded_dashboard()
   autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+  autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
 augroup END
 
 function! s:loaded_dashboard() abort
