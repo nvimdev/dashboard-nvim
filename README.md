@@ -83,7 +83,7 @@
   cres lambada commicgirl commicgirl2 commicgirl3 commicgirl4 commicgirl5
   commicgirl6 commicgirl7 commicgirl8 commicgirl9 commicgirl10 commicgirl11
   commicgirl12 commicgirl13 commicgirl14 commicgirl15 commicgirl16 commicgirl17
-  commicgirl18 commicgirl19
+  commicgirl18 commicgirl19 hydra
   ```
 
   [Preview Headers](https://github.com/hardcoreplayers/dashboard-nvim/wiki/Header-Preview)
