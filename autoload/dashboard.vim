@@ -185,4 +185,15 @@ function! dashboard#cd_to_vcs_root(path) abort
   return 0
 endfunction
 
+function! dashboard#change_to_dir(path)
+  if get(g:, 'dashboard_change_to_dir', 0)
+    let dir = fnamemodify(a:path, ':h')
+    if isdirectory(dir)
+      echom "test"
+      execute 'lcd' dir
+    else
+        " Do nothing. E.g. a:path == `scp://foo/bar`
+    endif
+  endif
+endfunction
 " vim: et sw=2 sts=2
