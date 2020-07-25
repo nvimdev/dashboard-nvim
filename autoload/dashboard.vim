@@ -171,4 +171,18 @@ function! s:set_cursor() abort
 
   call cursor(b:dashboard.newline, s:fixed_column)
 endfunction
+
+" Function: s:cd_to_vcs_root {{{1
+function! dashboard#cd_to_vcs_root(path) abort
+  let dir = fnamemodify(a:path, ':p:h')
+  for vcs in [ '.git', '.hg', '.bzr', '.svn' ]
+    let root = finddir(vcs, dir .';')
+    if !empty(root)
+      execute 'lcd' fnameescape(fnamemodify(root, ':h'))
+      return 1
+    endif
+  endfor
+  return 0
+endfunction
+
 " vim: et sw=2 sts=2
