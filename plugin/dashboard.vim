@@ -26,6 +26,7 @@ augroup dashboard
   autocmd!
   autocmd VimEnter * nested call s:loaded_dashboard()
   autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+  autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | silent! lcd %:p:h | endif
 augroup END
 
 function! s:loaded_dashboard() abort
