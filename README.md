@@ -186,7 +186,10 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   pop-up menu, it saves a lot of space, and provides more functions.
 
 - How to disable tabline in dashboard buffer?
-  `autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2`
+
+  ```vim
+  autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2
+  ```
 
 ## Donate
 
