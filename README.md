@@ -185,6 +185,9 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   and the file list takes up a lot of space, the dashboard uses fuzzy search plugin
   pop-up menu, it saves a lot of space, and provides more functions.
 
+- How to disable tabline in dashboard buffer?
+  `autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2`
+
 ## Donate
 
 Do you like dashboard-nvim? buy me a coffe 😘!
