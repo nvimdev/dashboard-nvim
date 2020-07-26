@@ -50,7 +50,6 @@ function! dashboard#instance(on_vimenter) abort
         \ noswapfile
         \ signcolumn=no
         \ synmaxcol&
-  setlocal showtabline=0
 
   " config the header margin-top
   call append('$', s:empty_lines)
