@@ -72,8 +72,20 @@
         \ }
   ```
 
-  - what does the shortcut do? just a tip like `whichkey`,on dashboard you just
-    move the cursor and press `enter`
+- `g:dashboard_custom_shortcut_icon` custom the shortcut icon.like this
+
+```
+ let g:dashboard_custom_shortcut_icon['last_session'] = ' '
+ let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
+ let g:dashboard_custom_shortcut_icon['find_file'] = ' '
+ let g:dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
+ let g:dashboard_custom_shortcut_icon['find_word'] = ' '
+ let g:dashboard_custom_shortcut_icon['book_marks'] = ' '
+
+```
+
+- what does the shortcut do? just a tip like `whichkey`,on dashboard you just
+  move the cursor and press `enter`
 
 - `g:dashboard_default_header` set the default header,dashboard provide some
   headers. you can choose the header that you like. defaule headers:
