@@ -22,10 +22,10 @@ if exists('g:dashboard_custom_shortcut_icon')
   call extend(s:dashboard_shortcut, g:dashboard_custom_shortcut)
 else
   let s:dashboard_shortcut_icon['last_session'] = ' '
-  let s:dashboard_shortcut_icon['find_history'] = 'ﭯ '
+  let s:dashboard_shortcut_icon['find_history'] = ' '
   let s:dashboard_shortcut_icon['find_file'] = ' '
-  let s:dashboard_shortcut_icon['change_colorscheme'] = ' '
-  let s:dashboard_shortcut_icon['find_word'] = ' '
+  let s:dashboard_shortcut_icon['change_colorscheme'] = ' '
+  let s:dashboard_shortcut_icon['find_word'] = ' '
   let s:dashboard_shortcut_icon['book_marks'] = ' '
 endif
 
