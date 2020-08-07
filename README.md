@@ -197,6 +197,12 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   and the file list takes up a lot of space, the dashboard uses fuzzy search plugin
   pop-up menu, it saves a lot of space, and provides more functions.
 
+- How to work with indentline plugin ?
+
+  ```vim
+  let g:indentLine_fileTypeExclude = ['dashboard']
+  ```
+
 - How to disable tabline in dashboard buffer?
 
   ```vim
