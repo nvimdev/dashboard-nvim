@@ -9,14 +9,15 @@ let g:autoloaded_dashboard = 1
 
 let s:fixed_column = 0
 let s:empty_lines = ['']
+let s:dashboard={}
 
 function! dashboard#get_lastline() abort
-  let b:dashboard.lastline = line('$')
-  return b:dashboard.lastline
+  let s:dashboard.lastline = line('$')
+  return s:dashboard.lastline
 endfunction
 
 function! dashboard#get_centerline() abort
-  return b:dashboard.centerline
+  return s:dashboard.centerline
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
@@ -64,16 +65,16 @@ function! dashboard#instance(on_vimenter) abort
   call append('$', g:dashboard_header)
   call append('$', s:empty_lines)
 
-  let b:dashboard = {
+  let s:dashboard = {
         \ 'entries':   {},
         \ }
-  let b:dashboard.centerline = line('$')
+  let s:dashboard.centerline = line('$')
 
   call dashboard#section#instance()
 
   " Set footer
   call append('$', s:empty_lines)
-  let b:dashboard.lastline = line('$')
+  let s:dashboard.lastline = line('$')
   let footer = exists('g:dashboard_custom_footer')
     \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_footer))
     \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(s:print_plugins_message()))
@@ -85,7 +86,7 @@ function! dashboard#instance(on_vimenter) abort
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
-  call cursor(b:dashboard.centerline+1,0)
+  call cursor(s:dashboard.centerline+1,0)
   normal! ^ w
   let s:fixed_column = getpos('.')[2]
   autocmd dashboard CursorMoved <buffer> call s:set_cursor()
@@ -130,8 +131,8 @@ endfunction
 
 function! s:call_line_function()
   let l:current_line = getpos('.')[1]
-  if has_key(b:dashboard.entries, l:current_line)
-    let l:method = b:dashboard.entries[l:current_line]['cmd']
+  if has_key(s:dashboard.entries, l:current_line)
+    let l:method = s:dashboard.entries[l:current_line]['cmd']
     if exists('g:dashboard_custom_section')
       let l:upper_method = toupper(l:method)
       call {l:upper_method}()
@@ -143,32 +144,32 @@ endfunction
 
 " Function: s:set_cursor {{{1
 function! s:set_cursor() abort
-  let b:dashboard.oldline = exists('b:dashboard.newline') ? b:dashboard.newline : 2 + s:fixed_column
-  let b:dashboard.newline = line('.')
+  let s:dashboard.oldline = exists('s:dashboard.newline') ? s:dashboard.newline : 2 + s:fixed_column
+  let s:dashboard.newline = line('.')
   let l:height = dashboard#section#height()
 
   " going up (-1) or down (1)
-  if b:dashboard.oldline == b:dashboard.newline
+  if s:dashboard.oldline == s:dashboard.newline
         \ && col('.') != s:fixed_column
-        \ && !b:dashboard.leftmouse
+        \ && !s:dashboard.leftmouse
     let movement = 2 * (col('.') > s:fixed_column) - 1
-    let b:dashboard.newline += movement
+    let s:dashboard.newline += movement
   else
-    let movement = 2 * (b:dashboard.newline > b:dashboard.oldline) - 1
-    let b:dashboard.leftmouse = 0
+    let movement = 2 * (s:dashboard.newline > s:dashboard.oldline) - 1
+    let s:dashboard.leftmouse = 0
   endif
 
-  let b:dashboard.newline += movement
+  let s:dashboard.newline += movement
 
   " skip blank lines between lists
-  if empty(getline(b:dashboard.newline))
-    let b:dashboard.newline += movement
+  if empty(getline(s:dashboard.newline))
+    let s:dashboard.newline += movement
   endif
 
   " don't go beyond first or last entry
-  let b:dashboard.newline = max([b:dashboard.centerline+1, min([b:dashboard.centerline+l:height, b:dashboard.newline])])
+  let s:dashboard.newline = max([s:dashboard.centerline+1, min([s:dashboard.centerline+l:height, s:dashboard.newline])])
 
-  call cursor(b:dashboard.newline, s:fixed_column)
+  call cursor(s:dashboard.newline, s:fixed_column)
 endfunction
 
 " Function: s:cd_to_vcs_root {{{1
@@ -195,4 +196,15 @@ function! dashboard#change_to_dir(path)
     endif
   endif
 endfunction
+
+" Function: s:register {{{1
+function! dashboard#register(line, index, cmd )
+  let s:dashboard.entries[a:line] = {
+        \ 'index':  a:index,
+        \ 'line':   a:line,
+        \ 'cmd':    a:cmd,
+        \ }
+endfunction
+
+
 " vim: et sw=2 sts=2
