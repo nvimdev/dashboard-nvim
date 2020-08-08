@@ -17,12 +17,3 @@ function! dashboard#utils#set_custom_section(section) abort
   return []
 endfunction
 
-" Function: s:register {{{1
-function! dashboard#utils#register(line, index, cmd )
-  let b:dashboard.entries[a:line] = {
-        \ 'index':  a:index,
-        \ 'line':   a:line,
-        \ 'cmd':    a:cmd,
-        \ }
-endfunction
-

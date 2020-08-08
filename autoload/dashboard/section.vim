@@ -54,7 +54,7 @@ function! s:set_section()
   for key in keys(s:Section)
     let dashboard_{key} = g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(s:Section[key]))
     call append('$',dashboard_{key})
-    call dashboard#utils#register(line('$'), key, key)
+    call dashboard#register(line('$'), key, key)
     call append('$', s:empty_lines)
   endfor
 endfunction
