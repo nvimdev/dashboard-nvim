@@ -43,6 +43,12 @@ Load a session from |g:dashboard_session_directory|
 <
 Search File wraped the vim-clap:`Clap history Clap files ++finder=rg --ignore --hidden --files`
                        fzf.vim :`Files`
+
+                                                              *dashboard-:DashboardNewFile*
+>
+    :DashboardNewFile
+<
+Open a new buffer
                                                               *dashboard-:DashboardFindHistory*
 >
     :DashboardFindHistory
@@ -154,12 +160,13 @@ Defaults: `$HOME/.cahce/vim/session`
 ------------------------------------------------------------------------------
                                                       *g:dashboard_custom_shortcut*
 >
-    let g:dashboard_custon_shortcut['last_session'] = 'SPC s l'
-    let g:dashboard_custon_shortcut['find_history'] = 'SPC f h'
-    let g:dashboard_custon_shortcut['find_file'] = 'SPC f f'
-    let g:dashboard_custon_shortcut['change_colorscheme'] = 'SPC t c'
-    let g:dashboard_custon_shortcut['find_word'] = 'SPC f a'
-    let g:dashboard_custon_shortcut['book_marks'] = 'SPC f b'
+    let g:dashboard_custom_shortcut['last_session'] = 'SPC s l'
+    let g:dashboard_custom_shortcut['find_history'] = 'SPC f h'
+    let g:dashboard_custom_shortcut['find_file'] = 'SPC f f'
+    let g:dashboard_custom_shortcut['change_colorscheme'] = 'SPC t c'
+    let g:dashboard_custom_shortcut['new_file'] = 'SPC c n'
+    let g:dashboard_custom_shortcut['find_word'] = 'SPC f a'
+    let g:dashboard_custom_shortcut['book_marks'] = 'SPC f b'
 <
 The keymap that config for vim-clap or fzf.vim or dashboard commands
 
@@ -209,6 +216,7 @@ For users who use the vim-clap
 
     nmap <Leader>ss :<C-u>SessionSave<CR>
     nmap <Leader>sl :<C-u>SessionLoad<CR>
+    nmap <Leader>cn :<C-u>DashboardNewFile<CR>
     nnoremap <silent> <Leader>fh :<C-u>Clap history<CR>
     nnoremap <silent> <Leader>ff :<C-u>Clap files ++finder=rg --ignore --hidden --files<cr>
     nnoremap <silent> <Leader>tc :<C-u>Clap colors<CR>
@@ -219,6 +227,7 @@ For users who use the vim-clap
       \ 'last_session' : 'SPC s l',
       \ 'find_history' : 'SPC f h',
       \ 'find_file' : 'SPC f f',
+      \ 'new_file' : 'SPC c n',
       \ 'change_colorscheme' : 'SPC t c',
       \ 'find_word' : 'SPC f a',
       \ 'book_marks' : 'SPC f b',
@@ -231,6 +240,7 @@ For users who use the fzf.vim
 
     nmap <Leader>ss :<C-u>SessionSave<CR>
     nmap <Leader>sl :<C-u>SessionLoad<CR>
+    nmap <Leader>cn :<C-u>DashboardNewFile<CR>
     nnoremap <silent> <Leader>fh :History<CR>
     nnoremap <silent> <Leader>ff :Files<CR>
     nnoremap <silent> <Leader>tc :Colors<CR>
@@ -241,6 +251,7 @@ For users who use the fzf.vim
       \ 'last_session' : 'SPC s l',
       \ 'find_history' : 'SPC f h',
       \ 'find_file' : 'SPC f f',
+      \ 'new_file' : 'SPC c n',
       \ 'change_colorscheme' : 'SPC t c',
       \ 'find_word' : 'SPC f a',
       \ 'book_marks' : 'SPC f b',
@@ -248,6 +259,9 @@ For users who use the fzf.vim
 <
 ==============================================================================
 CHANGELOG
+
+2020-8-14
+* Add 'New File' section
 
 2020-06-14
 * Support custom section

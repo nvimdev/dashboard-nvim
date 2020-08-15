@@ -66,6 +66,7 @@
         \ 'last_session'       : 'SPC s l',
         \ 'find_history'       : 'SPC f h',
         \ 'find_file'          : 'SPC f f',
+        \ 'new_file'           : 'SPC c n',
         \ 'change_colorscheme' : 'SPC t c',
         \ 'find_word'          : 'SPC f a',
         \ 'book_marks'         : 'SPC f b',
@@ -78,6 +79,7 @@
  let g:dashboard_custom_shortcut_icon['last_session'] = ' '
  let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
  let g:dashboard_custom_shortcut_icon['find_file'] = ' '
+ let g:dashboard_custom_shortcut_icon['new_file'] = ' '
  let g:dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
  let g:dashboard_custom_shortcut_icon['find_word'] = ' '
  let g:dashboard_custom_shortcut_icon['book_marks'] = ' '
@@ -147,6 +149,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   let g:mapleader="\<Space>"
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
+  nmap <Leader>cn :<C-u>DashboardNewFile<CR>
   nnoremap <silent> <Leader>fh :<C-u>Clap history<CR>
   nnoremap <silent> <Leader>ff :<C-u>Clap files ++finder=rg --ignore --hidden --files<cr>
   nnoremap <silent> <Leader>tc :<C-u>Clap colors<CR>
@@ -173,6 +176,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   let g:mapleader="\<Space>"
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
+  nmap <Leader>cn :<C-u>DashboardNewFile<CR>
   nnoremap <silent> <Leader>fh :History<CR>
   nnoremap <silent> <Leader>ff :Files<CR>
   nnoremap <silent> <Leader>tc :Colors<CR>
