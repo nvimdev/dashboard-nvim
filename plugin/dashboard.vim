@@ -60,6 +60,7 @@ endif
 
 command! -nargs=0 -bar Dashboard call dashboard#instance(0)
 
+command! -nargs=0 -bar DashboardNewFile           call dashboard#handler#new_file()
 command! -nargs=0 -bar DashboardFindFile          call dashboard#handler#find_file()
 command! -nargs=0 -bar DashboardFindHistory       call dashboard#handler#find_history()
 command! -nargs=0 -bar DashboardChangeColorscheme call dashboard#handler#change_colorscheme()

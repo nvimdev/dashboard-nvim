@@ -13,6 +13,7 @@ else
   let s:dashboard_shortcut['last_session'] = 'SPC s l'
   let s:dashboard_shortcut['find_history'] = 'SPC f h'
   let s:dashboard_shortcut['find_file'] = 'SPC f f'
+  let s:dashboard_shortcut['new_file'] = 'SPC c n'
   let s:dashboard_shortcut['change_colorscheme'] = 'SPC t c'
   let s:dashboard_shortcut['find_word'] = 'SPC f a'
   let s:dashboard_shortcut['book_marks'] = 'SPC f b'
@@ -24,6 +25,7 @@ else
   let s:dashboard_shortcut_icon['last_session'] = ' '
   let s:dashboard_shortcut_icon['find_history'] = ' '
   let s:dashboard_shortcut_icon['find_file'] = ' '
+  let s:dashboard_shortcut_icon['new_file'] = ' '
   let s:dashboard_shortcut_icon['change_colorscheme'] = ' '
   let s:dashboard_shortcut_icon['find_word'] = ' '
   let s:dashboard_shortcut_icon['book_marks'] = ' '
@@ -36,6 +38,7 @@ else
     \ 'last_session'         :[s:dashboard_shortcut_icon['last_session'].'Recently last session                 '.s:dashboard_shortcut['last_session']],
     \ 'find_history'         :[s:dashboard_shortcut_icon['find_history'].'Recently opened files                 '.s:dashboard_shortcut['find_history']],
     \ 'find_file'            :[s:dashboard_shortcut_icon['find_file'].'Find  File                            '.s:dashboard_shortcut['find_file']],
+    \ 'new_file'             :[s:dashboard_shortcut_icon['new_file'].'New  File                             '.s:dashboard_shortcut['new_file']],
     \ 'change_colorscheme'   :[s:dashboard_shortcut_icon['change_colorscheme'].'Change Colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
     \ 'find_word'            :[s:dashboard_shortcut_icon['find_word'].'Find  word                            '.s:dashboard_shortcut['find_word']],
     \ 'book_marks'           :[s:dashboard_shortcut_icon['book_marks'].'Jump to book marks                    '.s:dashboard_shortcut['book_marks']],
