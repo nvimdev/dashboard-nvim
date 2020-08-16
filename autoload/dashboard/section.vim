@@ -20,7 +20,7 @@ else
 endif
 
 if exists('g:dashboard_custom_shortcut_icon')
-  call extend(s:dashboard_shortcut, g:dashboard_custom_shortcut)
+  call extend(s:dashboard_shortcut_icon, g:dashboard_custom_shortcut_icon)
 else
   let s:dashboard_shortcut_icon['last_session'] = ' '
   let s:dashboard_shortcut_icon['find_history'] = ' '
