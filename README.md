@@ -58,7 +58,7 @@
   If you already define the vim-clap and fzf commands, just set your keymaps
   into the `g:dashboard_custom_shortcut`.
   If you want use the Dashboard wrap commands. you can define the dashboard
-  commands keymap then set it into `g:dashboard_custom_shutcut`
+  commands keymap then set it into `g:dashboard_custom_shortcut`
 
   ```viml
   eg : "SPC mean the leaderkey
