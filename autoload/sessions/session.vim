@@ -27,6 +27,9 @@ function! sessions#session#session_load(name)
   if filereadable(file_path)
     noautocmd silent! %bwipeout!
     execute 'silent! source '.file_path
+    if &laststatus == 0
+      set laststatus=2
+    endif
     echomsg 'Loaded "'.file_path.'" session'
   else
     echohl ErrorMsg
