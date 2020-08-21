@@ -212,6 +212,10 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   ```vim
   autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2
   ```
+- How to disable statusline in dashboard buffer?
+  ```vim 
+  autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+  ```
 
 ## Donate
 
