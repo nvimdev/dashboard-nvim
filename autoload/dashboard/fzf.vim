@@ -3,16 +3,6 @@
 " Maintainer:  Glepnir <http://github.com/glepnir>
 "
 let $FZF_DEFAULT_OPTS='--layout=reverse'
-let s:snr = get(s:, 'snr', s:snr())
-
-let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
-
-function s:fzf_window()
-  if g:dashboard_fzf_window == 1
-    let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
-  endif
-endfunction
-
 if !exists('g:dashboard_fzf_window_rate')
   let g:dashboard_fzf_window_rate = 0.9
 endif
@@ -44,6 +34,12 @@ endfunction
 fu s:snr() abort
     return matchstr(expand('<sfile>'), '.*\zs<SNR>\d\+_')
 endfu
+
+let s:snr = get(s:, 'snr', s:snr())
+
+if g:dashboard_fzf_window == 1
+    let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
+endif
 
 fu s:fzf_window(width, height, border_highlight) abort
     let width = float2nr(&columns * a:width)
