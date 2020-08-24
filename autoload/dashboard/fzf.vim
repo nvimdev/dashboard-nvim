@@ -2,6 +2,17 @@
 " Description: A fancy start screen for Vim.
 " Maintainer:  Glepnir <http://github.com/glepnir>
 "
+let $FZF_DEFAULT_OPTS='--layout=reverse'
+let s:snr = get(s:, 'snr', s:snr())
+
+let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
+
+function s:fzf_window()
+  if g:dashboard_fzf_window == 'float'
+    let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
+  endif
+endfunction
+
 if !exists('g:dashboard_fzf_window_rate')
   let g:dashboard_fzf_window_rate = 0.9
 endif
@@ -19,7 +30,11 @@ function! dashboard#fzf#change_colorscheme() abort
 endfunction
 
 function! dashboard#fzf#find_word() abort
-  Rg
+  if g:dashboard_fzf_engine == 'rg'
+    Rg
+  else
+    Ag
+  endif
 endfunction
 
 function! dashboard#fzf#book_marks() abort
@@ -29,9 +44,6 @@ endfunction
 fu s:snr() abort
     return matchstr(expand('<sfile>'), '.*\zs<SNR>\d\+_')
 endfu
-let $FZF_DEFAULT_OPTS='--layout=reverse'
-let s:snr = get(s:, 'snr', s:snr())
-let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
 
 fu s:fzf_window(width, height, border_highlight) abort
     let width = float2nr(&columns * a:width)
