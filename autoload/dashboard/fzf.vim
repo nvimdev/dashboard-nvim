@@ -8,7 +8,7 @@ let s:snr = get(s:, 'snr', s:snr())
 let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
 
 function s:fzf_window()
-  if g:dashboard_fzf_window == 'float'
+  if g:dashboard_fzf_window == 1
     let g:fzf_layout = {'window': 'call '..s:snr..'fzf_window(0.9, 0.6, "Comment")'}
   endif
 endfunction
@@ -32,7 +32,7 @@ endfunction
 function! dashboard#fzf#find_word() abort
   if g:dashboard_fzf_engine == 'rg'
     Rg
-  else
+  elseif g:dashboard_fzf_engine == 'ag'
     Ag
   endif
 endfunction
