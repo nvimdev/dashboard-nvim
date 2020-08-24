@@ -135,6 +135,7 @@
     Clap buffers
   endfunction
   ```
+- some options for fzf `g:dashboard_fzf_window` default is `float`, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
 
 ## Minial vimrc
 

@@ -19,6 +19,8 @@ let s:session_path = expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : s:home_dir.'/.c
 " Options
 let g:dashboard_version = '0.0.3'
 let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
+let g:dashboard_fzf_window =get(g:,'dashboard_fzf_window','float')
+let g:dashboard_fzf_engine = get(g:,'dashboard_fzf_engine','rg')
 let g:session_directory = get(g:, 'dashboard_session_directory',  s:session_path.'/session')
 let g:session_enable = get(g:,'dashboard_enable_session',1)
 
