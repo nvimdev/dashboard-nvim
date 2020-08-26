@@ -3,6 +3,9 @@
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
 function! dashboard#handler#new_file()
+  if &laststatus == 0
+      set laststatus=2
+    endif
   execute 'enew'
 endfunction
 
