@@ -15,13 +15,13 @@
 - vim-plug
 
   ```vim
-  Plug 'hardcoreplayers/dashboard-nvim'
+  Plug 'glepnir/dashboard-nvim'
   ```
 
 - dein
 
   ```vim
-  call dein#add('hardcoreplayers/dashboard-nvim')
+  call dein#add('glepnir/dashboard-nvim')
   ```
 
 ## Options
