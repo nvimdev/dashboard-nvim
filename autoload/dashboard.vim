@@ -47,6 +47,7 @@ function! dashboard#instance(on_vimenter) abort
         \ nolist
         \ nonumber
         \ norelativenumber
+        \ nowrap
         \ nospell
         \ noswapfile
         \ signcolumn=no
