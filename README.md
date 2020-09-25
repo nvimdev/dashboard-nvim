@@ -76,6 +76,7 @@
 - `g:dashboard_custom_shortcut_icon` custom the shortcut icon.like this
 
 ```
+ let g:dashboard_custom_shortcut_icon={}
  let g:dashboard_custom_shortcut_icon['last_session'] = ' '
  let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
  let g:dashboard_custom_shortcut_icon['find_file'] = ' '
@@ -137,7 +138,7 @@
   ```
 - some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
 
-## Minial vimrc
+## Minimal vimrc
 
 you can replace the vim-clap or fzf.vim commands by dashboard commands
 
