@@ -29,7 +29,7 @@
 - Config your excute tool by `g:dashboard_default_executive`,This option mean what fuzzy
   search plugins that you used. [vim-clap](https://github.com/liuchengxu/vim-clap)
   and [fzf.vim](https://github.com/junegunn/fzf.vim)
-  [leaderf](https://github.com/Yggdroot/LeaderF)
+  [Telescope](https://github.com/nvim-lua/telescope.nvim)
 
   ```viml
   " Default value is clap
