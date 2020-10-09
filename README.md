@@ -2,7 +2,7 @@
 <img src="https://user-images.githubusercontent.com/41671631/84760810-26c02480-affb-11ea-903a-d8796189e58a.png">
 </div>
 <p align="center">
-  <b><a href="https://github.com/hardcoreplayers/dashboard-nvim/wiki">Demo Screenshots</a></b>
+  <b><a href="https://github.com/glepnir/dashboard-nvim/wiki">Demo Screenshots</a></b>
   •
   <b><a href="/docs">docs</a></b>
 </p>
@@ -15,13 +15,13 @@
 - vim-plug
 
   ```vim
-  Plug 'hardcoreplayers/dashboard-nvim'
+  Plug 'glepnir/dashboard-nvim'
   ```
 
 - dein
 
   ```vim
-  call dein#add('hardcoreplayers/dashboard-nvim')
+  call dein#add('glepnir/dashboard-nvim')
   ```
 
 ## Options
@@ -100,7 +100,7 @@
   commicgirl18 commicgirl19 hydra
   ```
 
-  [Preview Headers](https://github.com/hardcoreplayers/dashboard-nvim/wiki/Header-Preview)
+  [Preview Headers](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview)
 
 - `g:dashboard_custom_header` custom the dashboard header (same as startify)
 
@@ -144,7 +144,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
 - dashboard-nvim with vim-clap
 
   ```viml
-  Plug 'hardcoreplayers/dashboard-nvim'
+  Plug 'glepnir/dashboard-nvim'
   Plug 'liuchengxu/vim-clap'
 
   let g:mapleader="\<Space>"
@@ -173,7 +173,7 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
 - dashboard-nvim with fzf.vim
 
   ```viml
-  Plug 'hardcoreplayers/dashboard-nvim'
+  Plug 'glepnir/dashboard-nvim'
   Plug 'junegunn/fzf.vim'
 
   let g:mapleader="\<Space>"
