@@ -3,7 +3,7 @@
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
 function! dashboard#telescope#find_file() abort
-  TelescopeFindFiles
+  TelescopeFindFile
 endfunction
 
 function! dashboard#telescope#find_history() abort
