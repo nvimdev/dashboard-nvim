@@ -3,11 +3,11 @@
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
 function! dashboard#telescope#find_file() abort
-  TelesopeFindFiles
+  TelescopeFindFiles
 endfunction
 
 function! dashboard#telescope#find_history() abort
-  TelesopeOldFiles
+  TelescopeOldFiles
 endfunction
 
 function! dashboard#telescope#change_colorscheme() abort
