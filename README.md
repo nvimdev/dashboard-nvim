@@ -123,14 +123,15 @@
   ```
 - Autocmd `Dashboard` `DashboardReady` same as vim-startify
 
-- `g:dashboard_custom_section` custom section, it's very easy to custom. like
-  example.
+- `g:dashboard_custom_section` custom section, it's a dict type,key is your section component name,
+  It will be used to sort. every component is a dict and must have `description` and `command`,
+  `description` is a list that show in Dashboard buffer,`command` is string or funcref type.
 
   ```viml
   let g:dashboard_custom_section={
     \ 'buffer_list': {
         \ 'description': [' Recently lase session                 SPC b b'],
-        \ 'command': string or funcref type}
+        \ 'command': 'Some Command' or function('your funciton name') }
     \ }
   ```
 - some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
@@ -139,22 +140,20 @@
 
 you can replace the vim-clap or fzf.vim commands by dashboard commands
 
-- dashboard-nvim with vim-clap
-
   ```viml
   Plug 'glepnir/dashboard-nvim'
-  Plug 'liuchengxu/vim-clap'
+  Plug 'liuchengxu/vim-clap' or Plug 'junegunn/fzf.vim' or Plug 'nvim-lua/telescope.nvim'
 
   let g:mapleader="\<Space>"
+  let g:dashboard_default_executive ='clap' or 'fzf' or 'telescope'
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
-  nmap <Leader>cn :<C-u>DashboardNewFile<CR>
-  nnoremap <silent> <Leader>fh :<C-u>Clap history<CR>
-  nnoremap <silent> <Leader>ff :<C-u>Clap files ++finder=rg --ignore --hidden --files<cr>
-  nnoremap <silent> <Leader>tc :<C-u>Clap colors<CR>
-  nnoremap <silent> <Leader>fa :<C-u>Clap grep2<CR>
-  nnoremap <silent> <Leader>fb :<C-u>Clap marks<CR>
-  nnoremap <silent> <Leader>cn :<C-u>DashboardNewFile<CR>
+  nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
+  nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+  nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+  nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+  nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
+  nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
 
   let g:dashboard_custom_shortcut={
     \ 'last_session'       : 'SPC s l',
@@ -166,34 +165,6 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
     \ 'book_marks'         : 'SPC f b',
     \ }
 
-  ```
-
-- dashboard-nvim with fzf.vim
-
-  ```viml
-  Plug 'glepnir/dashboard-nvim'
-  Plug 'junegunn/fzf.vim'
-
-  let g:mapleader="\<Space>"
-  nmap <Leader>ss :<C-u>SessionSave<CR>
-  nmap <Leader>sl :<C-u>SessionLoad<CR>
-  nmap <Leader>cn :<C-u>DashboardNewFile<CR>
-  nnoremap <silent> <Leader>fh :History<CR>
-  nnoremap <silent> <Leader>ff :Files<CR>
-  nnoremap <silent> <Leader>tc :Colors<CR>
-  nnoremap <silent> <Leader>fa :Rg<CR>
-  nnoremap <silent> <Leader>fb :Marks<CR>
-  nnoremap <silent> <Leader>cn :<C-u>DashboardNewFile<CR>
-
-  let g:dashboard_custom_shortcut={
-    \ 'last_session'       : 'SPC s l',
-    \ 'find_history'       : 'SPC f h',
-    \ 'find_file'          : 'SPC f f',
-    \ 'new_file'           : 'SPC c n',
-    \ 'change_colorscheme' : 'SPC t c',
-    \ 'find_word'          : 'SPC f a',
-    \ 'book_marks'         : 'SPC f b',
-    \ }
   ```
 
 ## FAQ
