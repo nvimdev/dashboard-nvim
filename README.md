@@ -128,12 +128,10 @@
 
   ```viml
   let g:dashboard_custom_section={
-    \ 'buffer_list': [' Recently lase session                 SPC b b'],
+    \ 'buffer_list': {
+        \ 'description': [' Recently lase session                 SPC b b'],
+        \ 'command': string or funcref type}
     \ }
-
-  function! BUFFER_LIST()
-    Clap buffers
-  endfunction
   ```
 - some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
 
