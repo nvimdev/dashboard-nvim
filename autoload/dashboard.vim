@@ -132,12 +132,12 @@ endfunction
 function! s:call_line_function()
   let l:current_line = getpos('.')[1]
   if has_key(s:dashboard.entries, l:current_line)
-    let l:method = s:dashboard.entries[l:current_line]['cmd']
-    if exists('g:dashboard_custom_section')
-      let l:upper_method = toupper(l:method)
-      call {l:upper_method}()
+    if type(s:dashboard.entries[l:current_line]['cmd']) == 2
+      call s:dashboard.entries[l:current_line]['cmd']()
+    elseif type(s:dashboard.entries[l:current_line]['cmd']) == 1
+      execute s:dashboard.entries[l:current_line]['cmd']
     else
-      call dashboard#handler#{l:method}()
+      echomsg 'Dashboard : Not support type'
     endif
   endif
 endfunction
@@ -200,8 +200,8 @@ endfunction
 " Function: s:register {{{1
 function! dashboard#register(line, index, cmd )
   let s:dashboard.entries[a:line] = {
-        \ 'index':  a:index,
         \ 'line':   a:line,
+        \ 'index':  a:index,
         \ 'cmd':    a:cmd,
         \ }
 endfunction
