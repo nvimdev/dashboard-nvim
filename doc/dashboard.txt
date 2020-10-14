@@ -142,13 +142,11 @@ Example #2:
 >
 
 	let g:dashboard_custom_section={
-	\ 'buffer_list': [' Recently lase session                 SPC b b'],
+	\ 'buffer_list': {
+		\ 'describtion': [' Recently lase session                 SPC b b'],
+		\ 'command': string or funcref type},
 	\ }
 
-	function! BUFFER_LIST()
-	Clap buffers
-	endfunction
-<
 ------------------------------------------------------------------------------
                                                         *g:dashboard_session_directory*
 >
@@ -259,6 +257,9 @@ For users who use the fzf.vim
 <
 ==============================================================================
 CHANGELOG
+
+2020-10-14
+* Refactor section
 
 2020-8-14
 * Add 'New File' section

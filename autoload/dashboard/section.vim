@@ -35,13 +35,27 @@ if exists('g:dashboard_custom_section')
   call extend(s:Section, g:dashboard_custom_section)
 else
   let s:Section = {
-    \ 'last_session'         :[s:dashboard_shortcut_icon['last_session'].'Recently last session                 '.s:dashboard_shortcut['last_session']],
-    \ 'find_history'         :[s:dashboard_shortcut_icon['find_history'].'Recently opened files                 '.s:dashboard_shortcut['find_history']],
-    \ 'find_file'            :[s:dashboard_shortcut_icon['find_file'].'Find  File                            '.s:dashboard_shortcut['find_file']],
-    \ 'new_file'             :[s:dashboard_shortcut_icon['new_file'].'New  File                             '.s:dashboard_shortcut['new_file']],
-    \ 'change_colorscheme'   :[s:dashboard_shortcut_icon['change_colorscheme'].'Change Colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
-    \ 'find_word'            :[s:dashboard_shortcut_icon['find_word'].'Find  word                            '.s:dashboard_shortcut['find_word']],
-    \ 'book_marks'           :[s:dashboard_shortcut_icon['book_marks'].'Jump to book marks                    '.s:dashboard_shortcut['book_marks']],
+    \ 'last_session'         :{
+          \ 'description': [s:dashboard_shortcut_icon['last_session'].'Recently last session                 '.s:dashboard_shortcut['last_session']],
+          \ 'command':function('dashboard#handler#last_session')},
+    \ 'find_history'         :{
+          \ 'description': [s:dashboard_shortcut_icon['find_history'].'Recently opened files                 '.s:dashboard_shortcut['find_history']],
+          \ 'command':function('dashboard#handler#find_history')},
+    \ 'find_file'            :{
+          \ 'description': [s:dashboard_shortcut_icon['find_file'].'Find  File                            '.s:dashboard_shortcut['find_file']],
+          \ 'command':function('dashboard#handler#find_file')},
+    \ 'new_file'             :{
+          \ 'description': [s:dashboard_shortcut_icon['new_file'].'New  File                             '.s:dashboard_shortcut['new_file']],
+          \ 'command':function('dashboard#handler#new_file')},
+    \ 'change_colorscheme'   :{
+          \ 'description': [s:dashboard_shortcut_icon['change_colorscheme'].'Change Colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
+          \ 'command':function('dashboard#handler#change_colorscheme')},
+    \ 'find_word'            :{
+          \ 'description': [s:dashboard_shortcut_icon['find_word'].'Find  word                            '.s:dashboard_shortcut['find_word']],
+          \ 'command': function('dashboard#handler#find_word')},
+    \ 'book_marks'           :{
+          \ 'description': [s:dashboard_shortcut_icon['book_marks'].'Jump to book marks                    '.s:dashboard_shortcut['book_marks']],
+          \ 'command':function('dashboard#handler#book_marks')},
     \ }
 endif
 
@@ -60,9 +74,9 @@ function! s:set_section()
   endfor
 
   for key in sort(l:sorted)
-    let dashboard_{key} = g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(s:Section[key]))
+    let dashboard_{key} = g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(s:Section[key]["description"]))
     call append('$',dashboard_{key})
-    call dashboard#register(line('$'), key, key)
+    call dashboard#register(line('$'), key, s:Section[key]["command"])
     call append('$', s:empty_lines)
   endfor
 endfunction
