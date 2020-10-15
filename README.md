@@ -155,16 +155,6 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
   nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
 
-  let g:dashboard_custom_shortcut={
-    \ 'last_session'       : 'SPC s l',
-    \ 'find_history'       : 'SPC f h',
-    \ 'find_file'          : 'SPC f f',
-    \ 'new_file'           : 'SPC c n',
-    \ 'change_colorscheme' : 'SPC t c',
-    \ 'find_word'          : 'SPC f a',
-    \ 'book_marks'         : 'SPC f b',
-    \ }
-
   ```
 
 ## FAQ
