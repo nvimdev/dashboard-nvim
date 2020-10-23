@@ -17,7 +17,7 @@ let s:home_dir = getenv('HOME')
 let s:session_path = expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : s:home_dir.'/.cache') . '/vim')
 
 " Options
-let g:dashboard_version = '0.0.4'
+let g:dashboard_version = '0.0.5'
 let g:dashboard_executive = get(g:,'dashboard_default_executive','clap')
 let g:dashboard_fzf_window =get(g:,'dashboard_fzf_float',1)
 let g:dashboard_fzf_engine = get(g:,'dashboard_fzf_engine','rg')
@@ -25,8 +25,8 @@ let g:session_directory = get(g:, 'dashboard_session_directory',  s:session_path
 let g:session_enable = get(g:,'dashboard_enable_session',1)
 let g:dashboard_command = get(g:,'dashboard_preview_command','')
 let g:preview_file_path = get(g:,'dashboard_preview_file','')
-let g:preview_file_height = get(g:,'dashboard_preview_file_height',10)
-let g:preview_file_width = get(g:,'dashboard_preview_file_width',70)
+let g:preview_file_height = get(g:,'dashboard_preview_file_height',0)
+let g:preview_file_width = get(g:,'dashboard_preview_file_width',0)
 
 augroup dashboard
   autocmd!
