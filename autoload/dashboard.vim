@@ -225,6 +225,7 @@ function! dashboard#close_win()
   endif
   if &filetype != 'dashboard'
     call nvim_win_close(s:dashboard_winid,v:true)
+    let s:dashboard_winid = 0
   endif
 endfunction
 
