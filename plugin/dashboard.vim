@@ -23,12 +23,17 @@ let g:dashboard_fzf_window =get(g:,'dashboard_fzf_float',1)
 let g:dashboard_fzf_engine = get(g:,'dashboard_fzf_engine','rg')
 let g:session_directory = get(g:, 'dashboard_session_directory',  s:session_path.'/session')
 let g:session_enable = get(g:,'dashboard_enable_session',1)
+let g:dashboard_command = get(g:,'dashboard_preview_command','cat')
+let g:preview_file_path = get(g:,'dashboard_preview_file','~/workstation/vim/dashboard-nvim/neovim.cat')
+let g:preview_file_height = get(g:,'dashboard_preview_file_height',10)
+let g:preview_file_width = get(g:,'dashboard_preview_file_width',70)
 
 augroup dashboard
   autocmd!
   autocmd VimEnter * nested call s:loaded_dashboard()
   autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
   autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
+  autocmd BufEnter * call dashboard#close_win()
 augroup END
 
 function! s:loaded_dashboard() abort
