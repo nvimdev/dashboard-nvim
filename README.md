@@ -136,6 +136,14 @@
   ```
 - some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
 
+- `dashboard_preview_command` like `cat` etc.
+
+- `dashboard_preview_file` your preview file path string.
+
+- `dashboard_preview_file_height` preview file height.
+
+- `dashboard_preview_file_width` preview file width.
+
 ## Minial vimrc
 
 you can replace the vim-clap or fzf.vim commands by dashboard commands
