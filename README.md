@@ -136,7 +136,8 @@
   ```
 - some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
 
-- `dashboard_preview_command` like `cat` etc.
+- `dashboard_preview_command`  a command that can normal output in neovim built-in terminal.like
+  `cat` etc
 
 - `dashboard_preview_file` your preview file path string.
 
