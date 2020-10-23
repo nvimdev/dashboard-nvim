@@ -10,6 +10,7 @@ let g:autoloaded_dashboard = 1
 let s:fixed_column = 0
 let s:empty_lines = ['']
 let s:dashboard={}
+let s:dashboard_winid = 0
 
 function! dashboard#get_lastline() abort
   let s:dashboard.lastline = line('$')
@@ -57,13 +58,20 @@ function! dashboard#instance(on_vimenter) abort
 
   " Set Header
   let g:dashboard_header = exists('g:dashboard_custom_header')
-        \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_header))
-        \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(dashboard#header#get_header()))
+       \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_header))
+       \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(dashboard#header#get_header()))
   if !empty(g:dashboard_header)
     let g:dashboard_header += ['']  " add blank line
   endif
-  call append('$', g:dashboard_header)
-  call append('$', s:empty_lines)
+
+  if empty(g:dashboard_command) && empty(g:preview_file_path)
+    call append('$', g:dashboard_header)
+    call append('$', s:empty_lines)
+  else
+    for i in range(1,g:preview_file_height + 4)
+      call append('$', s:empty_lines)
+    endfor
+  endif
 
   let s:dashboard = {
         \ 'entries':   {},
@@ -103,6 +111,11 @@ function! dashboard#instance(on_vimenter) abort
     doautocmd <nomodeline> User DashboardReady
   endif
 
+  let s:dashboard_bufnr = bufnr()
+  if !empty(g:dashboard_command) && !empty(g:preview_file_path)
+    let s:dashboard_winid = dashboard#preview#preview_file()
+    exec "normal \<C-W>\<C-w>"
+  endif
 endfunction
 
 function! s:print_plugins_message() abort
@@ -204,6 +217,15 @@ function! dashboard#register(line, index, cmd )
         \ 'index':  a:index,
         \ 'cmd':    a:cmd,
         \ }
+endfunction
+
+function! dashboard#close_win()
+  if s:dashboard_winid == 0 || &filetype == 'dashboard'
+    return
+  endif
+  if &filetype != 'dashboard'
+    call nvim_win_close(s:dashboard_winid,v:true)
+  endif
 endfunction
 
 
