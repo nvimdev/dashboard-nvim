@@ -14,6 +14,7 @@ function! dashboard#preview#preview_file()
   let s:buf = nvim_create_buf(v:false, v:true)
   let s:winid = nvim_open_win(s:buf, v:true, s:opts)
   call nvim_win_set_option(s:winid, "winhl", "Normal:DashboardTerminal")
+  setlocal nobuflisted
   hi DashboardTerminal guibg=NONE gui=NONE
   execute 'terminal ' . g:dashboard_command .' ' . g:preview_file_path
   return s:winid
