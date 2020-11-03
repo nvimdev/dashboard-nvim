@@ -3,22 +3,22 @@
 " Maintainer:  Glepnir <http://github.com/glepnir>
 
 function! dashboard#telescope#find_file() abort
-  Telescope find_files
+  Telescope find_files prompt_prefix=🔍
 endfunction
 
 function! dashboard#telescope#find_history() abort
-  Telescope oldfiles
+  Telescope oldfiles prompt_prefix=🔍
 endfunction
 
 function! dashboard#telescope#change_colorscheme() abort
-  Telescope colorscheme
+  Telescope colorscheme prompt_prefix=🔍
 endfunction
 
 function! dashboard#telescope#find_word() abort
-  Telescope grep_string
+  Telescope grep_string prompt_prefix=🔍
 endfunction
 
 function! dashboard#telescope#book_marks() abort
-  Telescope marks
+  Telescope marks prompt_prefix=🔍
 endfunction
 
