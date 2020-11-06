@@ -90,7 +90,6 @@ function! dashboard#instance(on_vimenter) abort
     let footer = [''] + footer
   endif
   call append('$', footer)
-  call append('$', s:empty_lines)
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
