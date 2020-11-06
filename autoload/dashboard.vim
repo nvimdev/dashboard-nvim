@@ -96,11 +96,6 @@ function! dashboard#instance(on_vimenter) abort
   endif
   call append('$', footer)
   call append('$', s:empty_lines)
-  let footer_end = exists('g:dashboard_custom_footer_end')
-    \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_footer_end))
-    \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(['']))
-
-  call append('$', footer_end)
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
