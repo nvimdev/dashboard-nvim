@@ -17,11 +17,6 @@ function! dashboard#get_lastline() abort
   return s:dashboard.lastline
 endfunction
 
-function! dashboard#get_endline() abort
-  let l:last_line = dashboard#get_lastline()
-  return l:last_line + 1
-endfunction
-
 function! dashboard#get_centerline() abort
   return s:dashboard.centerline
 endfunction
