@@ -106,6 +106,8 @@
 
 - `g:dashboard_custom_footer` custom the dashboard footer (same as startify)
 
+- `g:dashboard_custom_footer_end` custom the dashboard footer end
+
 - Dashboard provide session support with `SessionLoad` and `SessionSave`
   commands you can define keymap like this .
   ```viml
@@ -120,6 +122,7 @@
   DashboardCenter
   DashboardShortcut
   DashboardFooter
+  DashboardFooterEnd
   ```
 - Autocmd `Dashboard` `DashboardReady` same as vim-startify
 

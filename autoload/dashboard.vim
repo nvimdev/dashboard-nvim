@@ -17,6 +17,11 @@ function! dashboard#get_lastline() abort
   return s:dashboard.lastline
 endfunction
 
+function! dashboard#get_endline() abort
+  let l:last_line = dashboard#get_lastline()
+  return l:last_line + 1
+endfunction
+
 function! dashboard#get_centerline() abort
   return s:dashboard.centerline
 endfunction
@@ -90,7 +95,12 @@ function! dashboard#instance(on_vimenter) abort
     let footer = [''] + footer
   endif
   call append('$', footer)
+  call append('$', s:empty_lines)
+  let footer_end = exists('g:dashboard_custom_footer_end')
+    \ ? g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(g:dashboard_custom_footer_end))
+    \ : g:dashboard#utils#set_custom_section(g:dashboard#utils#draw_center(['']))
 
+  call append('$', footer_end)
 
   setlocal nomodifiable nomodified
   call s:set_mappings()
