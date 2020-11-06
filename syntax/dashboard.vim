@@ -13,6 +13,8 @@ execute 'syntax region DashboardHeader start=/\%1l/ end=/\%'. (dashboard#get_cen
 
 execute 'syntax region DashboardFooter start=/\%'. dashboard#get_lastline() .'l/ end=/\_.*/'
 
+execute 'syntax region DashboardFooterEnd start=/\%'. dashboard#get_endline() .'l/ end=/\_.*/'
+
 syntax region DashboardCenter start=/\S/ end=/\s\{1,3}/
 
 syntax region DashboardShortCut start=/\s\s\w\+\s[a-z]\+/ end=/$/
@@ -21,6 +23,7 @@ highlight default link DashboardHeader  Type
 highlight default link DashboardCenter  String
 highlight default link DashboardShortCut Keyword
 highlight default link DashboardFooter  Boolean
+highlight default link DashboardFooterEnd  Keyword
 
 let b:current_syntax = 'dashboard'
 
