@@ -186,21 +186,6 @@ you can replace the vim-clap or fzf.vim commands by dashboard commands
   autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2
   ```
 
-## Donate
-
-Do you like dashboard-nvim? buy me a coffe 😘!
-
-[![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/bobbyhub)
-
-| Wechat                                                                                                          | AliPay                                                                                                       |
-| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ![wechat](https://user-images.githubusercontent.com/41671631/84404718-c8312a00-ac39-11ea-90d7-ee679fbb3705.png) | ![ali](https://user-images.githubusercontent.com/41671631/84403276-1a714b80-ac38-11ea-8607-8492df84e516.png) |
-
-## Acknowledgement
-
-- Inspired by [doom emacs](https://github.com/hlissner/doom-emacs)
-
-- [vim-startify](https://github.com/mhinz/vim-startify)
 
 ## LICENSE
 
