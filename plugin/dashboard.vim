@@ -27,11 +27,14 @@ let g:dashboard_command = get(g:,'dashboard_preview_command','')
 let g:preview_file_path = get(g:,'dashboard_preview_file','')
 let g:preview_file_height = get(g:,'dashboard_preview_file_height',0)
 let g:preview_file_width = get(g:,'dashboard_preview_file_width',0)
+let s:disable_statusline = get(g:,'dashboard_disable_statusline',0)
 
 augroup dashboard
   autocmd!
   autocmd VimEnter * nested call s:loaded_dashboard()
-  autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+  if s:disable_statusline
+    autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+  endif
   autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
   autocmd BufEnter * call dashboard#close_win()
 augroup END
