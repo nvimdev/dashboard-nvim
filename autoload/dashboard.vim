@@ -113,8 +113,9 @@ function! dashboard#instance(on_vimenter) abort
   let s:dashboard_bufnr = bufnr()
   if !empty(g:dashboard_command) && !empty(g:preview_file_path)
     let s:dashboard_winid = dashboard#preview#preview_file()
+    set filetype=dashpreview
     silent! setlocal nobuflisted
-    exec "normal \<C-W>\<C-w>"
+    " exec "normal \<C-W>\<C-w>"
   endif
 endfunction
 
