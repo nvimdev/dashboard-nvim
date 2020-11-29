@@ -12,6 +12,7 @@ function! dashboard#preview#preview_file()
     \ 'style': 'minimal'
     \ }
   let s:buf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_option(s:buf,'filetype','dashpreview')
   let s:winid = nvim_open_win(s:buf, v:true, s:opts)
   call nvim_win_set_option(s:winid, "winhl", "Normal:DashboardTerminal")
   hi DashboardTerminal guibg=NONE gui=NONE
