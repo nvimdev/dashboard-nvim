@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://user-images.githubusercontent.com/41671631/100820859-2113a980-348a-11eb-8a11-c1fa3a76ab2f.png">
+<img src="https://user-images.githubusercontent.com/41671631/84760810-26c02480-affb-11ea-903a-d8796189e58a.png">
 </div>
 <p align="center">
   <b><a href="https://github.com/glepnir/dashboard-nvim/wiki">Demo Screenshots</a></b>
@@ -7,7 +7,7 @@
   <b><a href="/docs">docs</a></b>
 </p>
 <div align="center">
-<img src="https://user-images.githubusercontent.com/41671631/84384273-4f71a400-ac20-11ea-8806-8052ed64f28b.png" width="704" height="507">
+<img src="https://user-images.githubusercontent.com/41671631/100820859-2113a980-348a-11eb-8a11-c1fa3a76ab2f.png">
 </div>
 
 ## Install
