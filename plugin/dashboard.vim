@@ -27,6 +27,7 @@ let g:dashboard_command = get(g:,'dashboard_preview_command','')
 let g:preview_file_path = get(g:,'dashboard_preview_file','')
 let g:preview_file_height = get(g:,'dashboard_preview_file_height',0)
 let g:preview_file_width = get(g:,'dashboard_preview_file_width',0)
+let g:preview_pipeline_command = get(g:,'dashboard_preview_pipeline','')
 let s:disable_statusline = get(g:,'dashboard_disable_statusline',0)
 
 augroup dashboard
