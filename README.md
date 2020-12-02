@@ -139,7 +139,7 @@
 - `dashboard_preview_command`  a command that can normal output in neovim built-in terminal.like
   `cat` etc
 
-- `dashboard_preview_pipeline_command` pipeline command
+- `dashboard_preview_pipeline` pipeline command
 
 - `dashboard_preview_file` your preview file path string.
 
