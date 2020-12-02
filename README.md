@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://user-images.githubusercontent.com/41671631/84760810-26c02480-affb-11ea-903a-d8796189e58a.png">
+<img src="https://user-images.githubusercontent.com/41671631/100820859-2113a980-348a-11eb-8a11-c1fa3a76ab2f.png">
 </div>
 <p align="center">
   <b><a href="https://github.com/glepnir/dashboard-nvim/wiki">Demo Screenshots</a></b>
@@ -138,6 +138,8 @@
 
 - `dashboard_preview_command`  a command that can normal output in neovim built-in terminal.like
   `cat` etc
+
+- `dashboard_preview_pipeline_command` pipeline command
 
 - `dashboard_preview_file` your preview file path string.
 
