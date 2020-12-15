@@ -19,16 +19,16 @@ else
   let s:dashboard_shortcut['book_marks'] = 'SPC f b'
 endif
 
+let s:dashboard_shortcut_icon['last_session'] = ' '
+let s:dashboard_shortcut_icon['find_history'] = ' '
+let s:dashboard_shortcut_icon['find_file'] = ' '
+let s:dashboard_shortcut_icon['new_file'] = ' '
+let s:dashboard_shortcut_icon['change_colorscheme'] = ' '
+let s:dashboard_shortcut_icon['find_word'] = ' '
+let s:dashboard_shortcut_icon['book_marks'] = ' '
+
 if exists('g:dashboard_custom_shortcut_icon')
-  call extend(s:dashboard_shortcut_icon, g:dashboard_custom_shortcut_icon)
-else
-  let s:dashboard_shortcut_icon['last_session'] = ' '
-  let s:dashboard_shortcut_icon['find_history'] = ' '
-  let s:dashboard_shortcut_icon['find_file'] = ' '
-  let s:dashboard_shortcut_icon['new_file'] = ' '
-  let s:dashboard_shortcut_icon['change_colorscheme'] = ' '
-  let s:dashboard_shortcut_icon['find_word'] = ' '
-  let s:dashboard_shortcut_icon['book_marks'] = ' '
+  call extend(s:dashboard_shortcut_icon, g:dashboard_custom_shortcut_icon,'force')
 endif
 
 if exists('g:dashboard_custom_section')
