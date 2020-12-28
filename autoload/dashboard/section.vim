@@ -42,19 +42,19 @@ else
           \ 'description': [s:dashboard_shortcut_icon['find_history'].'Recently opened files                 '.s:dashboard_shortcut['find_history']],
           \ 'command':function('dashboard#handler#find_history')},
     \ 'find_file'            :{
-          \ 'description': [s:dashboard_shortcut_icon['find_file'].'Find  File                            '.s:dashboard_shortcut['find_file']],
+          \ 'description': [s:dashboard_shortcut_icon['find_file'].'Find file                            '.s:dashboard_shortcut['find_file']],
           \ 'command':function('dashboard#handler#find_file')},
     \ 'new_file'             :{
-          \ 'description': [s:dashboard_shortcut_icon['new_file'].'New  File                             '.s:dashboard_shortcut['new_file']],
+          \ 'description': [s:dashboard_shortcut_icon['new_file'].'New file                             '.s:dashboard_shortcut['new_file']],
           \ 'command':function('dashboard#handler#new_file')},
     \ 'change_colorscheme'   :{
-          \ 'description': [s:dashboard_shortcut_icon['change_colorscheme'].'Change Colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
+          \ 'description': [s:dashboard_shortcut_icon['change_colorscheme'].'Change colorscheme                    '.s:dashboard_shortcut['change_colorscheme']],
           \ 'command':function('dashboard#handler#change_colorscheme')},
     \ 'find_word'            :{
-          \ 'description': [s:dashboard_shortcut_icon['find_word'].'Find  word                            '.s:dashboard_shortcut['find_word']],
+          \ 'description': [s:dashboard_shortcut_icon['find_word'].'Find word                            '.s:dashboard_shortcut['find_word']],
           \ 'command': function('dashboard#handler#find_word')},
     \ 'book_marks'           :{
-          \ 'description': [s:dashboard_shortcut_icon['book_marks'].'Jump to book marks                    '.s:dashboard_shortcut['book_marks']],
+          \ 'description': [s:dashboard_shortcut_icon['book_marks'].'Jump to bookmarks                    '.s:dashboard_shortcut['book_marks']],
           \ 'command':function('dashboard#handler#book_marks')},
     \ }
 endif
