@@ -64,6 +64,18 @@ function! dashboard#instance(on_vimenter) abort
     let g:dashboard_header += ['']  " add blank line
   endif
 
+  if !empty(g:dashboard_command) && !empty(g:preview_file_path)
+    if v:version >= 800
+      call v:lua.require('dashboard.preview')
+    else
+      let preview_winid = dashboard#preview#preview_file()
+      set filetype=dashpreview
+      silent! setlocal nobuflisted
+      exec "normal \<C-W>\<C-w>"
+      call nvim_win_set_var(0,'dashboard_preview_winid',preview_winid)
+    endif
+  endif
+
   if empty(g:dashboard_command) && empty(g:preview_file_path)
     call append('$', g:dashboard_header)
     call append('$', s:empty_lines)
@@ -108,14 +120,6 @@ function! dashboard#instance(on_vimenter) abort
   endif
   if exists('#User#DashboardReady')
     doautocmd <nomodeline> User DashboardReady
-  endif
-
-  let s:dashboard_bufnr = bufnr()
-  if !empty(g:dashboard_command) && !empty(g:preview_file_path)
-    let s:dashboard_winid = dashboard#preview#preview_file()
-    set filetype=dashpreview
-    silent! setlocal nobuflisted
-    exec "normal \<C-W>\<C-w>"
   endif
 endfunction
 
@@ -221,6 +225,7 @@ function! dashboard#register(line, index, cmd )
 endfunction
 
 function! dashboard#close_win()
+  let s:dashboard_winid = get(w:,'dashboard_preview_winid',0)
   if s:dashboard_winid == 0 || &filetype == 'dashboard'
     return
   endif
