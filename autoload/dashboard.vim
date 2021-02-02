@@ -226,7 +226,6 @@ endfunction
 
 function! dashboard#close_win()
   let s:dashboard_winid = get(w:,'dashboard_preview_winid',0)
-  echomsg s:dashboard_winid
   if s:dashboard_winid == 0
     return
   endif
