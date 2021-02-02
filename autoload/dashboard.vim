@@ -226,10 +226,11 @@ endfunction
 
 function! dashboard#close_win()
   let s:dashboard_winid = get(w:,'dashboard_preview_winid',0)
-  if s:dashboard_winid == 0 || &filetype == 'dashboard'
+  echomsg s:dashboard_winid
+  if s:dashboard_winid == 0
     return
   endif
-  if &filetype != 'dashboard'
+  if nvim_win_is_valid(s:dashboard_winid)
     call nvim_win_close(s:dashboard_winid,v:true)
     let w:dashboard_preview_winid = 0
   endif

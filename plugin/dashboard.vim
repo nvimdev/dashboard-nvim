@@ -38,6 +38,7 @@ augroup dashboard
   endif
   autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
   autocmd BufEnter * call dashboard#close_win()
+  autocmd User Telescope call dashboard#close_win()
 augroup END
 
 function! s:loaded_dashboard() abort
