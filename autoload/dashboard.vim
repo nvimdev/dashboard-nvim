@@ -124,6 +124,7 @@ function! dashboard#instance(on_vimenter) abort
 endfunction
 
 function! s:print_plugins_message() abort
+  let l:packer = stdpath('data') .'/site/pack/packer/opt/packer.nvim'
   if has('nvim')
     let l:vim = 'neovim'
   else
@@ -133,6 +134,8 @@ function! s:print_plugins_message() abort
     let l:total_plugins = len(dein#get())
   elseif exists('*plug#begin')
     let l:total_plugins = len(keys(g:plugs))
+  elseif isdirectory(l:packer)
+    let l:total_plugins = luaeval('#vim.tbl_keys(packer_plugins)')
   else
     return [' Have fun with ' . l:vim]
   endif
