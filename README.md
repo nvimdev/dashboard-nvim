@@ -4,7 +4,7 @@
 <p align="center">
   <b><a href="https://github.com/glepnir/dashboard-nvim/wiki">Demo Screenshots</a></b>
   •
-  <b><a href="/docs">docs</a></b>
+  <b><a href="/doc/dashboard.txt">doc</a></b>
 </p>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/41671631/100820859-2113a980-348a-11eb-8a11-c1fa3a76ab2f.png">
