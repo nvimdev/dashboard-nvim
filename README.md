@@ -15,12 +15,14 @@
 - vim-plug
 
   ```vim
+  Plug 'liuchengxu/vim-clap'
   Plug 'glepnir/dashboard-nvim'
   ```
 
 - dein
 
   ```vim
+  call dein#add('liuchengxu/vim-clap')
   call dein#add('glepnir/dashboard-nvim')
   ```
 
