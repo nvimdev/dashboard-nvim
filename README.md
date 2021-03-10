@@ -61,6 +61,7 @@
     - fzf.vim : `Marks`
 
   If you have already defined the vim-clap and fzf commands, just set your keymaps into `g:dashboard_custom_shortcut`.
+  
   If you want to use the built-in commands, you can create the dashboard command keymappings (refer to **Minimal Vimrc** session Line 8-13) then set them into `g:dashboard_custom_shortcut`.
 
   ```vim
