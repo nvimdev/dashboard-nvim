@@ -41,8 +41,8 @@
   let g:dashboard_default_executive ='clap'
   ```
   
-- Dashboard wraps some `vim-clap` and `fzf.vim` commands and displays in popup windows.
-  The built-in dashboard commands execute based on the plugin you set in previous session.
+- Dashboard wraps some `vim-clap` and `fzf.vim` commands and displays the result in popup windows.
+  The built-in dashboard commands executed are based on the plugin you set in previous session.
 
   - DashboardFindFile is the same as: 
     - vim-clap: `Clap history Clap files ++finder=rg --ignore --hidden --files`
