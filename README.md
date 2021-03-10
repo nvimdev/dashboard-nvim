@@ -30,6 +30,7 @@
   search plugins that you used. [vim-clap](https://github.com/liuchengxu/vim-clap)
   and [fzf.vim](https://github.com/junegunn/fzf.vim)
   [Telescope](https://github.com/nvim-lua/telescope.nvim)
+  You must instll one of them.
 
   ```viml
   " Default value is clap
