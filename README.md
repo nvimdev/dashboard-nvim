@@ -26,96 +26,106 @@
 
 ## Options
 
-- Config your excute tool by `g:dashboard_default_executive`,This option mean what fuzzy
-  search plugins that you used. [vim-clap](https://github.com/liuchengxu/vim-clap)
-  and [fzf.vim](https://github.com/junegunn/fzf.vim)
-  [Telescope](https://github.com/nvim-lua/telescope.nvim)
-  You must instll one of them.
+- Use `g:dashboard_default_executive` to select which fuzzy search plugins that you would like to apply: 
+  
+  - [vim-clap](https://github.com/liuchengxu/vim-clap)
+  
+  - [fzf.vim](https://github.com/junegunn/fzf.vim)
 
+  - [Telescope](https://github.com/nvim-lua/telescope.nvim)
+  
+    **You must install one of them.**
+  
   ```viml
   " Default value is clap
   let g:dashboard_default_executive ='clap'
   ```
+  
+- Dashboard wraps some `vim-clap` and `fzf.vim` commands and displays in popup windows.
+  The built-in dashboard commands execute based on the plugin you set in previous session.
 
-- Dashboard wrap some `vim-clap` and `fzf.vim` commands with window config, And
-  the dashboard commands execute tool depends on what plugin you used
-
-  - DashboardFindFile same as
+  - DashboardFindFile is the same as: 
     - vim-clap: `Clap history Clap files ++finder=rg --ignore --hidden --files`
     - fzf.vim : `Files`
-  - DashboardFindHistory same as
+  - DashboardFindHistory: 
     - vim-clap: `Clap history`
     - fzf.vim : `History`
-  - DashboardChangeColorscheme same as
+  - DashboardChangeColorscheme: 
     - vim-clap: `Clap colors`
     - fzf.vim : `Colors`
-  - DashboardFindWord same as
+  - DashboardFindWord:
     - vim-clap: `Clap grep2`
     - fzf.vim : `Rg`
-  - DashboardJumpMark same as
+  - DashboardJumpMark:
     - vim-clap: `Clap marks`
     - fzf.vim : `Marks`
 
-  If you already define the vim-clap and fzf commands, just set your keymaps
-  into the `g:dashboard_custom_shortcut`.
-  If you want use the Dashboard wrap commands. you can define the dashboard
-  commands keymap then set it into `g:dashboard_custom_shortcut`
+  If you have already defined the vim-clap and fzf commands, just set your keymaps into `g:dashboard_custom_shortcut`.
+  If you want to use the built-in commands, you can create the dashboard command keymappings (refer to **Minimal Vimrc** session Line 8-13) then set them into `g:dashboard_custom_shortcut`.
 
   ```viml
   eg : "SPC mean the leaderkey
-      let g:dashboard_custom_shortcut={
-        \ 'last_session'       : 'SPC s l',
-        \ 'find_history'       : 'SPC f h',
-        \ 'find_file'          : 'SPC f f',
-        \ 'new_file'           : 'SPC c n',
-        \ 'change_colorscheme' : 'SPC t c',
-        \ 'find_word'          : 'SPC f a',
-        \ 'book_marks'         : 'SPC f b',
-        \ }
+  let g:dashboard_custom_shortcut={
+  \ 'last_session'       : 'SPC s l',
+  \ 'find_history'       : 'SPC f h',
+  \ 'find_file'          : 'SPC f f',
+  \ 'new_file'           : 'SPC c n',
+  \ 'change_colorscheme' : 'SPC t c',
+  \ 'find_word'          : 'SPC f a',
+  \ 'book_marks'         : 'SPC f b',
+  \ }
   ```
 
-- `g:dashboard_custom_shortcut_icon` custom the shortcut icon.like this
+- `g:dashboard_custom_shortcut_icon` customs the shortcut icons:
 
-```
- let g:dashboard_custom_shortcut_icon['last_session'] = ' '
- let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
- let g:dashboard_custom_shortcut_icon['find_file'] = ' '
- let g:dashboard_custom_shortcut_icon['new_file'] = ' '
- let g:dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
- let g:dashboard_custom_shortcut_icon['find_word'] = ' '
- let g:dashboard_custom_shortcut_icon['book_marks'] = ' '
+  Note: There is one extra space after the icon character to improve visibility.
 
-```
+  ```viml
+  let g:dashboard_custom_shortcut_icon['last_session'] = ' '
+  let g:dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
+  let g:dashboard_custom_shortcut_icon['find_file'] = ' '
+  let g:dashboard_custom_shortcut_icon['new_file'] = ' '
+  let g:dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
+  let g:dashboard_custom_shortcut_icon['find_word'] = ' '
+  let g:dashboard_custom_shortcut_icon['book_marks'] = ' '
+  ```
 
-- what does the shortcut do? just a tip like `whichkey`,on dashboard you just
-  move the cursor and press `enter`
+- What does the shortcut do? 
 
-- `g:dashboard_custom_header` custom the dashboard header (same as startify)
-  check [wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)
-  to find more Ascii Text Header collection.
+    Just a tip like `whichkey`, on the dashboard, shortcuts are items that you can use the cursor to navigate around and then press `Enter` to confirm.
 
-- `g:dashboard_custom_footer` custom the dashboard footer (same as startify)
+- `g:dashboard_custom_header` customs the dashboard header (same as startify). Check [wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text) to find more Ascii Text Header collections.
+  
+- `g:dashboard_custom_footer` customs the dashboard footer (same as startify).
 
-- Dashboard provide session support with `SessionLoad` and `SessionSave`
-  commands you can define keymap like this .
+- Dashboard provides session support. With `SessionLoad` and `SessionSave` commands, you can define keymaps like below:
+  
   ```viml
   nmap <Leader>ss :<C-u>SessionSave<CR>
   nmap <Leader>sl :<C-u>SessionLoad<CR>
   ```
-  set the `dashboard_session_directory` to change the session folder
-  default is `~/.cache/vim/session`
-- Highlight group
-  ```VimL
+  Set `dashboard_session_directory` to change the session folder which by default is `~/.cache/vim/session`.
+  
+- Highlight groups
+  ```viml
   DashboardHeader
   DashboardCenter
   DashboardShortcut
   DashboardFooter
   ```
-- Autocmd `Dashboard` `DashboardReady` same as vim-startify
 
-- `g:dashboard_custom_section` custom section, it's a dict type,key is your section component name,
-  It will be used to sort. every component is a dict and must have `description` and `command`,
-  `description` is a list that show in Dashboard buffer,`command` is string or funcref type.
+- Autocmd `Dashboard` `DashboardReady` are the same as vim-startify.
+
+- `g:dashboard_custom_section` customs your own sections. 
+  
+  It's a dictionary whose keys will be the name of the section.
+
+  Each value will be a sub-dict that must contains `description` and `command`.
+  
+  It will be used to sort. every component is a dict and must have `description` and `command`:
+  
+  * `description` is a list shown in Dashboard buffer.
+  * `command` is a string or funcref type.
 
   ```viml
   let g:dashboard_custom_section={
@@ -124,57 +134,59 @@
         \ 'command': 'Some Command' or function('your funciton name') }
     \ }
   ```
-- some options for fzf `g:dashboard_fzf_float` default is 1, `g:dashboard_fzf_engine` default is `rg` other value is `ag`
+  
+- some options for fzf :
 
-- `dashboard_preview_command`  a command that can normal output in neovim built-in terminal.like
-  `cat` etc
+    * `g:dashboard_fzf_float` : default is 1.
+    * `g:dashboard_fzf_engine`: default is `rg`, while the other value is `ag`.
 
-- `dashboard_preview_pipeline` pipeline command
+- `dashboard_preview_command`: use a command that can print output to a neovim built-in terminal. e.g. `cat`
+  
+- `dashboard_preview_pipeline`: pipeline command.
 
-- `dashboard_preview_file` your preview file path string.
+- `dashboard_preview_file`: the string path of your preview file.
 
-- `dashboard_preview_file_height` preview file height.
+- `dashboard_preview_file_height`: the height of the preview file.
 
-- `dashboard_preview_file_width` preview file width.
+- `dashboard_preview_file_width`: the width of the preview file.
 
-## Minial vimrc
+## Minimal Vimrc
 
-you can replace the vim-clap or fzf.vim commands by dashboard commands
+You can replace the vim-clap or fzf.vim commands by dashboard commands.
 
   ```viml
-  Plug 'glepnir/dashboard-nvim'
-  Plug 'liuchengxu/vim-clap' or Plug 'junegunn/fzf.vim' or Plug 'nvim-lua/telescope.nvim'
+Plug 'glepnir/dashboard-nvim'
+Plug 'liuchengxu/vim-clap' or Plug 'junegunn/fzf.vim' or Plug 'nvim-lua/telescope.nvim'
 
-  let g:mapleader="\<Space>"
-  let g:dashboard_default_executive ='clap' or 'fzf' or 'telescope'
-  nmap <Leader>ss :<C-u>SessionSave<CR>
-  nmap <Leader>sl :<C-u>SessionLoad<CR>
-  nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
-  nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
-  nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
-  nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
-  nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
-  nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
-
+let g:mapleader="\<Space>"
+let g:dashboard_default_executive ='clap' or 'fzf' or 'telescope'
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
+nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
+nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
   ```
 
 ## FAQ
 
-- What is it different from vim-startify ?
-  dashbaord is inspired by doom-emacs, startify provides a list of many files,
-  Mru oldfile, etc., but do we really need this list, we will only open one file,
-  and the file list takes up a lot of space, the dashboard uses fuzzy search plugin
-  pop-up menu, it saves a lot of space, and provides more functions.
+- What is the difference between this plugin and vim-startify?
+  Dashbaord is inspired by doom-emacs. vim-startify provides a list of many files, MRU old files, etc. But do we really need that list? We merely just wanna open one single file, while the huge files list is constantly occupying a lot of space.
+  Dashboard uses fuzzy search plugins, pop-up menus that hide all the lists and display only if needed. In addition, more functionalities are brought in.
+  
+- How to work with indentLine plugin?
 
-- How to work with indentline plugin ?
+  Disable the plugin while in dashboard:
 
-  ```vim
+  ```viml
   let g:indentLine_fileTypeExclude = ['dashboard']
   ```
 
-- How to disable tabline in dashboard buffer?
+- How to disable the tabline in dashboard buffer?
 
-  ```vim
+  ```viml
   autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2
   ```
 
