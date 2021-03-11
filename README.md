@@ -32,7 +32,7 @@
   
   - [fzf.vim](https://github.com/junegunn/fzf.vim)
 
-  - [Telescope](https://github.com/nvim-lua/telescope.nvim)
+  - [telescope.nvim](https://github.com/nvim-lua/telescope.nvim)
   
     **You must install one of them.**
   
@@ -41,26 +41,31 @@
   let g:dashboard_default_executive ='clap'
   ```
   
-- Dashboard utilises some `vim-clap` and `fzf.vim` commands and displays the result in popup windows.
+- Dashboard utilises some `vim-clap`, `fzf.vim`, and 'telescope.nvim' commands and displays the result in popup windows.
   The built-in dashboard commands executed are based on the plugin you set in previous session.
 
   - DashboardFindFile is the same as: 
-    - vim-clap: `Clap history Clap files ++finder=rg --ignore --hidden --files`
-    - fzf.vim : `Files`
+    - vim-clap: `Clap files ++finder=rg --ignore --hidden --files`
+    - fzf.vim: `Files`
+    - telescope.nvim: `Telescope find_files`
   - DashboardFindHistory: 
     - vim-clap: `Clap history`
-    - fzf.vim : `History`
+    - fzf.vim: `History`
+    - telescope.nvim: `Telescope oldfiles`
   - DashboardChangeColorscheme: 
     - vim-clap: `Clap colors`
-    - fzf.vim : `Colors`
+    - fzf.vim: `Colors`
+    - telescope.nvim: `Telescope colorscheme`
   - DashboardFindWord:
     - vim-clap: `Clap grep2`
-    - fzf.vim : `Rg`
+    - fzf.vim: `Rg` or `Ag`
+    - telescope.nvim: `Telescope live_grep`
   - DashboardJumpMark:
     - vim-clap: `Clap marks`
-    - fzf.vim : `Marks`
+    - fzf.vim: `Marks`
+    - telescope.nvim: `Telescope marks`
 
-  If you have already defined the vim-clap and fzf commands, just set your keymaps into `g:dashboard_custom_shortcut`.
+  If you have already defined the vim-clap/fzf/telescope commands, just set your keymaps into `g:dashboard_custom_shortcut`.
   
   If you want to use the built-in commands, you can create the dashboard command keymappings (refer to **Minimal Vimrc** session Line 8-13) then set them into `g:dashboard_custom_shortcut`.
 
@@ -124,7 +129,7 @@
   Each entry will be an object that must contain attribute `description` and attribute `command`:
   
   * `description` is a string shown in Dashboard buffer.
-  * `command` is a string or funcref type.
+  * `command` is a string or funcref type. You can pass every command from all fuzzy find plugins you used.
 
   ```vim
   let g:dashboard_custom_section={
