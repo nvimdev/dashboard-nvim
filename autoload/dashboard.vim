@@ -240,7 +240,6 @@ function! dashboard#close_win(force)
     return
   endif
 
-  echomsg a:force
   if nvim_win_is_valid(s:dashboard_winid) && &columns <= 94 || a:force
     call nvim_win_close(s:dashboard_winid,v:true)
     let w:dashboard_preview_winid = 0
