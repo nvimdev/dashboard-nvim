@@ -7,7 +7,7 @@
   <b><a href="/doc/dashboard.txt">doc</a></b>
 </p>
 <div align="center">
-<img src="https://user-images.githubusercontent.com/41671631/100820859-2113a980-348a-11eb-8a11-c1fa3a76ab2f.png">
+<img src="https://user-images.githubusercontent.com/41671631/110912263-b1e20700-834e-11eb-8058-c29e34ec439a.png">
 </div>
 
 ## Install
@@ -175,6 +175,21 @@ nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
   ```
 
 ## FAQ
+
+- Config as Demo
+
+  Thanks [@sunjon](https://github.com/sunjon) create this neovim logo. you can
+  find it in
+  [here](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)
+
+  ```vim
+  vim.g.dashboard_preview_command = 'cat'
+  vim.g.dashboard_preview_pipeline = 'lolcat'
+  vim.g.dashboard_preview_file = path to logo file like
+  ~/.config/nvim/neovim.cat
+  vim.g.dashboard_preview_file_height = 12
+  vim.g.dashboard_preview_file_width = 80
+  ```
 
 - What is the difference between this plugin and vim-startify?
 
