@@ -125,11 +125,17 @@ endfunction
 
 function! s:print_plugins_message() abort
   let l:packer = stdpath('data') .'/site/pack/packer/opt/packer.nvim'
+  let s:footer_icon = ''
+  if exist('g:dashboard_footer_icon')
+    let s:footer_icon = get(g:,'dashboard_footer_icon','')
+  endif
+
   if has('nvim')
     let l:vim = 'neovim'
   else
     let l:vim = 'vim'
   endif
+
   if exists('*dein#get')
     let l:total_plugins = len(dein#get())
   elseif exists('*plug#begin')
@@ -137,10 +143,11 @@ function! s:print_plugins_message() abort
   elseif isdirectory(l:packer)
     let l:total_plugins = luaeval('#vim.tbl_keys(packer_plugins)')
   else
-    return [' Have fun with ' . l:vim]
+    return [s:footer_icon . ' Have fun with ' . l:vim]
   endif
+
   let l:footer=[]
-  let footer_string= l:vim .' loaded ' . l:total_plugins . ' plugins '
+  let footer_string= s:footer_icon . l:vim .' loaded ' . l:total_plugins . ' plugins '
   call insert(l:footer,footer_string)
   return l:footer
 endfunction
