@@ -37,8 +37,8 @@ augroup dashboard
     autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
   endif
   autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
-  autocmd WinLeave * call dashboard#close_win()
-  autocmd User TelescopeFindPre call dashboard#close_win()
+  autocmd WinLeave * call dashboard#close_win(v:false)
+  autocmd User TelescopeFindPre call dashboard#close_win(v:true)
 
   autocmd VimResized * if &filetype ==# 'dashboard' | call dashboard#instance(0) | endif
 augroup END

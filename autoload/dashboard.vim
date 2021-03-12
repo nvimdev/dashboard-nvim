@@ -234,12 +234,14 @@ function! dashboard#register(line, index, cmd )
         \ }
 endfunction
 
-function! dashboard#close_win()
+function! dashboard#close_win(force)
   let s:dashboard_winid = get(w:,'dashboard_preview_winid',0)
   if s:dashboard_winid == 0
     return
   endif
-  if nvim_win_is_valid(s:dashboard_winid) && &columns <= 94
+
+  echomsg a:force
+  if nvim_win_is_valid(s:dashboard_winid) && &columns <= 94 || a:force
     call nvim_win_close(s:dashboard_winid,v:true)
     let w:dashboard_preview_winid = 0
   endif
