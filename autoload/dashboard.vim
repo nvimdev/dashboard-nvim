@@ -239,7 +239,7 @@ function! dashboard#close_win()
   if s:dashboard_winid == 0
     return
   endif
-  if nvim_win_is_valid(s:dashboard_winid)
+  if nvim_win_is_valid(s:dashboard_winid) && &columns <= 94
     call nvim_win_close(s:dashboard_winid,v:true)
     let w:dashboard_preview_winid = 0
   endif
