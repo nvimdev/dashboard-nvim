@@ -66,13 +66,13 @@ function! dashboard#instance(on_vimenter) abort
 
   if !empty(g:dashboard_command) && !empty(g:preview_file_path)
     if v:version >= 800
-      call v:lua.require('dashboard.preview')
+      call luaeval("require('dashboard.preview').open_preview")()
     else
-      let preview_winid = dashboard#preview#preview_file()
+      let preview_bufnr = dashboard#preview#preview_file(0)
       set filetype=dashpreview
       silent! setlocal nobuflisted
       exec "normal \<C-W>\<C-w>"
-      call nvim_win_set_var(0,'dashboard_preview_winid',preview_winid)
+      call nvim_win_set_var(0,'dashboard_preview_winid',preview_bufnr)
     endif
   endif
 
@@ -234,16 +234,26 @@ function! dashboard#register(line, index, cmd )
         \ }
 endfunction
 
-function! dashboard#close_win(force)
-  let s:dashboard_winid = get(w:,'dashboard_preview_winid',0)
-  if s:dashboard_winid == 0
+function! dashboard#toggle_preview()
+  if &filetype != 'dashboard'
     return
   endif
 
-  if nvim_win_is_valid(s:dashboard_winid) && &columns <= 94 || a:force
-    call nvim_win_close(s:dashboard_winid,v:true)
-    let w:dashboard_preview_winid = 0
+  let w:dashboard_preview_bufnr = exists('w:dashboard_preview_bufnr') ? w:dashboard_preview_bufnr : 0
+  if w:dashboard_preview_bufnr != 0
+    let bufinfo = getbufinfo(w:dashboard_preview_bufnr)[0]
+    if bufinfo.hidden == 0
+      silent! execute bufwinnr(bufinfo.bufnr) . 'hide'
+    else
+      if v:version >= 800
+        let wininfo = dashboard#preview#open_window(bufinfo.bufnr)
+      else
+        let wininfo = luaeval("require('dashboard.preview').open_window")(bufinfo.bufnr)
+      endif
+      call nvim_command('wincmd j')
+    endif
   endif
+
 endfunction
 
 
