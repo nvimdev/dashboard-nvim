@@ -66,6 +66,10 @@ function! dashboard#instance(on_vimenter) abort
 
   if !empty(g:dashboard_command) && !empty(g:preview_file_path)
     if v:version >= 800
+      if exists('w:dashboard_preview_bufnr')
+        let bufinfo = getbufinfo(w:dashboard_preview_bufnr)[0]
+        call nvim_win_close(bufinfo.windows[0],v:true)
+      endif
       call luaeval("require('dashboard.preview').open_preview")()
     else
       let preview_bufnr = dashboard#preview#preview_file(0)

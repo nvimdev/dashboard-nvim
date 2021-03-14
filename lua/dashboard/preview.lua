@@ -36,6 +36,7 @@ local async_preview = uv.new_async(vim.schedule_wrap(function()
   local cmd = 'terminal '..vim.g.dashboard_command..' '..vim.g.preview_file_path ..pipline
   api.nvim_command(cmd)
   api.nvim_command('wincmd j')
+  api.nvim_buf_set_option(wininfo[1],'buflisted',false)
   api.nvim_win_set_var(0,'dashboard_preview_bufnr',wininfo[1])
 end))
 
