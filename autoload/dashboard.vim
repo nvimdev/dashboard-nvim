@@ -244,7 +244,7 @@ function! dashboard#toggle_preview()
   endif
 
   let w:dashboard_preview_bufnr = exists('w:dashboard_preview_bufnr') ? w:dashboard_preview_bufnr : 0
-  if w:dashboard_preview_bufnr != 0
+  if w:dashboard_preview_bufnr != 0 && len(getbufinfo(w:dashboard_preview_bufnr)) >= 1
     let bufinfo = getbufinfo(w:dashboard_preview_bufnr)[0]
     if bufinfo.hidden == 0
       silent! execute bufwinnr(bufinfo.bufnr) . 'hide'
