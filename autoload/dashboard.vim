@@ -68,7 +68,9 @@ function! dashboard#instance(on_vimenter) abort
     if v:version >= 800
       if exists('w:dashboard_preview_bufnr')
         let bufinfo = getbufinfo(w:dashboard_preview_bufnr)[0]
-        call nvim_win_close(bufinfo.windows[0],v:true)
+        if !empty(bufinfo.windows)
+          call nvim_win_close(bufinfo.windows[0],v:true)
+        endif
       endif
       call luaeval("require('dashboard.preview').open_preview")()
     else
@@ -244,7 +246,7 @@ function! dashboard#toggle_preview()
   endif
 
   let w:dashboard_preview_bufnr = exists('w:dashboard_preview_bufnr') ? w:dashboard_preview_bufnr : 0
-  if w:dashboard_preview_bufnr != 0 && len(getbufinfo(w:dashboard_preview_bufnr)) >= 1
+  if w:dashboard_preview_bufnr != 0
     let bufinfo = getbufinfo(w:dashboard_preview_bufnr)[0]
     if bufinfo.hidden == 0
       silent! execute bufwinnr(bufinfo.bufnr) . 'hide'
