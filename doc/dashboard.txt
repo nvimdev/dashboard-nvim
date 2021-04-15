@@ -86,7 +86,7 @@ default values.
     Most used options:~
     |g:dashboard_custom_header|
     |g:dashboard_custom_footer|
-    |g:dashboard_enable_session|
+    |g:dashboard_custom_section|
     |g:dashboard_session_directory|
     |g:dashboard_custom_shortcut|
 
@@ -134,7 +134,7 @@ Same as the custom header, but shown at the bottom of the dashboard buffer.
 ------------------------------------------------------------------------------
                                                       *g:dashboard_custom_section*
 >
-    let g:dashboard_enable_session = {}
+    let g:dashboard_custom_section = {}
 <
 It's a dict for custom section .
 
