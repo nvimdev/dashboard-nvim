@@ -40,7 +40,7 @@ augroup dashboard
   autocmd WinLeave * call dashboard#close_preview()
   autocmd User TelescopeFindPre,ClapOnEnter call dashboard#close_preview()
 
-  autocmd VimResized * if &filetype ==# 'dashboard' | call dashboard#instance(0) | endif
+  autocmd VimResized * if &filetype ==# 'dashboard' | let s:dbufnr = bufnr("%") | call dashboard#instance(0) | execute "bd" . s:dbufnr | endif
 augroup END
 
 function! s:loaded_dashboard() abort
