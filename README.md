@@ -41,7 +41,7 @@
   let g:dashboard_default_executive ='clap'
   ```
   
-- Dashboard utilises some `vim-clap`, `fzf.vim`, and 'telescope.nvim' commands and displays the result in popup windows.
+- Dashboard utilises some `vim-clap`, `fzf.vim`, and `telescope.nvim` commands and displays the result in popup windows.
   The built-in dashboard commands executed are based on the plugin you set in previous session.
 
   - DashboardFindFile is the same as: 
