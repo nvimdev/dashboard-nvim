@@ -154,7 +154,7 @@ Example #2:
 <
 The directory to save/load sessions to/from.
 
-Defaults: `$HOME/.cahce/vim/session`
+Defaults: `$HOME/.cache/vim/session`
 ------------------------------------------------------------------------------
                                                       *g:dashboard_custom_shortcut*
 >
