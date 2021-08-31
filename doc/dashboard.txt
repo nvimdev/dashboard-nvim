@@ -174,13 +174,13 @@ AUTOCMD                                                       *dashboard-autocmd
 In certain situations dashboard emits events which can be hooked into via
 |autocmd|s. Those can be used for further customization.
 
-dashboardReady~
+DashboardReady~
 
   When the dashboard buffer is ready.
 
 Example:
 >
-    autocmd User dashboardReady let &l:stl = ' This statusline rocks!'
+    autocmd User DashboardReady let &l:stl = ' This statusline rocks!'
 <
 
 ==============================================================================
