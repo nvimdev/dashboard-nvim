@@ -124,7 +124,7 @@ function! dashboard#instance(on_vimenter) abort
 endfunction
 
 function! s:print_plugins_message() abort
-  let l:packer = stdpath('data') .'/site/pack/packer/opt/packer.nvim'
+  let l:packer = stdpath('data') .'/site/pack/packer/start/packer.nvim'
   let s:footer_icon = ''
   if exists('g:dashboard_footer_icon')
     let s:footer_icon = get(g:,'dashboard_footer_icon','')
