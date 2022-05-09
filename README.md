@@ -41,7 +41,7 @@
   let g:dashboard_default_executive ='clap'
   ```
   
-- Dashboard utilises some `vim-clap`, `fzf.vim`, and 'telescope.nvim' commands and displays the result in popup windows.
+- Dashboard utilises some `vim-clap`, `fzf.vim`, and `telescope.nvim` commands and displays the result in popup windows.
   The built-in dashboard commands executed are based on the plugin you set in previous session.
 
   - DashboardFindFile is the same as: 
@@ -193,7 +193,7 @@ nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
 
 - What is the difference between this plugin and vim-startify?
 
-  Dashbaord is inspired by doom-emacs. vim-startify provides a list of many files, MRU old files, etc. But do we really need that list? We merely just wanna open one single file, while the huge files list is constantly occupying a lot of space.
+  Dashboard is inspired by doom-emacs. vim-startify provides a list of many files, MRU old files, etc. But do we really need that list? We merely just wanna open one single file, while the huge files list is constantly occupying a lot of space.
   
   Dashboard uses fuzzy search plugins, pop-up menus that hide all the lists and display only if needed. In addition, more functionalities are brought in.
   
