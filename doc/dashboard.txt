@@ -127,7 +127,7 @@ Example #1:~
 ------------------------------------------------------------------------------
                                                       *g:dashboard_custom_footer*
 >
-    let g:dashboard_custom_footer = ''
+    let g:dashboard_custom_footer = ['']
 <
 Same as the custom header, but shown at the bottom of the dashboard buffer.
 
