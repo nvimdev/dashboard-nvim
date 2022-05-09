@@ -14,7 +14,11 @@ let s:dashboard_winid = 0
 
 function! dashboard#get_lastline() abort
   let s:dashboard.lastline = line('$')
-  return s:dashboard.lastline
+  let offset = 0
+  if exists('g:dashboard_custom_footer')
+    let offset = len(g:dashboard_custom_footer) - 1
+  endif
+  return s:dashboard.lastline - offset
 endfunction
 
 function! dashboard#get_centerline() abort
