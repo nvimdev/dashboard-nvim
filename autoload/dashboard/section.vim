@@ -35,7 +35,7 @@ if exists('g:dashboard_custom_section')
   if type(g:dashboard_custom_section) == 2
     let custom_section = g:dashboard_custom_section()
     call extend(s:Section, custom_section)
-  elseif type(g:dashboard_custom_section) == 1
+  elseif type(g:dashboard_custom_section) == 4
     call extend(s:Section, g:dashboard_custom_section)
   else
     echomsg 'Dashboard : Not support type'
