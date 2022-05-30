@@ -124,7 +124,7 @@
 
 - `g:dashboard_custom_section` customs your own sections. 
   
-  It's a dictionary whose entries will be your DIY shortcuts.
+  It's a dictionary (or function returning a dictionary) whose entries will be your DIY shortcuts.
 
   Each entry will be an object that must contain attribute `description` and attribute `command`:
   
