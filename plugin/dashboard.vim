@@ -34,7 +34,7 @@ let s:disable_statusline = get(g:,'dashboard_disable_statusline',0)
 
 augroup dashboard
   autocmd!
-  autocmd VimEnter * nested call s:loaded_dashboard()
+"   autocmd VimEnter * nested call s:loaded_dashboard()
   if s:disable_statusline
     autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
   endif
