@@ -32,18 +32,18 @@ let g:preview_file_width = get(g:,'dashboard_preview_file_width',0)
 let g:preview_pipeline_command = get(g:,'dashboard_preview_pipeline','')
 let s:disable_statusline = get(g:,'dashboard_disable_statusline',0)
 
-augroup dashboard
-  autocmd!
-  autocmd VimEnter * nested call s:loaded_dashboard()
-  if s:disable_statusline
-    autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
-  endif
-  autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
-  autocmd WinLeave * call dashboard#close_preview()
-  autocmd User TelescopeFindPre,ClapOnEnter call dashboard#close_preview()
-
-  autocmd VimResized * if &filetype ==# 'dashboard' | call dashboard#instance(0) | endif
-augroup END
+" augroup dashboard
+"   autocmd!
+"   autocmd VimEnter * nested call s:loaded_dashboard()
+"   if s:disable_statusline
+"     autocmd FileType dashboard set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
+"   endif
+"   autocmd BufReadPost * call dashboard#change_to_dir(expand("%:p"))
+"   autocmd WinLeave * call dashboard#close_preview()
+"   autocmd User TelescopeFindPre,ClapOnEnter call dashboard#close_preview()
+" 
+"   autocmd VimResized * if &filetype ==# 'dashboard' | call dashboard#instance(0) | endif
+" augroup END
 
 function! s:loaded_dashboard() abort
   if !argc() && line2byte('$') == -1

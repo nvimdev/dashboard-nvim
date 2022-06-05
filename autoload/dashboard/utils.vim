@@ -4,6 +4,7 @@ function! dashboard#utils#draw_center(lines) abort
   let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
   let centered_lines = map(copy(a:lines),
         \ 'repeat(" ", (winwidth(0) / 2) - (longest_line / 2)) . v:val')
+  let l:tes = (winwidth(0) / 2) - (longest_line / 2)
   return centered_lines
 endfunction
 
