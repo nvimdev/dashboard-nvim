@@ -1,5 +1,4 @@
-local api = vim.api
-local uv = vim.loop
+local api,fn,uv,co = vim.api,vim.fn,vim.loop,coroutine
 local db = {}
 local empty_lines = {''}
 
@@ -46,49 +45,62 @@ local set_buf_local_options = function ()
   end
 end
 
+-- draw the graphics into the screen center
 local draw_center = function(tbl)
   vim.validate{
     tbl = {tbl,'table'}
   }
 
+  local function shallowCopy(original)
+    local copy = {}
+    for key, value in pairs(original) do
+      copy[key] = value
+    end
+    return copy
+  end
+
   local centered_lines = {}
-  local tmp = tbl
-  table.sort(tmp,function(a,b) return #a > #b end)
-  local longest_line = #tmp[1]
+  local tmp = shallowCopy(tbl)
+  table.sort(tmp,function(a,b) return fn.strwidth(a) > fn.strwidth(b) end)
+  local longest_line = fn.strwidth(tmp[1])
   local fill_size = math.floor((vim.fn.winwidth(0) / 2) - (longest_line / 2))
 
   for _,v in pairs(tbl) do
     local fill_line = vim.fn['repeat'](' ',fill_size) .. v
     table.insert(centered_lines,fill_line)
   end
-  table.insert(centered_lines,'')
 
   return centered_lines
 end
 
-local header_length,center_length = 0,0
+local center_length = 0
 local dashboard_namespace = api.nvim_create_namespace('Dashboard')
 local hl_group = {'DashboardHeader','DashboardCenter','DashboardFooter'}
 
-local render_hl = function(bufnr,tbl,hl)
+local render_hl = function(bufnr,tbl,line_start,hl)
   for i=1,#tbl do
-    api.nvim_buf_add_highlight(bufnr,dashboard_namespace,hl,2+i,1,-1)
+    api.nvim_buf_add_highlight(bufnr,dashboard_namespace,hl,line_start+i,1,-1)
   end
 end
 
+-- insert text and config highlight
 local set_line_with_highlight = function(bufnr,line_start,line_end,tbl,hl)
-  api.nvim_buf_set_lines(bufnr,line_start+1,line_end,false,draw_center(tbl))
-  render_hl(bufnr,tbl,hl)
+  api.nvim_buf_set_lines(bufnr,line_start,line_end,false,draw_center(tbl))
+  render_hl(bufnr,tbl,line_start-1,hl)
 end
 
 -- render header
-local render_header = uv.new_async(vim.schedule_wrap(function(bufnr)
+local render_header = co.create(function(bufnr)
+  local header_length = 0
+
   if db.custom_header == nil then
     if #db.preview_pipeline_command > 0 then
       local preview = require('dashboard.preview')
       preview.open_preview()
     else
-      set_line_with_highlight(bufnr,1,#db.default_banner,db.default_banner,hl_group[1])
+      header_length = #db.default_banner
+      set_line_with_highlight(bufnr,-2,#db.default_banner+1,db.default_banner,hl_group[1])
+      co.yield(header_length)
     end
     return
   end
@@ -98,12 +110,12 @@ local render_header = uv.new_async(vim.schedule_wrap(function(bufnr)
     header_length = #db.custom_header
   elseif type(db.custom_header) == 'function' then
     local user_header = db.custom_header()
-    set_line_with_highlight(bufnr,1,#user_header,user_header,hl_group[1])
+    set_line_with_highlight(bufnr,5,#user_header,user_header,hl_group[1])
     header_length = #user_header
   else
     vim.notify('Wrong Header type must be table or function','error')
   end
-end))
+end)
 
 local db_notify = function(msg)
   vim.notify(msg,'error',{title='Dashboard'})
@@ -150,7 +162,7 @@ local render_center = uv.new_async(vim.schedule_wrap(function(bufnr)
 end))
 
 -- render footer
-local render_footer = uv.new_async(vim.schedule_wrap(function(bufnr)
+local render_footer = co.create(function(bufnr,header_length)
   local default_footer = {'Have fun with neovim'}
 
   -- load defualt footer
@@ -159,7 +171,9 @@ local render_footer = uv.new_async(vim.schedule_wrap(function(bufnr)
       local count = #vim.tbl_keys(packer_plugins)
       default_footer[1] = 'neovim loaded '.. count .. ' plugins'
     end
-    set_line_with_highlight(bufnr,center_length+1,-1,default_footer,hl_group[3])
+    print(header_length)
+    set_line_with_highlight(bufnr,header_length+center_length+1,-1,default_footer,hl_group[3])
+    api.nvim_buf_set_option(bufnr,'modifiable',false)
     return
   end
 
@@ -171,13 +185,12 @@ local render_footer = uv.new_async(vim.schedule_wrap(function(bufnr)
     if type(default_footer) ~= 'table' then
       db_notify('Your function must return a table type!')
     end
-    set_line_with_highlight(bufnr,center_length+1,-1,default_footer,hl_group[3])
+    set_line_with_highlight(bufnr,header_length+center_length+1,-1,default_footer,hl_group[3])
   end
-end))
+end)
 
 -- create dashboard instance
 function db.instance(on_vimenter)
-  local bufnr
   if on_vimenter and (vim.o.insertmode or not vim.bo.modfied) then
     return
   end
@@ -191,14 +204,25 @@ function db.instance(on_vimenter)
     return
   end
 
+  local bufnr
+  local window = api.nvim_get_current_win()
+  if on_vimenter then
+    bufnr = vim.api.nvim_get_current_buf()
+  else
+    if vim.bo.ft ~= "dashboard" then
+        bufnr = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_win_set_buf(window, bufnr)
+    else
+        bufnr = vim.api.nvim_get_current_buf()
+        vim.api.nvim_buf_delete(bufnr, {})
+        return
+    end
+  end
   set_buf_local_options()
 
-  bufnr = api.nvim_create_buf(false,true)
-
-  render_header:send(bufnr)
+  local _, header_length = co.resume(render_header,bufnr)
 --   render_center:send(bufnr)
-  render_footer:send(bufnr)
-  api.nvim_buf_set_option(bufnr,'modified',false)
+  co.resume(render_footer,bufnr,header_length)
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
   })
