@@ -16,7 +16,7 @@ db.default_banner = {
 }
 db.custom_header = nil
 db.custom_footer = nil
-db.custom_center = nil
+db.custom_center = {}
 db.preview_file_Path = ''
 db.preview_file_height = ''
 db.preview_file_width = ''
@@ -100,11 +100,8 @@ local get_length_with_graphics = co.create(function()
   }
 
   local get_data = function(item)
-    local length,user_data = 0,nil
-
     if item == 'header' and db.custom_header == nil then
-      length = #db.default_banner
-      return length,db.default_banner
+      return db.default_banner
     end
 
     if item == 'footer' and db.custom_footer == nil then
@@ -113,31 +110,34 @@ local get_length_with_graphics = co.create(function()
         local count = #vim.tbl_keys(packer_plugins)
         default_footer[1] = 'neovim loaded '.. count .. ' plugins'
       end
-      return 0,default_footer
+      return default_footer
+    end
+
+    if item == 'center' then
+      local user_conf = {}
+      for _,v in pairs(meta[item]) do
+        if v.desc == nil then db_notify('Miss desc keyword in custom center') end
+        table.insert(user_conf,v.desc)
+      end
+      return user_conf
     end
 
     if type(meta[item]) == 'table' then
-      length = #meta[item]
-      return length,meta[item]
+      return meta[item]
     end
 
     if type(meta[item]) == 'function' then
-      user_data = meta[item]()
-      return #user_data,user_data
+      return meta[item]()
     end
 
     db_notify('Wrong Data Type must be table or function in custom header or center')
   end
 
-  local count = 0
-  for _,v in pairs {"header","footer"} do
-    local length,graphics = get_data(v)
-    count = length + count
-    if v == 'footer' then
-      co.yield(count,graphics)
-    else
-      co.yield(length,graphics)
-    end
+  local margin = {}
+  for _,v in pairs {"header","center","footer"} do
+    local graphics = get_data(v)
+    table.insert(margin,#graphics)
+    co.yield(margin,graphics)
   end
 end)
 
@@ -148,55 +148,31 @@ local render_header = co.create(function(bufnr)
     preview.open_preview()
     return
   end
-  local _,header_length,header_graphics = co.resume(get_length_with_graphics)
-  set_line_with_highlight(bufnr,1,header_length,header_graphics,hl_group[1])
+  local _,_,header_graphics = co.resume(get_length_with_graphics)
+  set_line_with_highlight(bufnr,1,#header_graphics,header_graphics,hl_group[1])
 end)
 
 local render_default_center = function(bufnr)
-  if db.custom_center == nil then return end
-  local center_descs = {}
-
-  local set_center_lines = function()
-    for _,v in pairs(center_descs) do
-      if v.desc == nil then
-        db_notify('Miss keyword desc in custom center')
-        return
-      end
-      table.insert(center_descs,v.desc)
-    end
-    set_line_with_highlight(bufnr,header_length+1,#center_descs+1,center_descs,hl_group[2])
-    center_length = #center_descs
-  end
-
-  if type(db.custom_center) == 'table' then
-    center_descs = db.custom_center
-    set_center_lines()
-  elseif type(db.custom_center) == 'function' then
-    center_descs = db.custom_center()
-    if type(center_descs) ~= 'table' then
-      db_notify('Your center function must return table type')
-      return
-    end
-    set_center_lines()
-  end
+  local _,margin,graphics = co.resume(get_length_with_graphics)
+  set_line_with_highlight(bufnr,margin[1],#graphics+1,graphics,hl_group[2])
 end
 
 local render_tomato_work = function()end
 
 -- render center
-local render_center = uv.new_async(vim.schedule_wrap(function(bufnr)
+local render_center = co.create(function(bufnr)
   if  not db.tomato_work then
     render_default_center(bufnr)
   else
     render_tomato_work()
   end
-end))
+end)
 
 -- render footer
 local render_footer = co.create(function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
   -- load user custom footer
-  set_line_with_highlight(bufnr,margin,-1,graphics,hl_group[3])
+  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,graphics,hl_group[3])
   api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
@@ -231,8 +207,10 @@ function db.instance(on_vimenter)
   end
   set_buf_local_options()
 
-  co.resume(render_header,bufnr)
-  co.resume(render_footer,bufnr)
+  for _,v in pairs {render_header,render_center,render_footer} do
+    co.resume(v,bufnr)
+  end
+
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
   })
