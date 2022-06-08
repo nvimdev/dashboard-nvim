@@ -1,6 +1,5 @@
 local api,fn,uv,co = vim.api,vim.fn,vim.loop,coroutine
 local db = {}
-local empty_lines = {''}
 
 db.default_banner = {
     '',
@@ -12,7 +11,7 @@ db.default_banner = {
     ' ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ',
     ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
     '',
-    '                     [ Dashboard version 0.2.0 ]     ',
+    '                     [ Dashboard version 0.2.1 ]     ',
     '',
 }
 db.custom_header = nil
@@ -73,7 +72,6 @@ local draw_center = function(tbl)
   return centered_lines
 end
 
-local center_length = 0
 local dashboard_namespace = api.nvim_create_namespace('Dashboard')
 local hl_group = {'DashboardHeader','DashboardCenter','DashboardFooter'}
 
@@ -89,37 +87,70 @@ local set_line_with_highlight = function(bufnr,line_start,line_end,tbl,hl)
   render_hl(bufnr,tbl,line_start-1,hl)
 end
 
--- render header
-local render_header = co.create(function(bufnr)
-  local header_length = 0
-
-  if db.custom_header == nil then
-    if #db.preview_pipeline_command > 0 then
-      local preview = require('dashboard.preview')
-      preview.open_preview()
-    else
-      header_length = #db.default_banner
-      set_line_with_highlight(bufnr,-2,#db.default_banner+1,db.default_banner,hl_group[1])
-      co.yield(header_length)
-    end
-    return
-  end
-
-  if type(db.custom_header)  == 'table' then
-    set_line_with_highlight(bufnr,1,#db.custom_header,db.custom_header,hl_group[1])
-    header_length = #db.custom_header
-  elseif type(db.custom_header) == 'function' then
-    local user_header = db.custom_header()
-    set_line_with_highlight(bufnr,5,#user_header,user_header,hl_group[1])
-    header_length = #user_header
-  else
-    vim.notify('Wrong Header type must be table or function','error')
-  end
-end)
-
 local db_notify = function(msg)
   vim.notify(msg,'error',{title='Dashboard'})
 end
+
+-- get header and center graphics length use coroutine
+local get_length_with_graphics = co.create(function()
+  local meta = {
+    ['header'] = db.custom_header,
+    ['center'] = db.custom_center,
+    ['footer'] = db.custom_footer
+  }
+
+  local get_data = function(item)
+    local length,user_data = 0,nil
+
+    if item == 'header' and db.custom_header == nil then
+      length = #db.default_banner
+      return length,db.default_banner
+    end
+
+    if item == 'footer' and db.custom_footer == nil then
+      local default_footer = {'Have fun with neovim'}
+      if packer_plugins ~= nil then
+        local count = #vim.tbl_keys(packer_plugins)
+        default_footer[1] = 'neovim loaded '.. count .. ' plugins'
+      end
+      return 0,default_footer
+    end
+
+    if type(meta[item]) == 'table' then
+      length = #meta[item]
+      return length,meta[item]
+    end
+
+    if type(meta[item]) == 'function' then
+      user_data = meta[item]()
+      return #user_data,user_data
+    end
+
+    db_notify('Wrong Data Type must be table or function in custom header or center')
+  end
+
+  local count = 0
+  for _,v in pairs {"header","footer"} do
+    local length,graphics = get_data(v)
+    count = length + count
+    if v == 'footer' then
+      co.yield(count,graphics)
+    else
+      co.yield(length,graphics)
+    end
+  end
+end)
+
+-- render header
+local render_header = co.create(function(bufnr)
+  if #db.preview_pipeline_command > 0 then
+    local preview = require('dashboard.preview')
+    preview.open_preview()
+    return
+  end
+  local _,header_length,header_graphics = co.resume(get_length_with_graphics)
+  set_line_with_highlight(bufnr,1,header_length,header_graphics,hl_group[1])
+end)
 
 local render_default_center = function(bufnr)
   if db.custom_center == nil then return end
@@ -162,31 +193,11 @@ local render_center = uv.new_async(vim.schedule_wrap(function(bufnr)
 end))
 
 -- render footer
-local render_footer = co.create(function(bufnr,header_length)
-  local default_footer = {'Have fun with neovim'}
-
-  -- load defualt footer
-  if db.custom_footer == nil then
-    if packer_plugins ~= nil then
-      local count = #vim.tbl_keys(packer_plugins)
-      default_footer[1] = 'neovim loaded '.. count .. ' plugins'
-    end
-    print(header_length)
-    set_line_with_highlight(bufnr,header_length+center_length+1,-1,default_footer,hl_group[3])
-    api.nvim_buf_set_option(bufnr,'modifiable',false)
-    return
-  end
-
+local render_footer = co.create(function(bufnr)
+  local _,margin,graphics = co.resume(get_length_with_graphics)
   -- load user custom footer
-  if type(db.custom_footer) == 'table' then
-    set_line_with_highlight(bufnr,center_length+1,-1,db.custom_footer,hl_group[3])
-  elseif type(db.custom_footer) == 'function' then
-    default_footer = db.custom_footer()
-    if type(default_footer) ~= 'table' then
-      db_notify('Your function must return a table type!')
-    end
-    set_line_with_highlight(bufnr,header_length+center_length+1,-1,default_footer,hl_group[3])
-  end
+  set_line_with_highlight(bufnr,margin,-1,graphics,hl_group[3])
+  api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
 -- create dashboard instance
@@ -220,9 +231,8 @@ function db.instance(on_vimenter)
   end
   set_buf_local_options()
 
-  local _, header_length = co.resume(render_header,bufnr)
---   render_center:send(bufnr)
-  co.resume(render_footer,bufnr,header_length)
+  co.resume(render_header,bufnr)
+  co.resume(render_footer,bufnr)
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
   })
