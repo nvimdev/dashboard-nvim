@@ -16,7 +16,11 @@ db.default_banner = {
 }
 db.custom_header = nil
 db.custom_footer = nil
-db.custom_center = {}
+db.custom_center = {
+  {desc = 'Find File                                           SPC f f'},
+  {desc = 'Find File                                           SPC f f'},
+  {desc = 'Find File                                           SPC f f'}
+}
 db.preview_file_Path = ''
 db.preview_file_height = ''
 db.preview_file_width = ''
@@ -118,6 +122,7 @@ local get_length_with_graphics = co.create(function()
       for _,v in pairs(meta[item]) do
         if v.desc == nil then db_notify('Miss desc keyword in custom center') end
         table.insert(user_conf,v.desc)
+        table.insert(user_conf,'')
       end
       return user_conf
     end
@@ -154,7 +159,7 @@ end)
 
 local render_default_center = function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
-  set_line_with_highlight(bufnr,margin[1],#graphics+1,graphics,hl_group[2])
+  set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
 end
 
 local render_tomato_work = function()end
