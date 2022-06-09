@@ -194,13 +194,48 @@ local render_default_center = function(bufnr,window)
   local _,margin,graphics = co.resume(get_length_with_graphics)
   graphics = draw_center(graphics)
   set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
-  local cow = graphics[1]:find('%S')
-  api.nvim_win_set_cursor(window,{margin[1]+2,cow -1})
+  local col = graphics[1]:find('%S')
+  api.nvim_win_set_var(window,'db_fix_col',col)
+  api.nvim_win_set_var(window,'db_margin',margin)
+  api.nvim_win_set_cursor(window,{margin[1]+2,col -1})
   register_line_with_action(margin)
 end
 
-local function set_cursor()
+local function set_cursor(bufnr,window)
+  local cur_line = api.nvim_win_get_cursor(window)[1]
+  local col = api.nvim_win_get_var(window,'db_fix_col')
+  local margin = api.nvim_win_get_var(window,'db_margin')
+  local initial_line = margin[1] + 2
+  local max_line = margin[1] + margin[2]
+  local new_line = 0
+  local ok,_ = pcall(api.nvim_win_get_var,window,'db_oldline')
+  if not ok then
+    api.nvim_win_set_var(window,'db_oldline',initial_line)
+  end
 
+  -- if cursor in initial pos no need move
+  if cur_line == initial_line then return end
+  if next(api.nvim_buf_get_lines(bufnr,cur_line,cur_line,false)) == nil then
+    if cur_line > vim.w.db_oldline then
+      new_line = cur_line + 1
+      vim.w.db_oldline = new_line
+    else
+      new_line = cur_line - 1
+      vim.w.db_oldline = new_line
+    end
+  end
+
+  if new_line > max_line then
+    new_line = margin[1] + 2
+    vim.w.db_oldline = new_line
+  end
+
+  if cur_line < initial_line then
+    new_line = max_line
+    vim.w.db_oldline = new_line
+  end
+
+  api.nvim_win_set_cursor(window,{new_line,col - 1})
 end
 
 local render_tomato_work = function()end
@@ -260,6 +295,11 @@ function db.instance(on_vimenter)
   api.nvim_buf_set_keymap(bufnr,'n','<CR>',
   '<cmd>lua require("dashboard").call_line_action()<CR>',
   {noremap = true,silent = true,nowait = true})
+
+  api.nvim_create_autocmd('CursorMoved',{
+    buffer = bufnr,
+    callback = function() set_cursor(bufnr,window) end
+  })
 
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
