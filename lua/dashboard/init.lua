@@ -88,7 +88,7 @@ end
 
 -- insert text and config highlight
 local set_line_with_highlight = function(bufnr,line_start,line_end,tbl,hl)
-  api.nvim_buf_set_lines(bufnr,line_start,line_end,false,draw_center(tbl))
+  api.nvim_buf_set_lines(bufnr,line_start,line_end,false,tbl)
   render_hl(bufnr,tbl,line_start-1,hl)
 end
 
@@ -160,7 +160,7 @@ local render_header = co.create(function(bufnr)
     return
   end
   local _,_,header_graphics = co.resume(get_length_with_graphics)
-  set_line_with_highlight(bufnr,1,#header_graphics,header_graphics,hl_group[1])
+  set_line_with_highlight(bufnr,1,#header_graphics,draw_center(header_graphics),hl_group[1])
 end)
 
 -- register every center line function in a table
@@ -171,7 +171,6 @@ local register_line_with_action = function (margin)
     count = count + 1
     line_with_action[i] = line_actions[count]
   end
-  print(vim.inspect(line_with_action))
   line_actions = line_with_action
 end
 
@@ -191,19 +190,25 @@ function db.call_line_action()
   db_notify('Wrong type of action must be string or function type')
 end
 
-local render_default_center = function(bufnr)
+local render_default_center = function(bufnr,window)
   local _,margin,graphics = co.resume(get_length_with_graphics)
+  graphics = draw_center(graphics)
   set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
+  local cow = graphics[1]:find('%S')
+  api.nvim_win_set_cursor(window,{margin[1]+2,cow -1})
   register_line_with_action(margin)
-  print(vim.inspect(line_actions))
+end
+
+local function set_cursor()
+
 end
 
 local render_tomato_work = function()end
 
 -- render center
-local render_center = co.create(function(bufnr)
+local render_center = co.create(function(bufnr,window)
   if  not db.tomato_work then
-    render_default_center(bufnr)
+    render_default_center(bufnr,window)
   else
     render_tomato_work()
   end
@@ -213,7 +218,7 @@ end)
 local render_footer = co.create(function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
   -- load user custom footer
-  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,graphics,hl_group[3])
+  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,draw_center(graphics),hl_group[3])
   api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
@@ -249,10 +254,12 @@ function db.instance(on_vimenter)
   set_buf_local_options()
 
   for _,v in pairs {render_header,render_center,render_footer} do
-    co.resume(v,bufnr)
+    co.resume(v,bufnr,window)
   end
 
-  api.nvim_buf_set_keymap(bufnr,'n','<CR>','<cmd>lua require("dashboard").call_line_action()<CR>',{noremap = true})
+  api.nvim_buf_set_keymap(bufnr,'n','<CR>',
+  '<cmd>lua require("dashboard").call_line_action()<CR>',
+  {noremap = true,silent = true,nowait = true})
 
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
