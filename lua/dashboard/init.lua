@@ -17,7 +17,8 @@ db.default_banner = {
 db.custom_header = nil
 db.custom_footer = nil
 db.custom_center = {
-  {desc = 'Find File                                           SPC f f'},
+  {desc = 'Find File                                           SPC f f',
+   action = 'Telescope find_files'},
   {desc = 'Find File                                           SPC f f'},
   {desc = 'Find File                                           SPC f f'}
 }
@@ -95,6 +96,8 @@ local db_notify = function(msg)
   vim.notify(msg,'error',{title='Dashboard'})
 end
 
+local line_actions = {}
+
 -- get header and center graphics length use coroutine
 local get_length_with_graphics = co.create(function()
   local meta = {
@@ -120,9 +123,12 @@ local get_length_with_graphics = co.create(function()
     if item == 'center' then
       local user_conf = {}
       for _,v in pairs(meta[item]) do
-        if v.desc == nil then db_notify('Miss desc keyword in custom center') end
+        if v.desc == nil then db_notify('Miss desc keyword in custom center') return end
         table.insert(user_conf,v.desc)
         table.insert(user_conf,'')
+        if v.action then
+          table.insert(line_actions,v.action)
+        end
       end
       return user_conf
     end
@@ -157,9 +163,39 @@ local render_header = co.create(function(bufnr)
   set_line_with_highlight(bufnr,1,#header_graphics,header_graphics,hl_group[1])
 end)
 
+-- register every center line function in a table
+local register_line_with_action = function (margin)
+  local line_with_action = {}
+  local count = 0
+  for i = margin[1]+2,margin[1]+margin[2] do
+    count = count + 1
+    line_with_action[i] = line_actions[count]
+  end
+  print(vim.inspect(line_with_action))
+  line_actions = line_with_action
+end
+
+-- cr map event
+function db.call_line_action()
+  local current_line = api.nvim_win_get_cursor(0)[1]
+  if not line_actions[current_line] then return end
+  if type(line_actions[current_line]) == 'string' then
+    vim.cmd(line_actions[current_line])
+    return
+  end
+
+  if type(line_actions[current_line])  == 'function' then
+    line_actions[current_line]()
+    return
+  end
+  db_notify('Wrong type of action must be string or function type')
+end
+
 local render_default_center = function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
   set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
+  register_line_with_action(margin)
+  print(vim.inspect(line_actions))
 end
 
 local render_tomato_work = function()end
@@ -215,6 +251,8 @@ function db.instance(on_vimenter)
   for _,v in pairs {render_header,render_center,render_footer} do
     co.resume(v,bufnr)
   end
+
+  api.nvim_buf_set_keymap(bufnr,'n','<CR>','<cmd>lua require("dashboard").call_line_action()<CR>',{noremap = true})
 
   api.nvim_exec_autocmds('User DashboardReady',{
     modeline = false
