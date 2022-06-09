@@ -8,3 +8,5 @@ api.nvim_create_autocmd('Vimenter',{
     require('dashboard').instance()
   end
 })
+
+api.nvim_create_user_command('Dashboard','lua require("dashboard").instance()<CR>',{})
