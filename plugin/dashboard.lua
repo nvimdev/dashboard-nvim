@@ -10,13 +10,29 @@ api.nvim_create_autocmd('Vimenter',{
   end
 })
 
-api.nvim_create_autocmd({'WinLeave','BufReadPre'},{
+api.nvim_create_autocmd({'WinLeave'},{
   group = db_autogroup,
   pattern = '*',
   callback = function()
-    if require('dashboard').hide_statusline then
-      vim.opt.laststatus=2
+    require('dashboard.preview').close_preview_window()
+  end
+})
+
+api.nvim_create_autocmd('FileType',{
+  group = db_autogroup,
+  pattern = 'dashboard',
+  callback = function()
+    if vim.bo.filetype == 'dashboard' and require('dashboard').hide_statusline then
+      vim.opt.laststatus = 0
     end
+  end
+})
+
+api.nvim_create_autocmd({'BufLeave','BufWinEnter'},{
+  group = db_autogroup,
+  pattern ='*',
+  callback = function()
+    if vim.opt.laststatus == 0 then print('here')vim.opt.laststatus = 2 end
   end
 })
 

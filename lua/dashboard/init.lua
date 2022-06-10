@@ -17,13 +17,12 @@ db.default_banner = {
 db.custom_header = nil
 db.custom_footer = nil
 db.custom_center = {
-  {icon = '',desc= ' ', action=''}
+  {icon = '',desc= 'Please Config your own center section ', action=''}
 }
 db.preview_file_Path = ''
 db.preview_file_height = ''
 db.preview_file_width = ''
-db.preview_pipeline_command = ''
-db.tomato_work = false
+db.preview_command = ''
 db.hide_statusline = true
 
 local set_buf_local_options = function ()
@@ -96,6 +95,14 @@ end
 
 local line_actions,icons,shortcuts = {},{},{}
 
+local generate_empty_table = function (length)
+  local empty_tbl = {}
+  for _ = 1,length + 3 do
+    table.insert(empty_tbl,'')
+  end
+  return empty_tbl
+end
+
 -- get header and center graphics length use coroutine
 local get_length_with_graphics = co.create(function()
   local meta = {
@@ -105,8 +112,12 @@ local get_length_with_graphics = co.create(function()
   }
 
   local get_data = function(item)
-    if item == 'header' and db.custom_header == nil then
+    if item == 'header' and db.custom_header == nil and db.preview_command == '' then
       return db.default_banner
+    end
+
+    if #db.preview_command > 0 and item == 'header' then
+      return generate_empty_table(db.preview_file_height)
     end
 
     if item == 'footer' and db.custom_footer == nil then
@@ -158,10 +169,9 @@ end)
 
 -- render header
 local render_header = co.create(function(bufnr)
-  if #db.preview_pipeline_command > 0 then
+  if #db.preview_command > 0 then
     local preview = require('dashboard.preview')
     preview.open_preview()
-    return
   end
   local _,_,header_graphics = co.resume(get_length_with_graphics)
   set_line_with_highlight(bufnr,1,#header_graphics,draw_center(header_graphics),hl_group[1])
@@ -254,15 +264,10 @@ local function set_cursor(bufnr,window)
   api.nvim_win_set_cursor(window,{new_line,col - 1})
 end
 
-local render_tomato_work = function()end
 
 -- render center
 local render_center = co.create(function(bufnr,window)
-  if  not db.tomato_work then
     render_default_center(bufnr,window)
-  else
-    render_tomato_work()
-  end
 end)
 
 -- render footer
@@ -317,10 +322,6 @@ function db.instance(on_vimenter)
 
   for _,v in pairs {render_header,render_center,render_footer} do
     co.resume(v,bufnr,window)
-  end
-
-  if db.hide_statusline then
-    vim.opt.laststatus=0
   end
 
   set_keymap(bufnr)
