@@ -120,7 +120,7 @@ local get_length_with_graphics = co.create(function()
 
     if item == 'center' then
       local user_conf = {}
-      for i,v in pairs(meta[item]) do
+      for _,v in pairs(meta[item]) do
         if v.desc == nil then db_notify('Miss desc keyword in custom center') return end
         if v.icon == nil then v.icon = '' end
         if v.shortcut == nil then v.shortcut = '' end
@@ -273,6 +273,20 @@ local render_footer = co.create(function(bufnr)
   api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
+local set_keymap = function (bufnr)
+  -- disable h l move
+  local keys = {
+    ['h'] = '',
+    ['l'] = '',
+    ['<CR>'] =  '<cmd>lua require("dashboard").call_line_action()<CR>'
+   }
+
+   for key,rhs in pairs(keys) do
+    api.nvim_buf_set_keymap(bufnr,'n',key,rhs,
+    {noremap = true,silent = true,nowait = true})
+   end
+end
+
 -- create dashboard instance
 function db.instance(on_vimenter)
   if not vim.o.hidden and vim.bo.modfied then
@@ -309,9 +323,7 @@ function db.instance(on_vimenter)
     vim.opt.laststatus=0
   end
 
-  api.nvim_buf_set_keymap(bufnr,'n','<CR>',
-  '<cmd>lua require("dashboard").call_line_action()<CR>',
-  {noremap = true,silent = true,nowait = true})
+  set_keymap(bufnr)
 
   api.nvim_create_autocmd('CursorMoved',{
     buffer = bufnr,
