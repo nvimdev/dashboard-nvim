@@ -17,16 +17,14 @@ db.default_banner = {
 db.custom_header = nil
 db.custom_footer = nil
 db.custom_center = {
-  {desc = 'Find File                                           SPC f f',
-   action = 'Telescope find_files'},
-  {desc = 'Find File                                           SPC f f'},
-  {desc = 'Find File                                           SPC f f'}
+  {icon = '',desc= ' ', action=''}
 }
 db.preview_file_Path = ''
 db.preview_file_height = ''
 db.preview_file_width = ''
 db.preview_pipeline_command = ''
 db.tomato_work = false
+db.hide_statusline = true
 
 local set_buf_local_options = function ()
   local opts = {
@@ -96,7 +94,7 @@ local db_notify = function(msg)
   vim.notify(msg,'error',{title='Dashboard'})
 end
 
-local line_actions = {}
+local line_actions,icons,shortcuts = {},{},{}
 
 -- get header and center graphics length use coroutine
 local get_length_with_graphics = co.create(function()
@@ -112,20 +110,26 @@ local get_length_with_graphics = co.create(function()
     end
 
     if item == 'footer' and db.custom_footer == nil then
-      local default_footer = {'Have fun with neovim'}
+      local default_footer = {'','🎉 Have fun with neovim'}
       if packer_plugins ~= nil then
         local count = #vim.tbl_keys(packer_plugins)
-        default_footer[1] = 'neovim loaded '.. count .. ' plugins'
+        default_footer[2] = '🎉 neovim loaded '.. count .. ' plugins'
       end
       return default_footer
     end
 
     if item == 'center' then
       local user_conf = {}
-      for _,v in pairs(meta[item]) do
+      for i,v in pairs(meta[item]) do
         if v.desc == nil then db_notify('Miss desc keyword in custom center') return end
-        table.insert(user_conf,v.desc)
+        if v.icon == nil then v.icon = '' end
+        if v.shortcut == nil then v.shortcut = '' end
+        table.insert(user_conf,v.icon .. v.desc..v.shortcut)
         table.insert(user_conf,'')
+        table.insert(shortcuts,v.shortcut)
+        table.insert(shortcuts,'')
+        table.insert(icons,{v.icon,#v.desc})
+        table.insert(icons,{''})
         if v.action then
           table.insert(line_actions,v.action)
         end
@@ -194,10 +198,22 @@ local render_default_center = function(bufnr,window)
   local _,margin,graphics = co.resume(get_length_with_graphics)
   graphics = draw_center(graphics)
   set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
-  local col = graphics[1]:find('%S')
+  local col = graphics[1]:find('%S') + #db.custom_center[1]['icon']
   api.nvim_win_set_var(window,'db_fix_col',col)
   api.nvim_win_set_var(window,'db_margin',margin)
   api.nvim_win_set_cursor(window,{margin[1]+2,col -1})
+
+  for i,shortcut in pairs(shortcuts) do
+    if #shortcut > 0 then
+      fn.matchaddpos('DashboardShortCut',{{ margin[1]+1+i,#graphics[i]-#shortcut,#shortcut+1}})
+    end
+
+    if #icons[i] == 2 then
+      local tmp = icons[i]
+      fn.matchaddpos('DashboardCenterIcon',{{ margin[1]+1+i,#graphics[i]-#shortcut-tmp[2]-#tmp[1],#tmp[1]}})
+    end
+  end
+
   register_line_with_action(margin)
 end
 
@@ -259,10 +275,6 @@ end)
 
 -- create dashboard instance
 function db.instance(on_vimenter)
-  if on_vimenter and (vim.o.insertmode or not vim.bo.modfied) then
-    return
-  end
-
   if not vim.o.hidden and vim.bo.modfied then
     vim.notify('Save your change first','info',{title = 'Dashboard'})
     return
@@ -286,10 +298,15 @@ function db.instance(on_vimenter)
         return
     end
   end
+
   set_buf_local_options()
 
   for _,v in pairs {render_header,render_center,render_footer} do
     co.resume(v,bufnr,window)
+  end
+
+  if db.hide_statusline then
+    vim.opt.laststatus=0
   end
 
   api.nvim_buf_set_keymap(bufnr,'n','<CR>',
