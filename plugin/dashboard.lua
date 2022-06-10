@@ -6,7 +6,7 @@ api.nvim_create_autocmd('Vimenter',{
   pattern = '*',
   nested = true,
   callback = function()
-    require('dashboard').instance()
+    require('dashboard').instance(true)
   end
 })
 
@@ -28,11 +28,13 @@ api.nvim_create_autocmd('FileType',{
   end
 })
 
-api.nvim_create_autocmd({'BufLeave','BufWinEnter'},{
+api.nvim_create_autocmd({'BufLeave','BufWinEnter','BufReadPre','BufRead'},{
   group = db_autogroup,
   pattern ='*',
   callback = function()
-    if vim.opt.laststatus == 0 then print('here')vim.opt.laststatus = 2 end
+    if vim.opt.laststatus == 0 then
+      vim.opt.laststatus = 2
+    end
   end
 })
 
