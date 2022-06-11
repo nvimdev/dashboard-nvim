@@ -6,7 +6,7 @@ api.nvim_create_autocmd('Vimenter',{
   pattern = '*',
   nested = true,
   callback = function()
-    require('dashboard').instance()
+    require('dashboard').instance(true)
   end
 })
 
@@ -16,6 +16,13 @@ api.nvim_create_autocmd({'BufLeave'},{
   callback = function()
     local pos = api.nvim_win_get_cursor(0)
     api.nvim_win_set_var(0,'dashboard_prev_pos',pos)
+  end
+})
+
+api.nvim_create_autocmd('WinLeave',{
+  group = db_autogroup,
+  pattern = '*',
+  callback = function()
     require('dashboard.preview').close_preview_window()
   end
 })
@@ -24,8 +31,18 @@ api.nvim_create_autocmd('FileType',{
   group = db_autogroup,
   pattern = 'dashboard',
   callback = function()
-    if vim.bo.filetype == 'dashboard' and require('dashboard').hide_statusline then
+    if require('dashboard').hide_statusline then
       vim.opt.laststatus = 0
+    end
+  end
+})
+
+api.nvim_create_autocmd('BufReadPost',{
+  group = db_autogroup,
+  pattern = '*',
+  callback  = function()
+    if vim.bo.filetype ~= 'dashboard' and vim.opt.laststatus:get() == 0 then
+      vim.opt.laststatus =2
     end
   end
 })
