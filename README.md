@@ -34,9 +34,7 @@
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/41671631/110912263-b1e20700-834e-11eb-8058-c29e34ec439a.png"
-  height = "40%"
-  widht = "40%"
+  <img src="![QQ20220611-170021](https://user-images.githubusercontent.com/41671631/173181227-dd8f46c3-0aae-444a-b2e8-fe8ed592e28f.png)"
   />
 </p>
 
