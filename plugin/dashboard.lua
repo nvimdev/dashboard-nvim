@@ -6,7 +6,9 @@ api.nvim_create_autocmd('Vimenter',{
   pattern = '*',
   nested = true,
   callback = function()
-    require('dashboard').instance(true)
+    if vim.fn.argc() >= 0 and vim.fn.line2byte('$') == -1 then
+      require('dashboard').instance(true)
+    end
   end
 })
 

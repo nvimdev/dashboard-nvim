@@ -1,4 +1,4 @@
-local api,fn,uv,co = vim.api,vim.fn,vim.loop,coroutine
+local api,fn,co = vim.api,vim.fn,coroutine
 local db = {}
 
 db.default_banner = {
@@ -39,7 +39,9 @@ local set_buf_local_options = function ()
     ['relativenumber'] = false,
     ['spell'] = false,
     ['swapfile'] = false,
-    ['filetype'] = 'dashboard'
+    ['filetype'] = 'dashboard',
+    ['buftype'] = 'nofile',
+    ['wrap'] = false
   }
   for opt,val in pairs(opts) do
     vim.opt_local[opt] = val
@@ -102,6 +104,10 @@ local generate_empty_table = function (length)
   end
   return empty_tbl
 end
+
+local cache_data = {
+  header = {},center ={},footer = {},margin = {}
+}
 
 -- get header and center graphics length use coroutine
 local get_length_with_graphics = co.create(function()
@@ -173,8 +179,11 @@ local render_header = co.create(function(bufnr)
     local preview = require('dashboard.preview')
     preview.open_preview()
   end
-  local _,_,header_graphics = co.resume(get_length_with_graphics)
-  set_line_with_highlight(bufnr,1,#header_graphics,draw_center(header_graphics),hl_group[1])
+  local _,_,graphics = co.resume(get_length_with_graphics)
+  graphics = draw_center(graphics)
+  -- cache the header graphics
+  cache_data.header = graphics
+  set_line_with_highlight(bufnr,1,#graphics,draw_center(graphics),hl_group[1])
 end)
 
 -- register every center line function in a table
@@ -204,14 +213,21 @@ function db.call_line_action()
   db_notify('Wrong type of action must be string or function type')
 end
 
-local render_default_center = function(bufnr,window)
-  local _,margin,graphics = co.resume(get_length_with_graphics)
-  graphics = draw_center(graphics)
-  set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
+local set_cursor_initial_pos = function(margin,graphics,window)
   local col = graphics[1]:find('%S') + #db.custom_center[1]['icon']
   api.nvim_win_set_var(window,'db_fix_col',col)
   api.nvim_win_set_var(window,'db_margin',margin)
   api.nvim_win_set_cursor(window,{margin[1]+2,col -1})
+end
+
+local render_default_center = function(bufnr,window)
+  local _,margin,graphics = co.resume(get_length_with_graphics)
+  graphics = draw_center(graphics)
+  --cache the center graphics
+  cache_data.center = graphics
+  set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
+
+  set_cursor_initial_pos(margin,graphics,window)
 
   for i,shortcut in pairs(shortcuts) do
     if #shortcut > 0 then
@@ -273,8 +289,11 @@ end)
 -- render footer
 local render_footer = co.create(function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
+  graphics = draw_center(graphics)
+  cache_data.footer = graphics
+  cache_data.margin = margin
   -- load user custom footer
-  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,draw_center(graphics),hl_group[3])
+  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,graphics,hl_group[3])
   api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
@@ -292,36 +311,54 @@ local set_keymap = function (bufnr)
    end
 end
 
+local dashboard_loaded = false
+
+local load_from_cache = function(bufnr,window)
+  if #db.preview_command > 0 then
+    local preview = require('dashboard.preview')
+    preview.open_preview()
+  end
+
+  set_line_with_highlight(bufnr,1,#cache_data.header,cache_data.header,hl_group[1])
+  set_line_with_highlight(bufnr,cache_data.margin[1]+1,cache_data.margin[1]+1+cache_data.margin[2],cache_data.center,hl_group[2])
+  set_line_with_highlight(bufnr,cache_data.margin[1]+cache_data.margin[2],-1,cache_data.footer,hl_group[3])
+
+  set_cursor_initial_pos(cache_data.margin,cache_data.center,window)
+end
+
 -- create dashboard instance
 function db.instance(on_vimenter)
+  local mode = api.nvim_get_mode().mode
+  if on_vimenter and ( mode == 'i' or not vim.bo.modifiable) then
+    return
+  end
+
   if not vim.o.hidden and vim.bo.modfied then
     vim.notify('Save your change first','info',{title = 'Dashboard'})
     return
   end
 
+  local bufnr
+
   if vim.fn.line2byte('$') ~= -1 then
-    return
+    vim.cmd("noautocmd")
+    bufnr = api.nvim_create_buf(false,true)
+  else
+    bufnr =api.nvim_get_current_buf()
   end
 
-  local bufnr
   local window = api.nvim_get_current_win()
-  if on_vimenter then
-    bufnr = vim.api.nvim_get_current_buf()
-  else
-    if vim.bo.ft ~= "dashboard" then
-        bufnr = vim.api.nvim_create_buf(false, true)
-        vim.api.nvim_win_set_buf(window, bufnr)
-    else
-        bufnr = vim.api.nvim_get_current_buf()
-        vim.api.nvim_buf_delete(bufnr, {})
-        return
-    end
-  end
+  api.nvim_win_set_buf(window,bufnr)
 
   set_buf_local_options()
 
-  for _,v in pairs {render_header,render_center,render_footer} do
-    co.resume(v,bufnr,window)
+  if dashboard_loaded then
+    load_from_cache(bufnr,window)
+  else
+    for _,v in pairs {render_header,render_center,render_footer} do
+      co.resume(v,bufnr,window)
+    end
+    dashboard_loaded = true
   end
 
   set_keymap(bufnr)
