@@ -42,7 +42,8 @@ local set_buf_local_options = function ()
     ['swapfile'] = false,
     ['filetype'] = 'dashboard',
     ['buftype'] = 'nofile',
-    ['wrap'] = false
+    ['wrap'] = false,
+    ['signcolumn'] = 'no'
   }
   for opt,val in pairs(opts) do
     vim.opt_local[opt] = val

@@ -7,7 +7,7 @@ api.nvim_create_autocmd('Vimenter',{
   pattern = '*',
   nested = true,
   callback = function()
-    if vim.fn.argc() >= 0 and vim.fn.line2byte('$') == -1 then
+    if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
       db.instance(true)
     end
   end
@@ -22,7 +22,7 @@ api.nvim_create_autocmd({'BufLeave'},{
   end
 })
 
-api.nvim_create_autocmd('WinLeave',{
+api.nvim_create_autocmd({'WinLeave','BufNewFile'},{
   group = db_autogroup,
   pattern = '*',
   callback = function()
