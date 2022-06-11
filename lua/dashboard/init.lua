@@ -24,6 +24,7 @@ db.preview_file_height = ''
 db.preview_file_width = ''
 db.preview_command = ''
 db.hide_statusline = true
+db.hide_tabline = true
 
 local set_buf_local_options = function ()
   local opts = {

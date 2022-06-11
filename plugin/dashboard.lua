@@ -1,4 +1,5 @@
 local api = vim.api
+local db = require('dashboard')
 
 local db_autogroup = api.nvim_create_augroup('Dashboard',{})
 api.nvim_create_autocmd('Vimenter',{
@@ -7,7 +8,7 @@ api.nvim_create_autocmd('Vimenter',{
   nested = true,
   callback = function()
     if vim.fn.argc() >= 0 and vim.fn.line2byte('$') == -1 then
-      require('dashboard').instance(true)
+      db.instance(true)
     end
   end
 })
@@ -33,8 +34,12 @@ api.nvim_create_autocmd('FileType',{
   group = db_autogroup,
   pattern = 'dashboard',
   callback = function()
-    if require('dashboard').hide_statusline then
+    if db.hide_statusline then
       vim.opt.laststatus = 0
+    end
+
+    if db.hide_tabline then
+      vim.opt.showtabline = 0
     end
   end
 })
@@ -43,7 +48,12 @@ api.nvim_create_autocmd('BufReadPost',{
   group = db_autogroup,
   pattern = '*',
   callback  = function()
-    if vim.bo.filetype ~= 'dashboard' and vim.opt.laststatus:get() == 0 then
+    if vim.bo.filetype == 'dashboard' then return end
+    if vim.opt.laststatus:get() == 0 then
+      vim.opt.laststatus =2
+    end
+
+    if vim.opt.showtabline:get() == 0 then
       vim.opt.laststatus =2
     end
   end
