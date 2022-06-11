@@ -189,12 +189,14 @@ local render_header = co.create(function(bufnr)
 end)
 
 -- register every center line function in a table
-local register_line_with_action = function (margin)
+local register_line_with_action = function (margin,graphics)
   local line_with_action = {}
   local count = 0
-  for i = margin[1]+2,margin[1]+margin[2] do
-    count = count + 1
-    line_with_action[i] = line_actions[count]
+  for i = 1,#graphics-1  do
+    if #graphics[i] > 0 then
+      count = count + 1
+      line_with_action[margin[1]+i+1] = line_actions[count]
+    end
   end
   line_actions = line_with_action
 end
@@ -223,8 +225,8 @@ local set_cursor_initial_pos = function(margin,graphics,window)
 end
 
 local render_default_center = function(bufnr,window)
-  local _,margin,graphics = co.resume(get_length_with_graphics)
-  graphics = draw_center(graphics)
+  local _,margin,center_graphics = co.resume(get_length_with_graphics)
+  local graphics = draw_center(center_graphics)
   --cache the center graphics
   cache_data.center = graphics
   set_line_with_highlight(bufnr,margin[1]+1,margin[1]+1+margin[2],graphics,hl_group[2])
@@ -242,7 +244,7 @@ local render_default_center = function(bufnr,window)
     end
   end
 
-  register_line_with_action(margin)
+  register_line_with_action(margin,center_graphics)
 end
 
 local function set_cursor(bufnr,window)
