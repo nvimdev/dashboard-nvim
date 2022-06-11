@@ -52,14 +52,14 @@ packer.use {'glepnir/dashboard-nvim'}
 
 ```lua
 local db = require('dashboard')
-db.custom_header  -- type can be nil,string or function(must be return table in function)
+db.custom_header  -- type can be nil,table or function(must be return table in function)
                   -- if not config will use default banner
 db.custom_center  -- table type and in this table you can set icon,desc,shortcut,action keywords. desc must be exist and type is string
                   -- icon type is nil or string
                   -- shortcut type is nil or string also like icon
                   -- action type can be string or function or nil.
                   -- if you don't need any one of icon shortcut action ,you can ignore it.
-db.custom_footer  -- type can be nil,string or function(must be return table in function)
+db.custom_footer  -- type can be nil,table or function(must be return table in function)
 db.preview_file_Path    -- string type 
 db.preview_file_height  -- string type
 db.preview_file_width   -- string type
@@ -109,7 +109,7 @@ these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Prev
       {icon = '  ',
       desc = 'Find  word                              ',
       aciton = 'DashboardFindWord',
-      shortcut = 'SPC f b'},
+      shortcut = 'SPC f w'},
       {icon = '  ',
       desc = 'Open Personal dotfiles                  ',
       action = 'Telescope dotfiles path=' .. home ..'/.dotfiles',
