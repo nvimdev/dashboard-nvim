@@ -185,7 +185,7 @@ local render_header = co.create(function(bufnr)
   graphics = draw_center(graphics)
   -- cache the header graphics
   cache_data.header = graphics
-  set_line_with_highlight(bufnr,1,#graphics,draw_center(graphics),hl_group[1])
+  set_line_with_highlight(bufnr,1,#graphics,graphics,hl_group[1])
 end)
 
 -- register every center line function in a table
