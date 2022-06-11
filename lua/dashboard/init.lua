@@ -52,20 +52,25 @@ end
 
 -- draw the graphics into the screen center
 local draw_center = function(tbl)
-  local function widest_line(lines)
-    local widest = 0
+  vim.validate{
+    tbl = {tbl,'table'}
+  }
+  local function fill_sizes(lines)
+    local winwidth = fn.winwidth(0)
+    local fills  = {}
+
     for _, line in pairs(lines) do
-      local width = fn.strwidth(line)
-      widest = width > widest and width or widest
+      table.insert(fills, math.floor((winwidth  - fn.strwidth(line)) / 2))
     end
-    return widest
+
+    return fills
   end
 
   local centered_lines = {}
-  local fill_size = math.floor((vim.fn.winwidth(0) - widest_line(tbl)) / 2)
+  local fills = fill_sizes(tbl)
 
-  for _,v in pairs(tbl) do
-    local fill_line = vim.fn['repeat'](' ',fill_size) .. v
+  for i = 1, #tbl do
+    local fill_line = vim.fn['repeat'](' ', fills[i]) .. tbl[i]
     table.insert(centered_lines,fill_line)
   end
 
