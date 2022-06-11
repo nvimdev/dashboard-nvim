@@ -16,19 +16,19 @@
   <a href="https://github.com/glepnir/nvim/stargazers">
     <img
       alt="Stargazers"
-      src="https://img.shields.io/github/stars/glepnir/nvim?style=for-the-badge&logo=starship&color=c678dd&logoColor=d9e0ee&labelColor=282a36"
+      src="https://img.shields.io/github/stars/glepnir/dashboard-nvim?style=for-the-badge&logo=starship&color=c678dd&logoColor=d9e0ee&labelColor=282a36"
     />
   </a>
   <a href="https://github.com/glepnir/nvim/issues">
     <img
       alt="Issues"
-      src="https://img.shields.io/github/issues/glepnir/nvim?style=for-the-badge&logo=gitbook&color=f0c062&logoColor=d9e0ee&labelColor=282a36"
+      src="https://img.shields.io/github/issues/glepnir/dashboard-nvim?style=for-the-badge&logo=gitbook&color=f0c062&logoColor=d9e0ee&labelColor=282a36"
     />
   </a>
-  <a href="https://github.com/glepnir/nvim/contributors">
+  <a href="https://github.com/glepnir/dashboard-nvim/contributors">
     <img
       alt="Contributors"
-      src="https://img.shields.io/github/contributors/glepnir/nvim?style=for-the-badge&logo=opensourceinitiative&color=abcf84&logoColor=d9e0ee&labelColor=282a36"
+      src="https://img.shields.io/github/contributors/glepnir/dashboard-nvim?style=for-the-badge&logo=opensourceinitiative&color=abcf84&logoColor=d9e0ee&labelColor=282a36"
     />
   </a>
 </p>
@@ -65,6 +65,9 @@ db.preview_file_height  -- string type
 db.preview_file_width   -- string type
 db.preview_command      -- string type
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
+
+-- Highlight Group
+DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
 ```
 - Ascii Header text
 
@@ -115,6 +118,7 @@ these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Prev
 - How to work with indentLine plugin?
 
    If you install some indentline plugin. you need config the option that can pass dashboard filetype `dashboard` to exclude filetyp
+
 
 ## LICENSE
 
