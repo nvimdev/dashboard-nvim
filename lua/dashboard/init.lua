@@ -328,7 +328,14 @@ function db.instance(on_vimenter)
 
   api.nvim_create_autocmd('CursorMoved',{
     buffer = bufnr,
-    callback = function() set_cursor(bufnr,window) end
+    callback = function()
+      local ok,pos = pcall(api.nvim_win_get_var,window,'dashboard_prev_pos')
+      set_cursor(bufnr,window)
+      if ok and pos[2] > 0 then
+        api.nvim_win_set_cursor(window,pos)
+        api.nvim_win_set_var(window,'dashboard_prev_pos',{0,0})
+      end
+    end
   })
 
   api.nvim_exec_autocmds('User DashboardReady',{
