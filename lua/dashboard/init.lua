@@ -52,23 +52,17 @@ end
 
 -- draw the graphics into the screen center
 local draw_center = function(tbl)
-  vim.validate{
-    tbl = {tbl,'table'}
-  }
-
-  local function shallowCopy(original)
-    local copy = {}
-    for key, value in pairs(original) do
-      copy[key] = value
+  local function widest_line(lines)
+    local widest = 0
+    for _, line in pairs(lines) do
+      local width = fn.strwidth(line)
+      widest = width > widest and width or widest
     end
-    return copy
+    return widest
   end
 
   local centered_lines = {}
-  local tmp = shallowCopy(tbl)
-  table.sort(tmp,function(a,b) return fn.strwidth(a) > fn.strwidth(b) end)
-  local longest_line = fn.strwidth(tmp[1])
-  local fill_size = math.floor((vim.fn.winwidth(0) / 2) - (longest_line / 2))
+  local fill_size = math.floor((vim.fn.winwidth(0) - widest_line(tbl)) / 2)
 
   for _,v in pairs(tbl) do
     local fill_line = vim.fn['repeat'](' ',fill_size) .. v
