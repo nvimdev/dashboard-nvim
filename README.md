@@ -9,7 +9,7 @@
     src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/misc/transparent.png"
     height="30"
     width="0px"
-  />“
+  />
 </h1>
 
 <p align="center">
@@ -76,17 +76,16 @@ db.custom_center = {
 -- Highlight Group
 DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
 ```
-- Ascii Header text
 
-  I collection some header texts in [Wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text) and you can preview
-these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview      )
+### Ascii Header Examples
 
-## FQA
+I've collected some header texts in the [wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text). You can view previews of them [here](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview).
 
-- How to config like screenshot
+## FAQ
 
-   you need install `lolcat` and Thanks [@sunjon](https://github.com/sunjon) create this neovim logo. you can
-  find it in [here](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)
+1. How to achieve the dashboard like in the screenshot?
+
+You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://github.com/sunjon), which you can find [here](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)).
 
 ```lua
   local home = os.getenv('HOME')
@@ -122,11 +121,15 @@ these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Prev
       shortcut = 'SPC f d'},
     }
 ```
-- How to work with indentLine plugin?
+2. How to work with indentLine plugin?
 
-   If you install some indentline plugin. you need config the option that can pass dashboard filetype `dashboard` to exclude filetyp
+If you installed some indentline plugin. you need to set it to ignore the filetype `dashboard`. For example:
+
+```
+vim.g.indentLine_fileTypeExclude = { 'dashboard' }
+```
 
 
 ## LICENSE
 
-- MIT
+MIT
