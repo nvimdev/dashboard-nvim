@@ -135,14 +135,7 @@ Or in a `plugins.lua` config context:
 use {
   "lukas-reineke/indent-blankline.nvim",
   config = function()
-    require("indent_blankline").setup {
-      filetype_exclude = {
-        "alpha",
-        "neo-tree",
-        "lsp-installer",
-        "packer",
-        "dashboard"
-      }
+    require("indent_blankline").setup { filetype_exclude = { "dashboard" }
     }
   end
 }
