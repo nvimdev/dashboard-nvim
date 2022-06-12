@@ -83,10 +83,9 @@ these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Prev
 
 ## FAQ
 
-- How to config like screenshot
+1. How to achieve the dashboard like in the screenshot?
 
-   you need install `lolcat` and Thanks [@sunjon](https://github.com/sunjon) create this neovim logo. you can
-  find it in [here](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)
+You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://github.com/sunjon), which you can find [here](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text)).
 
 ```lua
   local home = os.getenv('HOME')
@@ -122,11 +121,15 @@ these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Prev
       shortcut = 'SPC f d'},
     }
 ```
-- How to work with indentLine plugin?
+2. How to work with indentLine plugin?
 
-   If you install some indentline plugin. you need config the option that can pass dashboard filetype `dashboard` to exclude filetyp
+If you installed some indentline plugin. you need to set it to ignore the filetype `dashboard`. For example:
+
+```
+vim.g.indentLine_fileTypeExclude = { 'dashboard' }
+```
 
 
 ## LICENSE
 
-- MIT
+MIT
