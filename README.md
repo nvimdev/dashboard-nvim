@@ -129,6 +129,25 @@ If you installed some indentline plugin. you need to set it to ignore the filety
 vim.g.indentLine_fileTypeExclude = { 'dashboard' }
 ```
 
+Or in a `plugins.lua` config context:
+
+```lua
+use {
+  "lukas-reineke/indent-blankline.nvim",
+  config = function()
+    require("indent_blankline").setup {
+      filetype_exclude = {
+        "alpha",
+        "neo-tree",
+        "lsp-installer",
+        "packer",
+        "dashboard"
+      }
+    }
+  end
+}
+```
+
 
 ## LICENSE
 
