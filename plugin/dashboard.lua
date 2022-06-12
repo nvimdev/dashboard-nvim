@@ -50,11 +50,11 @@ api.nvim_create_autocmd('BufReadPost',{
   callback  = function()
     if vim.bo.filetype == 'dashboard' then return end
     if vim.opt.laststatus:get() == 0 then
-      vim.opt.laststatus =2
+      vim.opt.laststatus = 2
     end
 
     if vim.opt.showtabline:get() == 0 then
-      vim.opt.laststatus =2
+      vim.opt.showtabline = 2
     end
   end
 })
