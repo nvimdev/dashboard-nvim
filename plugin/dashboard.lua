@@ -22,7 +22,7 @@ api.nvim_create_autocmd({'BufLeave'},{
   end
 })
 
-api.nvim_create_autocmd({'WinLeave','BufNewFile'},{
+api.nvim_create_autocmd({'WinLeave','BufEnter'},{
   group = db_autogroup,
   pattern = '*',
   callback = function()
