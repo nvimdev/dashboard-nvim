@@ -9,7 +9,7 @@
     src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/misc/transparent.png"
     height="30"
     width="0px"
-  />“
+  />
 </h1>
 
 <p align="center">
@@ -81,7 +81,7 @@ DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardF
   I collection some header texts in [Wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text) and you can preview
 these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview      )
 
-## FQA
+## FAQ
 
 - How to config like screenshot
 
