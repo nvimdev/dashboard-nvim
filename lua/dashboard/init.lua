@@ -217,10 +217,11 @@ function db.call_line_action()
 end
 
 local set_cursor_initial_pos = function(margin,graphics,window)
-  local col = graphics[1]:find('%S') + #db.custom_center[1]['icon']
+  local col = graphics[1]:find('%S') + #icons[1][1]
   api.nvim_win_set_var(window,'db_fix_col',col)
   api.nvim_win_set_var(window,'db_margin',margin)
   api.nvim_win_set_cursor(window,{margin[1]+2,col -1})
+  api.nvim_win_set_var(window,'db_oldline',margin[1]+2)
 end
 
 local render_default_center = function(bufnr,window)
@@ -253,10 +254,6 @@ local function set_cursor(bufnr,window)
   local initial_line = margin[1] + 2
   local max_line = margin[1] + margin[2]
   local new_line = 0
-  local ok,_ = pcall(api.nvim_win_get_var,window,'db_oldline')
-  if not ok then
-    api.nvim_win_set_var(window,'db_oldline',initial_line)
-  end
 
   -- if cursor in initial pos no need move
   if cur_line == initial_line then return end
@@ -305,6 +302,8 @@ local set_keymap = function (bufnr)
   local keys = {
     ['h'] = '',
     ['l'] = '',
+    ['w'] = '',
+    ['b'] = '',
     ['<CR>'] =  '<cmd>lua require("dashboard").call_line_action()<CR>'
    }
 
