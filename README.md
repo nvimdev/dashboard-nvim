@@ -76,10 +76,10 @@ db.custom_center = {
 -- Highlight Group
 DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
 ```
-- Ascii Header text
 
-  I collection some header texts in [Wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text) and you can preview
-these texts [Preview](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview      )
+### Ascii Header Examples
+
+I've collected some header texts in the [wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text). You can view previews of them [here](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview).
 
 ## FAQ
 
