@@ -248,8 +248,8 @@ end
 
 local function set_cursor(bufnr,window)
   local cur_line = api.nvim_win_get_cursor(window)[1]
-  local col = api.nvim_win_get_var(window,'db_fix_col')
-  local margin = api.nvim_win_get_var(window,'db_margin')
+  local _,col = pcall(api.nvim_win_get_var,window,'db_fix_col')
+  local _,margin = pcall(api.nvim_win_get_var,window,'db_margin')
   local initial_line = margin[1] + 2
   local max_line = margin[1] + margin[2]
   local new_line = 0
@@ -373,6 +373,7 @@ function db.instance(on_vimenter)
   api.nvim_create_autocmd('CursorMoved',{
     buffer = bufnr,
     callback = function()
+      if vim.bo.filetype ~= 'dashboard' then return end
       local ok,pos = pcall(api.nvim_win_get_var,window,'dashboard_prev_pos')
       set_cursor(bufnr,window)
       if ok and pos[2] > 0 then
