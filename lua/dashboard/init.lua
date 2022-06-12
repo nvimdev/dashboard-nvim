@@ -55,23 +55,22 @@ local draw_center = function(tbl)
   vim.validate{
     tbl = {tbl,'table'}
   }
+  local function fill_sizes(lines)
+    local winwidth = fn.winwidth(0)
+    local fills  = {}
 
-  local function shallowCopy(original)
-    local copy = {}
-    for key, value in pairs(original) do
-      copy[key] = value
+    for _, line in pairs(lines) do
+      table.insert(fills, math.floor((winwidth  - fn.strwidth(line)) / 2))
     end
-    return copy
+
+    return fills
   end
 
   local centered_lines = {}
-  local tmp = shallowCopy(tbl)
-  table.sort(tmp,function(a,b) return fn.strwidth(a) > fn.strwidth(b) end)
-  local longest_line = fn.strwidth(tmp[1])
-  local fill_size = math.floor((vim.fn.winwidth(0) / 2) - (longest_line / 2))
+  local fills = fill_sizes(tbl)
 
-  for _,v in pairs(tbl) do
-    local fill_line = vim.fn['repeat'](' ',fill_size) .. v
+  for i = 1, #tbl do
+    local fill_line = vim.fn['repeat'](' ', fills[i]) .. tbl[i]
     table.insert(centered_lines,fill_line)
   end
 
