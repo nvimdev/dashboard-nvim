@@ -65,6 +65,14 @@ db.preview_command      -- string type
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
 
+-- example of db.custom_center for new lua coder,the value of nil mean if you
+-- don't need this filed you can not write it
+db.custom_center = {
+  { icon = 'some icon' desc = 'some description here' } --correct if you don't action filed
+  { desc = 'some description here' }                    --correct if you don't action and icon filed
+  { desc = 'some description here' action = 'Telescope find files'} --correct if you don't icon filed
+}
+
 -- Highlight Group
 DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
 ```
