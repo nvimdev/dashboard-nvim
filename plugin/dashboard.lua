@@ -44,17 +44,17 @@ api.nvim_create_autocmd('FileType',{
   end
 })
 
-api.nvim_create_autocmd('BufReadPost',{
+api.nvim_create_autocmd({'BufReadPost','BufNewFile'},{
   group = db_autogroup,
   pattern = '*',
   callback  = function()
     if vim.bo.filetype == 'dashboard' then return end
     if vim.opt.laststatus:get() == 0 then
-      vim.opt.laststatus = 2
+      vim.opt.laststatus = db.user_laststatus_value
     end
 
     if vim.opt.showtabline:get() == 0 then
-      vim.opt.showtabline = 2
+      vim.opt.showtabline = db.user_showtabline_value
     end
   end
 })

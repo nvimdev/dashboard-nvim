@@ -353,6 +353,10 @@ function db.instance(on_vimenter)
   local window = api.nvim_get_current_win()
   api.nvim_win_set_buf(window,bufnr)
 
+  -- cache the user config and restore it see #144
+  db.user_laststatus_value = vim.opt.laststatus:get()
+  db.user_showtabline_value = vim.opt.showtabline:get()
+
   set_buf_local_options()
 
   if dashboard_loaded then
