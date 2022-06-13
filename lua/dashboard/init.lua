@@ -252,6 +252,7 @@ local function set_cursor(bufnr,window)
   local _,col = pcall(api.nvim_win_get_var,window,'db_fix_col')
   local _,margin = pcall(api.nvim_win_get_var,window,'db_margin')
   local initial_line = margin[1] + 2
+  vim.w.db_oldline = vim.w.db_oldline == nil and initial_line or vim.w.db_oldline
   local max_line = margin[1] + margin[2]
   local new_line = 0
 
