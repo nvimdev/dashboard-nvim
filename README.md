@@ -75,6 +75,10 @@ db.custom_center = {
 
 -- Highlight Group
 DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
+
+-- Command
+
+DahboardNewFile  -- if you like use `enew` to create file,Please use this command,it's wrap enew and restore the statsuline and tabline
 ```
 
 ### Ascii Header Examples

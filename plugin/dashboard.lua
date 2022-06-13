@@ -60,3 +60,4 @@ api.nvim_create_autocmd({'BufReadPost','BufNewFile'},{
 })
 
 api.nvim_create_user_command('Dashboard','lua require("dashboard").instance(false)<CR>',{})
+api.nvim_create_user_command('DashboardNewFile','lua require("dashboard").new_file()<CR>',{})

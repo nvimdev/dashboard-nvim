@@ -328,6 +328,17 @@ local load_from_cache = function(bufnr,window)
   set_cursor_initial_pos(cache_data.margin,cache_data.center,window)
 end
 
+function db.new_file()
+  vim.cmd('enew')
+  if vim.opt_local.laststatus:get() == 0 then
+    vim.opt_local.laststatus = db.user_laststatus_value
+  end
+
+  if vim.opt_local.showtabline:get() == 0 then
+    vim.opt_local.showtabline = db.user_showtabline_value
+  end
+end
+
 -- create dashboard instance
 function db.instance(on_vimenter)
   local mode = api.nvim_get_mode().mode
