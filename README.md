@@ -64,6 +64,7 @@ db.preview_file_width   -- string type
 db.preview_command      -- string type
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
+db.session_directory    -- string type the directory to store the session file
 
 -- example of db.custom_center for new lua coder,the value of nil mean if you
 -- don't need this filed you can not write it
@@ -79,6 +80,7 @@ DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardF
 -- Command
 
 DahboardNewFile  -- if you like use `enew` to create file,Please use this command,it's wrap enew and restore the statsuline and tabline
+SessionSave,SessionLoad
 ```
 
 ### Ascii Header Examples

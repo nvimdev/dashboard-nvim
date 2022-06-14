@@ -59,5 +59,24 @@ api.nvim_create_autocmd({'BufReadPost','BufNewFile'},{
   end
 })
 
-api.nvim_create_user_command('Dashboard','lua require("dashboard").instance(false)<CR>',{})
-api.nvim_create_user_command('DashboardNewFile','lua require("dashboard").new_file()<CR>',{})
+api.nvim_create_user_command('Dashboard',function()
+  require("dashboard").instance(false)
+end,{})
+
+api.nvim_create_user_command('DashboardNewFile',function()
+  require("dashboard").new_file()
+end,{})
+
+api.nvim_create_user_command('SessionSave',function()
+  require("dashboard.session").session_save()
+end,{
+  nargs = "?",
+  complete = require('dashboard.session').session_list,
+})
+
+api.nvim_create_user_command('SessionLoad',function()
+  require("dashboard.session").session_load()
+end,{
+  nargs = "?",
+  complete = require('dashboard.session').session_list,
+})
