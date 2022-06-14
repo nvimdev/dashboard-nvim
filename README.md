@@ -79,7 +79,7 @@ DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardF
 
 -- Command
 
-DahboardNewFile  -- if you like use `enew` to create file,Please use this command,it's wrap enew and restore the statsuline and tabline
+DashboardNewFile  -- if you like use `enew` to create file,Please use this command,it's wrap enew and restore the statsuline and tabline
 SessionSave,SessionLoad
 ```
 
