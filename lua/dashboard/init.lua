@@ -290,11 +290,15 @@ end)
 -- render footer
 local render_footer = co.create(function(bufnr)
   local _,margin,graphics = co.resume(get_length_with_graphics)
-  graphics = draw_center(graphics)
-  cache_data.footer = graphics
+  local tmp = {''}
+  for _,v in pairs(graphics) do
+    table.insert(tmp,v)
+  end
+  tmp = draw_center(tmp)
+  cache_data.footer = tmp
   cache_data.margin = margin
   -- load user custom footer
-  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,graphics,hl_group[3])
+  set_line_with_highlight(bufnr,margin[1]+margin[2],-1,tmp,hl_group[3])
   api.nvim_buf_set_option(bufnr,'modifiable',false)
 end)
 
