@@ -34,7 +34,7 @@ local async_preview = uv.new_async(vim.schedule_wrap(function()
   api.nvim_command(cmd)
   api.nvim_command('wincmd j')
   api.nvim_buf_set_option(wininfo[1],'buflisted',false)
-  api.nvim_win_set_var(0,'dashboard_preview_winid',wininfo[2])
+  api.nvim_win_set_var(0,'dashboard_preview_wininfo',wininfo)
   api.nvim_command('let b:term_title ="dashboard_preview" ')
 end))
 
@@ -43,9 +43,15 @@ local open_preview =function()
 end
 
 local close_preview_window = function()
-  local ok,winid = pcall(api.nvim_win_get_var,0,'dashboard_preview_winid')
-  if ok and api.nvim_win_is_valid(winid) then
-    api.nvim_win_close(winid,true)
+  local ok,wininfo = pcall(api.nvim_win_get_var,0,'dashboard_preview_wininfo')
+  if ok then
+    if api.nvim_buf_is_loaded(wininfo[1]) then
+      api.nvim_buf_delete(wininfo[1],{force = true})
+    end
+
+    if api.nvim_win_is_valid(wininfo[2]) then
+      api.nvim_win_close(wininfo[2],true)
+    end
   end
 end
 
