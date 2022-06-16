@@ -17,7 +17,7 @@ function FilenameConverter(filename)
   if vim.loop.os_uname().sysname == 'Windows_NT' then
     filename = ((string.gsub(filename, 'C:\\', '')))
     return ((string.gsub(filename, '\\', '_')))
-  elseif vim.loop.os_uname.sysname == "Linux" then
+  elseif vim.loop.os_uname().sysname == "Linux" then
     return ((string.gsub(filename, '/', '_')))
   else
     return filename
