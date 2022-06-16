@@ -31,7 +31,6 @@ end
 local session_directory = DirectoryConverter(db.session_directory)
 
 function session.session_save(name)
-  print(session_directory)
   if fn.isdirectory(session_directory) == 0 then
     vim.cmd(':!mkdir ' .. session_directory)
   end
