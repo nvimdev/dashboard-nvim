@@ -1,7 +1,6 @@
 local fn,api = vim.fn,vim.api
 local db = require('dashboard')
 local session = {}
-local session_loaded = false
 local home = os.getenv("HOME")
 
 local project_name = function()
@@ -28,7 +27,7 @@ function session.session_load(name)
   local file_name = name == nil and project_name() or name
   local file_path = db.session_directory .. '/' .. file_name ..'.vim'
 
-  if vim.v.this_session ~= nil and not session_loaded then
+  if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
   end
 
