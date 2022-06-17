@@ -102,7 +102,7 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
   db.preview_file_width = 80
   db.custom_center = {
       {icon = '  ',
-      desc = 'Recently laset session                  ',
+      desc = 'Recently latest session                  ',
       shortcut = 'SPC s l',
       action ='SessionLoad'},
       {icon = '  ',
@@ -119,7 +119,7 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
       shortcut = 'SPC f b'},
       {icon = '  ',
       desc = 'Find  word                              ',
-      aciton = 'DashboardFindWord',
+      action = 'Telescope live_grep',
       shortcut = 'SPC f w'},
       {icon = '  ',
       desc = 'Open Personal dotfiles                  ',
