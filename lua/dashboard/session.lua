@@ -1,15 +1,33 @@
-local fn,api = vim.fn,vim.api
+local fn, api, loop = vim.fn, vim.api, vim.loop
 local db = require('dashboard')
 local session = {}
 local session_loaded = false
-local home = os.getenv("HOME")
+local home = loop.os_homedir()
+
+local isWindows = function()
+  if loop.os_uname().sysname == 'Windows_NT' then
+    return true
+  else
+    return false
+  end
+end
 
 local project_name = function()
   local cwd = fn.resolve(fn.getcwd())
-  cwd = fn.substitute(cwd,'^'..home..'/','','')
-  cwd = fn.fnamemodify(cwd,[[:p:gs?/?_?]])
-  cwd = fn.substitute(cwd,[[^\.]],'','')
+  cwd = fn.substitute(cwd, '^' .. home .. '/', '', '')
+  if isWindows() then
+    cwd = fn.fnamemodify(cwd, [[:p:gs?\?_?]])
+    cwd = ((string.gsub(cwd, 'C:', '')))
+  else
+    cwd = fn.fnamemodify(cwd, [[:p:gs?/?_?]])
+  end
+  cwd = fn.substitute(cwd, [[^\.]], '', '')
   return cwd
+end
+
+-- overwrite db.session_directory for Windows in this file
+if isWindows() then
+  db.session_directory = string.gsub(db.session_directory, '/', '\\')
 end
 
 function session.session_save(name)
@@ -18,15 +36,15 @@ function session.session_save(name)
   end
 
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory ..'/'..file_name ..'.vim'
-  api.nvim_command('mksession! '..fn.fnameescape(file_path))
+  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
+  api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
-  vim.notify('Session '..file_name .. ' is now persistent')
+  vim.notify('Session ' .. file_name .. ' is now persistent')
 end
 
 function session.session_load(name)
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. '/' .. file_name ..'.vim'
+  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
 
   if vim.v.this_session ~= nil and not session_loaded then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
@@ -40,15 +58,15 @@ function session.session_load(name)
       vim.opt.laststatus = 2
     end
 
-    vim.notify('Loaded '..file_path .. ' session')
+    vim.notify('Loaded ' .. file_path .. ' session')
     return
   end
 
-  vim.notify('The session '..file_path .. ' does not exist')
+  vim.notify('The session ' .. file_path .. ' does not exist')
 end
 
 function session.session_list()
-   return vim.split(fn.globpath(db.session_directory,'*.vim'),'\n')
+  return vim.split(fn.globpath(db.session_directory, '*.vim'), '\n')
 end
 
 return session
