@@ -1,7 +1,6 @@
 local fn, api, loop = vim.fn, vim.api, vim.loop
 local db = require('dashboard')
 local session = {}
-local session_loaded = false
 local home = loop.os_homedir()
 
 local isWindows = function()
@@ -25,14 +24,14 @@ local project_name = function()
   return cwd
 end
 
--- overwrite db.session_directory for Windows in this file
 if isWindows() then
+  -- overwrite db.session_directory for Windows in this file
   db.session_directory = string.gsub(db.session_directory, '/', '\\')
 end
 
 function session.session_save(name)
   if fn.isdirectory(db.session_directory) == 0 then
-    os.execute('mkdir -p ' .. db.session_directory)
+    vim.cmd(':!mkdir ' .. db.session_directory)
   end
 
   local file_name = name == nil and project_name() or name
@@ -46,7 +45,7 @@ function session.session_load(name)
   local file_name = name == nil and project_name() or name
   local file_path = db.session_directory .. '/' .. file_name .. '.vim'
 
-  if vim.v.this_session ~= nil and not session_loaded then
+  if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
   end
 
