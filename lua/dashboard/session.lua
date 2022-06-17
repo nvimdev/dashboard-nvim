@@ -2,20 +2,24 @@ local fn,api = vim.fn,vim.api
 local db = require('dashboard')
 local session = {}
 local session_loaded = false
+local home = os.getenv("HOME")
 
 local project_name = function()
-  local cwd = os.getenv('PWD')
+  local cwd = fn.resolve(fn.getcwd())
+  cwd = fn.substitute(cwd,'^'..home..'/','','')
+  cwd = fn.fnamemodify(cwd,[[:p:gs?/?_?]])
+  cwd = fn.substitute(cwd,[[^\.]],'','')
   return cwd
 end
 
 function session.session_save(name)
   if fn.isdirectory(db.session_directory) == 0 then
-    os.execute('mkdir -p' .. db.session_directory)
+    os.execute('mkdir -p ' .. db.session_directory)
   end
 
   local file_name = name == nil and project_name() or name
   local file_path = db.session_directory ..'/'..file_name ..'.vim'
-  api.nvim_command('mksession!'..fn.fnameescape(file_path))
+  api.nvim_command('mksession! '..fn.fnameescape(file_path))
   vim.v.this_session = file_path
   vim.notify('Session '..file_name .. ' is now persistent')
 end
@@ -44,7 +48,7 @@ function session.session_load(name)
 end
 
 function session.session_list()
-  return fn.split(db.session_directory..'/*.vim','\n')
+   return vim.split(fn.globpath(db.session_directory,'*.vim'),'\n')
 end
 
 return session
