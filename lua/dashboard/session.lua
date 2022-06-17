@@ -31,7 +31,7 @@ end
 
 function session.session_save(name)
   if fn.isdirectory(db.session_directory) == 0 then
-    vim.cmd(':!mkdir ' .. db.session_directory)
+    fn.mkdir(db.session_directory, 'p')
   end
 
   local file_name = name == nil and project_name() or name
@@ -69,3 +69,4 @@ function session.session_list()
 end
 
 return session
+
