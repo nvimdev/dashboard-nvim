@@ -310,6 +310,7 @@ local set_keymap = function (bufnr)
     ['l'] = '',
     ['w'] = '',
     ['b'] = '',
+    ['<Bs>'] = '',
     ['<CR>'] =  '<cmd>lua require("dashboard").call_line_action()<CR>'
    }
 
