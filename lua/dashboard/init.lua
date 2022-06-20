@@ -143,7 +143,11 @@ local get_length_with_graphics = co.create(function()
         table.insert(meta[item],{ desc = 'Please config your own section'})
       end
       for _,v in pairs(meta[item]) do
-        if v.desc == nil then db_notify('Miss desc keyword in custom center') return end
+        if v.desc == nil or #v.desc == 0 then
+          db_notify('Miss desc keyword in custom center')
+          return
+        end
+
         if v.icon == nil then v.icon = '' end
         if v.shortcut == nil then v.shortcut = '' end
         table.insert(user_conf,v.icon .. v.desc..v.shortcut)
