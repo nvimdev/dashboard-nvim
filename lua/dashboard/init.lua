@@ -139,6 +139,9 @@ local get_length_with_graphics = co.create(function()
 
     if item == 'center' then
       local user_conf = {}
+      if next(meta[item]) == nil then
+        table.insert(meta[item],{ desc = 'Please config your own section'})
+      end
       for _,v in pairs(meta[item]) do
         if v.desc == nil then db_notify('Miss desc keyword in custom center') return end
         if v.icon == nil then v.icon = '' end
