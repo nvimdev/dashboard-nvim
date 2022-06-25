@@ -87,7 +87,7 @@ SessionSave,SessionLoad
 
 I've collected some header texts in the [wiki](https://github.com/glepnir/dashboard-nvim/wiki/Ascii-Header-Text). You can view previews of them [here](https://github.com/glepnir/dashboard-nvim/wiki/Header-Preview).
 
-And you can use the [nv-dashboard-header-maker](nv-dashboard-header-maker)
+And you can use the [nv-dashboard-header-maker](https://github.com/xflea/nv-dashboard-header-maker)
 thanks the [xflea](https://github.com/xflea)  create it.
 
 ## FAQ
