@@ -4,7 +4,7 @@
     height="30"
     width="0px"
   />
-  Fancy And Fastest Start Screen Plugin of Neovim
+  Fancy Fastest Async Start Screen Plugin of Neovim
   <img
     src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/misc/transparent.png"
     height="30"
