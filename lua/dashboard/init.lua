@@ -19,7 +19,7 @@ db.custom_footer = nil
 db.custom_center = {
   {icon = '',desc= 'Please Config your own center section ', action=''}
 }
-db.preview_file_Path = ''
+db.preview_file_Path = nil
 db.preview_file_height = ''
 db.preview_file_width = ''
 db.preview_command = ''

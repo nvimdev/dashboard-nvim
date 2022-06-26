@@ -29,8 +29,18 @@ local open_window = function (bn)
 end
 
 local async_preview = uv.new_async(vim.schedule_wrap(function()
+  local file_path = ''
+  if type(db.preview_file_path) == 'string' then
+    file_path = db.preview_file_path
+  elseif type(db.preview_file_path) == 'function' then
+    file_path = db.preview_file_path()
+  else
+    vim.notify('wrong type of preview_file_path')
+    return
+  end
+
   local wininfo = open_window()
-  local cmd = 'terminal '..db.preview_command..' '..db.preview_file_path
+  local cmd = 'terminal '..db.preview_command..' '..file_path
   api.nvim_command(cmd)
   api.nvim_command('wincmd j')
   api.nvim_buf_set_option(wininfo[1],'buflisted',false)
