@@ -58,9 +58,9 @@ db.custom_center  -- table type and in this table you can set icon,desc,shortcut
                   -- action type can be string or function or nil.
                   -- if you don't need any one of icon shortcut action ,you can ignore it.
 db.custom_footer  -- type can be nil,table or function(must be return table in function)
-db.preview_file_Path    -- string or function type
-db.preview_file_height  -- string type
-db.preview_file_width   -- string type
+db.preview_file_Path    -- string or function type that mean in function you can dynamic generate height width
+db.preview_file_height  -- number type
+db.preview_file_width   -- number type
 db.preview_command      -- string type
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
