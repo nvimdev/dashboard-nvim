@@ -20,8 +20,8 @@ db.custom_center = {
   {icon = '',desc= 'Please Config your own center section ', action=''}
 }
 db.preview_file_Path = nil
-db.preview_file_height = ''
-db.preview_file_width = ''
+db.preview_file_height = 0
+db.preview_file_width = 0
 db.preview_command = ''
 db.hide_statusline = true
 db.hide_tabline = true
@@ -125,6 +125,9 @@ local get_length_with_graphics = co.create(function()
     end
 
     if #db.preview_command > 0 and item == 'header' then
+      if type(db.preview_file_Path) == 'function' then
+        db.preview_file_Path()
+      end
       return generate_empty_table(db.preview_file_height)
     end
 
