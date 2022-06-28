@@ -228,7 +228,12 @@ function db.call_line_action()
 end
 
 local set_cursor_initial_pos = function(margin,graphics,window)
-  local col = graphics[1]:find('%S') + #icons[1][1]
+  local col = 0
+  if graphics[1]:find('%w') == nil then
+    col = #graphics[1]
+  else
+    col = graphics[1]:find('%S') + #icons[1][1]
+  end
   api.nvim_win_set_var(window,'db_fix_col',col)
   api.nvim_win_set_var(window,'db_margin',margin)
   api.nvim_win_set_cursor(window,{margin[1]+2,col -1})
