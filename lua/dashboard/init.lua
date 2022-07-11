@@ -26,6 +26,21 @@ db.preview_command = ""
 db.hide_statusline = true
 db.hide_tabline = true
 db.session_directory = ""
+db.header_pad = 1
+db.center_pad = 1
+db.footer_pad = 1
+
+local generate_empty_table = function(length)
+	local empty_tbl = {}
+	if length == 0 then
+		return empty_tbl
+	end
+
+	for _ = 1, length + 3 do
+		table.insert(empty_tbl, "")
+	end
+	return empty_tbl
+end
 
 local set_buf_local_options = function()
 	local opts = {
@@ -98,14 +113,6 @@ local db_notify = function(msg)
 end
 
 local line_actions, icons, shortcuts = {}, {}, {}
-
-local generate_empty_table = function(length)
-	local empty_tbl = {}
-	for _ = 1, length + 3 do
-		table.insert(empty_tbl, "")
-	end
-	return empty_tbl
-end
 
 local cache_data = {
 	header = {},
@@ -185,8 +192,23 @@ local get_length_with_graphics = co.create(function()
 	end
 
 	local margin = {}
-	for _, v in pairs({ "header", "center", "footer" }) do
+	for i, v in pairs({ "header", "center", "footer" }) do
 		local graphics = get_data(v)
+		if i == 1 then
+			for i = 1, db.header_pad do
+				table.insert(graphics, 1, "")
+			end
+
+			for i = 1, db.center_pad do
+				table.insert(graphics, #graphics, "")
+			end
+		end
+
+		if i == 3 then
+			for i = 1, db.footer_pad do
+				table.insert(graphics, 1, "")
+			end
+		end
 		table.insert(margin, #graphics)
 		co.yield(margin, graphics)
 	end
