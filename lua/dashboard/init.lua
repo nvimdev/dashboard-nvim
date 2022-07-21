@@ -86,7 +86,7 @@ local draw_center = function(tbl)
 	local fills = fill_sizes(tbl)
 
 	for i = 1, #tbl do
-		local fill_line = vim.fn["repeat"](" ", fills[i]) .. tbl[i]
+		local fill_line = string.rep(" ", fills[i]) .. tbl[i]
 		table.insert(centered_lines, fill_line)
 	end
 
@@ -171,8 +171,8 @@ local get_length_with_graphics = co.create(function()
 				table.insert(user_conf, "")
 				table.insert(shortcuts, v.shortcut)
 				table.insert(shortcuts, "")
-				table.insert(icons, { v.icon, #v.desc })
-				table.insert(icons, { "" })
+				table.insert(icons, v.icon)
+				table.insert(icons, "")
 				if v.action then
 					table.insert(line_actions, v.action)
 				end
@@ -263,7 +263,7 @@ local set_cursor_initial_pos = function(margin, graphics, window)
 	if graphics[1]:find("%w") == nil then
 		col = #graphics[1]
 	else
-		col = graphics[1]:find("%S") + #icons[1][1]
+		col = graphics[1]:find("%S") + #icons[1]
 	end
 	api.nvim_win_set_var(window, "db_fix_col", col)
 	api.nvim_win_set_var(window, "db_margin", margin)
@@ -281,15 +281,20 @@ local render_default_center = function(bufnr, window)
 	set_cursor_initial_pos(margin, graphics, window)
 
 	for i, shortcut in pairs(shortcuts) do
-		if #shortcut > 0 then
-			fn.matchaddpos("DashboardShortCut", { { margin[1] + 1 + i, #graphics[i] - #shortcut, #shortcut + 1 } })
+		local start_pos = graphics[i]:find(shortcut)
+		if start_pos ~= nil then
+			api.nvim_buf_add_highlight(bufnr, 0, "DashboardShortCut", margin[1] + i, start_pos - 1, -1)
 		end
 
-		if #icons[i] == 2 then
-			local tmp = icons[i]
-			fn.matchaddpos(
+		if #icons[i] >= 2 then
+			local icon_pos = graphics[i]:find(icons[i])
+			api.nvim_buf_add_highlight(
+				bufnr,
+				0,
 				"DashboardCenterIcon",
-				{ { margin[1] + 1 + i, #graphics[i] - #shortcut - tmp[2] - #tmp[1], #tmp[1] } }
+				margin[1] + i,
+				icon_pos,
+				icon_pos + #icons[i] - 1
 			)
 		end
 	end
