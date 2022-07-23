@@ -33,10 +33,9 @@
   </a>
 </p>
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/41671631/173181227-dd8f46c3-0aae-444a-b2e8-fe8ed592e28f.png"
-  />
-</p>
+| macos | linux |
+| ---   | ---   |
+|<img src="https://user-images.githubusercontent.com/41671631/173181227-dd8f46c3-0aae-444a-b2e8-fe8ed592e28f.png" width=80% height=50%/> | <img src="https://user-images.githubusercontent.com/41671631/180594217-49567435-f7b6-4282-bf52-2d70eeb6b476.png" width=90% height=50%>|
 
 ## Install
 
@@ -61,7 +60,7 @@ db.custom_footer  -- type can be nil,table or function(must be return table in f
 db.preview_file_Path    -- string or function type that mean in function you can dynamic generate height width
 db.preview_file_height  -- number type
 db.preview_file_width   -- number type
-db.preview_command      -- string type
+db.preview_command      -- string type (can be ueberzug which only work in linux)
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
 db.session_directory    -- string type the directory to store the session file
@@ -102,7 +101,11 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
 ```lua
   local home = os.getenv('HOME')
   local db = require('dashboard')
+  -- macos
   db.preview_command = 'cat | lolcat -F 0.3'
+  -- linux
+  db.preview_command = 'ueberzug'
+  --
   db.preview_file_path = home .. '/.config/nvim/static/neovim.cat'
   db.preview_file_height = 12
   db.preview_file_width = 80
@@ -133,6 +136,7 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
       shortcut = 'SPC f d'},
     }
 ```
+
 2. How to work with indentLine plugin?
 
 If you installed some indentline plugin. you need to set it to ignore the filetype `dashboard`. For example:
@@ -154,10 +158,10 @@ use {
 ```
 
 ## Donate
+
 [![](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/bobbyhub)
 
 If you'd like to support my work financially, buy me a drink through [paypal](https://paypal.me/bobbyhub)
-
 
 ## LICENSE
 
