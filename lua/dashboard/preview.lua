@@ -8,12 +8,8 @@ local height = db.preview_file_height
 local row, col
 
 local get_script_path = function()
-  local path
-  for _, p in pairs(vim.opt.runtimepath:get()) do
-    if p:find('dashboard') then
-      path = p
-    end
-  end
+  local path = packer_plugins['dashboard-nvim'].path
+
   if path == nil then
     error('Does not find the dashboard dir')
     return
@@ -108,6 +104,7 @@ local open_preview = function()
 end
 
 return {
+  get_script_path = get_script_path,
   open_window = open_window,
   open_preview = open_preview,
   close_preview_window = close_preview_window,
