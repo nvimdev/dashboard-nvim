@@ -358,6 +358,8 @@ local render_footer = co.create(function(bufnr)
   api.nvim_buf_set_option(bufnr, 'modifiable', false)
 end)
 
+db.confirm_key = '<CR>'
+
 local set_keymap = function(bufnr)
   -- disable h l move
   local keys = {
@@ -366,7 +368,7 @@ local set_keymap = function(bufnr)
     ['w'] = '',
     ['b'] = '',
     ['<Bs>'] = '',
-    ['<CR>'] = '<cmd>lua require("dashboard").call_line_action()<CR>',
+    [db.confirm_key] = '<cmd>lua require("dashboard").call_line_action()<CR>',
   }
 
   for key, rhs in pairs(keys) do
