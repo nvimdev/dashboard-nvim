@@ -46,7 +46,6 @@ api.nvim_create_autocmd('FileType', {
 
 api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
   group = db_autogroup,
-  pattern = '*',
   callback = function()
     if vim.bo.filetype == 'dashboard' then
       return
@@ -58,6 +57,22 @@ api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
     if vim.opt.showtabline:get() == 0 then
       vim.opt.showtabline = db.user_showtabline_value
     end
+  end,
+})
+
+api.nvim_create_autocmd('VimResized', {
+  group = db_autogroup,
+  callback = function()
+    if vim.bo.filetype ~= 'dashboard' then
+      return
+    end
+    require('dashboard.preview').close_preview_window()
+    vim.opt_local.modifiable = true
+    if db.cursor_moved_id ~= nil then
+      api.nvim_del_augroup_by_id(db.cursor_moved_id)
+      db.cursor_moved_id = nil
+    end
+    db.instance(false, true)
   end,
 })
 
