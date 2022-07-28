@@ -266,7 +266,7 @@ local set_cursor_initial_pos = function(margin, graphics, window)
   if graphics[1]:find('%w') == nil then
     col = #graphics[1]
   else
-    col = graphics[1]:find('%S') + #icons[1]
+    col = graphics[1]:find('%S') + #cache_data.icons[1]
   end
   api.nvim_win_set_var(window, 'db_fix_col', col)
   api.nvim_win_set_var(window, 'db_margin', margin)
@@ -279,6 +279,7 @@ local render_default_center = function(bufnr, window)
   local graphics = draw_center(center_graphics)
   --cache the center graphics
   cache_data.center = graphics
+  cache_data.icons = icons
   set_line_with_highlight(bufnr, margin[1] + 1, margin[1] + 1 + margin[2], graphics, hl_group[2])
 
   set_cursor_initial_pos(margin, graphics, window)
