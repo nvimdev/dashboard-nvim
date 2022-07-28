@@ -63,6 +63,7 @@ db.preview_file_width   -- number type
 db.preview_command      -- string type (can be ueberzug which only work in linux)
 db.confirm_key          -- string type key that do confirm in center select
 db.exit_key             -- string type key that exit the dashboard
+db.custom_key           -- table type key that set custom keymap for dashboard
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
 db.session_directory    -- string type the directory to store the session file
@@ -156,6 +157,20 @@ use {
     require("indent_blankline").setup { filetype_exclude = { "dashboard" }
     }
   end
+}
+```
+
+3. How to custom keymaps in dashboard?
+
+You can use `custom_key` to map your custom keymaps for dashboard. For example:
+
+```lua
+local db = require "dashboard"
+db.custom_key = {
+    ['1'] = ':Telescope oldfiles<CR>',
+    ['2'] = ':Telescope find_files<CR>',
+    ['3'] = ':Telescope live_grep<CR>',
+    ['4'] = ':edit $MYVIMRC<CR>',
 }
 ```
 

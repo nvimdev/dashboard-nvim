@@ -360,6 +360,13 @@ end)
 
 db.confirm_key = '<CR>'
 
+local custom_keymap = function(bufnr)
+    local custom_key = db.custom_key
+    for key, rhs in pairs(custom_key) do
+        api.nvim_buf_set_keymap(bufnr, 'n', key, rhs, { noremap = true, silent = true, nowait = true })
+    end
+end
+
 local set_keymap = function(bufnr)
   -- disable h l move
   local keys = {
@@ -375,6 +382,7 @@ local set_keymap = function(bufnr)
   for key, rhs in pairs(keys) do
     api.nvim_buf_set_keymap(bufnr, 'n', key, rhs, { noremap = true, silent = true, nowait = true })
   end
+
 end
 
 local dashboard_loaded = false
@@ -455,6 +463,7 @@ function db.instance(on_vimenter)
   end
 
   set_keymap(bufnr)
+  custom_keymap(bufnr)
 
   api.nvim_create_autocmd('CursorMoved', {
     buffer = bufnr,
