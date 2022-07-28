@@ -487,7 +487,7 @@ function db.instance(on_vimenter, ...)
   })
 
   -- clear
-  line_actions, icons, shortcuts, margin = {}, {}, {}, {}
+  icons, shortcuts, margin = {}, {}, {}
 end
 
 return db
