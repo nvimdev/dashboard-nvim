@@ -1,5 +1,6 @@
-local api, fn, co = vim.api, vim.fn, coroutine
+local api, fn = vim.api, vim.fn
 local db = {}
+local insert = table.insert
 
 db.default_banner = {
   '',
@@ -37,7 +38,7 @@ local generate_empty_table = function(length)
   end
 
   for _ = 1, length + 3 do
-    table.insert(empty_tbl, '')
+    insert(empty_tbl, '')
   end
   return empty_tbl
 end
@@ -76,7 +77,7 @@ local draw_center = function(tbl)
     local fills = {}
 
     for _, line in pairs(lines) do
-      table.insert(fills, math.floor((winwidth - fn.strwidth(line)) / 2))
+      insert(fills, math.floor((winwidth - fn.strwidth(line)) / 2))
     end
 
     return fills
@@ -87,7 +88,7 @@ local draw_center = function(tbl)
 
   for i = 1, #tbl do
     local fill_line = string.rep(' ', fills[i]) .. tbl[i]
-    table.insert(centered_lines, fill_line)
+    insert(centered_lines, fill_line)
   end
 
   return centered_lines
@@ -121,8 +122,9 @@ local cache_data = {
   margin = {},
 }
 
+local margin = {}
 -- get header and center graphics length use coroutine
-local get_length_with_graphics = co.create(function()
+local get_length_with_graphics = function(pos)
   local meta = {
     ['header'] = db.custom_header,
     ['center'] = db.custom_center,
@@ -131,7 +133,11 @@ local get_length_with_graphics = co.create(function()
 
   local get_data = function(item)
     if item == 'header' and db.custom_header == nil and db.preview_command == '' then
-      return db.default_banner
+      local tmp = {}
+      for _, v in pairs(db.default_banner) do
+        insert(tmp, v)
+      end
+      return tmp
     end
 
     if #db.preview_command > 0 and item == 'header' then
@@ -153,7 +159,7 @@ local get_length_with_graphics = co.create(function()
     if item == 'center' then
       local user_conf = {}
       if next(meta[item]) == nil then
-        table.insert(meta[item], { desc = 'Please config your own section' })
+        insert(meta[item], { desc = 'Please config your own section' })
       end
       for _, v in pairs(meta[item]) do
         if v.desc == nil or #v.desc == 0 then
@@ -167,14 +173,14 @@ local get_length_with_graphics = co.create(function()
         if v.shortcut == nil then
           v.shortcut = ''
         end
-        table.insert(user_conf, v.icon .. v.desc .. v.shortcut)
-        table.insert(user_conf, '')
-        table.insert(shortcuts, v.shortcut)
-        table.insert(shortcuts, '')
-        table.insert(icons, v.icon)
-        table.insert(icons, '')
+        insert(user_conf, v.icon .. v.desc .. v.shortcut)
+        insert(user_conf, '')
+        insert(shortcuts, v.shortcut)
+        insert(shortcuts, '')
+        insert(icons, v.icon)
+        insert(icons, '')
         if v.action then
-          table.insert(line_actions, v.action)
+          insert(line_actions, v.action)
         end
       end
       return user_conf
@@ -191,44 +197,41 @@ local get_length_with_graphics = co.create(function()
     db_notify('Wrong Data Type must be table or function in custom header or center')
   end
 
-  local margin = {}
-  for i, v in pairs({ 'header', 'center', 'footer' }) do
-    local graphics = get_data(v)
-    if i == 1 then
-      for i = 1, db.header_pad do
-        table.insert(graphics, 1, '')
-      end
-
-      for i = 1, db.center_pad do
-        table.insert(graphics, #graphics, '')
-      end
+  local graphics = get_data(pos)
+  if pos == 'header' then
+    for _ = 1, db.header_pad do
+      insert(graphics, 1, '')
     end
 
-    if i == 3 then
-      for i = 1, db.footer_pad do
-        table.insert(graphics, 1, '')
-      end
+    for _ = 1, db.center_pad do
+      insert(graphics, #graphics, '')
     end
-    table.insert(margin, #graphics)
-    co.yield(margin, graphics)
   end
-end)
+
+  if pos == 'footer' then
+    for _ = 1, db.footer_pad do
+      insert(graphics, 1, '')
+    end
+  end
+  insert(margin, #graphics)
+  return graphics
+end
 
 -- render header
-local render_header = co.create(function(bufnr)
+local render_header = function(bufnr)
   if #db.preview_command > 0 then
     local preview = require('dashboard.preview')
     preview.open_preview()
   end
-  local _, _, graphics = co.resume(get_length_with_graphics)
+  local graphics = get_length_with_graphics('header')
   graphics = draw_center(graphics)
   -- cache the header graphics
   cache_data.header = graphics
   set_line_with_highlight(bufnr, 1, #graphics, graphics, hl_group[1])
-end)
+end
 
 -- register every center line function in a table
-local register_line_with_action = function(margin, graphics)
+local register_line_with_action = function(graphics)
   local line_with_action = {}
   local count = 0
   for i = 1, #graphics - 1 do
@@ -272,7 +275,7 @@ local set_cursor_initial_pos = function(margin, graphics, window)
 end
 
 local render_default_center = function(bufnr, window)
-  local _, margin, center_graphics = co.resume(get_length_with_graphics)
+  local center_graphics = get_length_with_graphics('center')
   local graphics = draw_center(center_graphics)
   --cache the center graphics
   cache_data.center = graphics
@@ -299,7 +302,7 @@ local render_default_center = function(bufnr, window)
     end
   end
 
-  register_line_with_action(margin, center_graphics)
+  register_line_with_action(center_graphics)
 end
 
 local function set_cursor(bufnr, window)
@@ -339,16 +342,16 @@ local function set_cursor(bufnr, window)
 end
 
 -- render center
-local render_center = co.create(function(bufnr, window)
+local render_center = function(bufnr, window)
   render_default_center(bufnr, window)
-end)
+end
 
 -- render footer
-local render_footer = co.create(function(bufnr)
-  local _, margin, graphics = co.resume(get_length_with_graphics)
-  local tmp = { '' }
+local render_footer = function(bufnr)
+  local graphics = get_length_with_graphics('footer')
+  local tmp = {}
   for _, v in pairs(graphics) do
-    table.insert(tmp, v)
+    insert(tmp, v)
   end
   tmp = draw_center(tmp)
   cache_data.footer = tmp
@@ -356,7 +359,7 @@ local render_footer = co.create(function(bufnr)
   -- load user custom footer
   set_line_with_highlight(bufnr, margin[1] + margin[2], -1, tmp, hl_group[3])
   api.nvim_buf_set_option(bufnr, 'modifiable', false)
-end)
+end
 
 db.confirm_key = '<CR>'
 
@@ -415,7 +418,7 @@ function db.new_file()
 end
 
 -- create dashboard instance
-function db.instance(on_vimenter)
+function db.instance(on_vimenter, ...)
   local mode = api.nvim_get_mode().mode
   if on_vimenter and (mode == 'i' or not vim.bo.modifiable) then
     return
@@ -444,18 +447,26 @@ function db.instance(on_vimenter)
 
   set_buf_local_options()
 
-  if dashboard_loaded then
+  local args = { ... }
+  local force = args[1] or false
+
+  if dashboard_loaded and not force then
     load_from_cache(bufnr, window)
   else
-    for _, v in pairs({ render_header, render_center, render_footer }) do
-      co.resume(v, bufnr, window)
-    end
+    render_header(bufnr)
+    render_center(bufnr, window)
+    render_footer(bufnr)
     dashboard_loaded = true
   end
 
   set_keymap(bufnr)
 
+  if db.cursor_moved_id == nil then
+    db.cursor_moved_id = api.nvim_create_augroup('Dashboard CursorMoved Autocmd', {})
+  end
+
   api.nvim_create_autocmd('CursorMoved', {
+    group = db.cursor_moved_id,
     buffer = bufnr,
     callback = function()
       if vim.bo.filetype ~= 'dashboard' then
@@ -470,9 +481,13 @@ function db.instance(on_vimenter)
     end,
   })
 
-  api.nvim_exec_autocmds('User DashboardReady', {
+  api.nvim_exec_autocmds('User', {
+    pattern = 'DashboardReady',
     modeline = false,
   })
+
+  -- clear
+  line_actions, icons, shortcuts, margin = {}, {}, {}, {}
 end
 
 return db
