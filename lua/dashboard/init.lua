@@ -133,11 +133,7 @@ local get_length_with_graphics = function(pos)
 
   local get_data = function(item)
     if item == 'header' and db.custom_header == nil and db.preview_command == '' then
-      local tmp = {}
-      for _, v in pairs(db.default_banner) do
-        insert(tmp, v)
-      end
-      return tmp
+      return db.default_banner
     end
 
     if #db.preview_command > 0 and item == 'header' then
@@ -197,7 +193,7 @@ local get_length_with_graphics = function(pos)
     db_notify('Wrong Data Type must be table or function in custom header or center')
   end
 
-  local graphics = get_data(pos)
+  local graphics = vim.deepcopy(get_data(pos))
   if pos == 'header' then
     for _ = 1, db.header_pad do
       insert(graphics, 1, '')
