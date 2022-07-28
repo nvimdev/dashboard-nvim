@@ -374,9 +374,7 @@ local set_keymap = function(bufnr)
     ['l'] = '',
     ['w'] = '',
     ['b'] = '',
-    ['<Bs>'] = '',
-    [db.confirm_key] = '<cmd>lua require("dashboard").call_line_action()<CR>',
-    [db.exit_key] = '<cmd>q!<CR>',
+    ['<BS>'] = '',
   }
 
   for key, rhs in pairs(keys) do
