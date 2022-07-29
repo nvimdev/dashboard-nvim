@@ -200,7 +200,7 @@ local get_length_with_graphics = function(pos)
     end
 
     for _ = 1, db.center_pad do
-      insert(graphics, #graphics, '')
+      insert(graphics, '')
     end
   end
 
