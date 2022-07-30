@@ -79,7 +79,7 @@ db.custom_center = {
 }
 
 -- Highlight Group
-DashboardHeader DashboardCenter DashboardCenterIcon DashboardShortCut DashboardFooter
+DashboardHeader DashboardCenter DashboardShortCut DashboardFooter
 
 -- Command
 
