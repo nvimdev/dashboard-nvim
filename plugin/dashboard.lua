@@ -13,15 +13,6 @@ api.nvim_create_autocmd('Vimenter', {
   end,
 })
 
-api.nvim_create_autocmd({ 'BufLeave' }, {
-  group = db_autogroup,
-  pattern = '*',
-  callback = function()
-    local pos = api.nvim_win_get_cursor(0)
-    api.nvim_win_set_var(0, 'dashboard_prev_pos', pos)
-  end,
-})
-
 api.nvim_create_autocmd({ 'WinLeave', 'BufEnter' }, {
   group = db_autogroup,
   pattern = '*',

@@ -315,6 +315,11 @@ local function set_cursor(bufnr, window)
   if cur_line == initial_line then
     return
   end
+
+  if cur_line == vim.w.db_oldline then
+    return
+  end
+
   if next(api.nvim_buf_get_lines(bufnr, cur_line, cur_line, false)) == nil then
     if cur_line > vim.w.db_oldline then
       new_line = cur_line + 1
@@ -469,12 +474,7 @@ function db.instance(on_vimenter, ...)
       if vim.bo.filetype ~= 'dashboard' then
         return
       end
-      local ok, pos = pcall(api.nvim_win_get_var, window, 'dashboard_prev_pos')
       set_cursor(bufnr, window)
-      if ok and pos[2] > 0 then
-        api.nvim_win_set_cursor(window, pos)
-        api.nvim_win_set_var(window, 'dashboard_prev_pos', { 0, 0 })
-      end
     end,
   })
 
