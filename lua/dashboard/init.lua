@@ -12,7 +12,7 @@ db.default_banner = {
   ' ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ',
   ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
   '',
-  ' [ Dashboard version 0.2.1 ] ',
+  ' [ Dashboard version 0.2.2 ] ',
   '',
 }
 db.custom_header = nil
@@ -162,19 +162,15 @@ local get_length_with_graphics = function(pos)
           db_notify('Miss desc keyword in custom center')
           return
         end
-
-        if v.icon == nil then
-          v.icon = ''
-        end
-        if v.shortcut == nil then
-          v.shortcut = ''
-        end
+        v.icon = v.icon and v.icon or ''
+        v.icon_hl = v.icon_hl and v.icon_hl or ''
+        v.shortcut = v.shortcut and v.shortcut or ''
         insert(user_conf, v.icon .. v.desc .. v.shortcut)
         insert(user_conf, '')
         insert(shortcuts, v.shortcut)
         insert(shortcuts, '')
-        insert(icons, v.icon)
-        insert(icons, '')
+        insert(icons, { v.icon, v.icon_hl })
+        insert(icons, { '', '' })
         if v.action then
           insert(line_actions, v.action)
         end
@@ -262,7 +258,7 @@ local set_cursor_initial_pos = function(margin, graphics, window)
   if graphics[1]:find('%w') == nil then
     col = #graphics[1]
   else
-    col = graphics[1]:find('%S') + #cache_data.icons[1]
+    col = graphics[1]:find('%S') + #cache_data.icons[1][1]
   end
   api.nvim_win_set_var(window, 'db_fix_col', col)
   api.nvim_win_set_var(window, 'db_margin', margin)
@@ -280,22 +276,27 @@ local render_default_center = function(bufnr, window)
 
   set_cursor_initial_pos(margin, graphics, window)
 
+  local icon_group
   for i, shortcut in pairs(shortcuts) do
     local start_pos = graphics[i]:find(shortcut)
     if start_pos ~= nil then
       api.nvim_buf_add_highlight(bufnr, 0, 'DashboardShortCut', margin[1] + i, start_pos - 1, -1)
     end
 
-    if #icons[i] >= 2 then
-      local icon_pos = graphics[i]:find(icons[i])
+    if #icons[i][1] >= 2 then
+      icon_group = 'DashboardCenter' .. tostring(i) .. 'Icon'
+      local icon_pos = graphics[i]:find(icons[i][1])
       api.nvim_buf_add_highlight(
         bufnr,
         0,
-        'DashboardCenterIcon',
+        icon_group,
         margin[1] + i,
         icon_pos,
-        icon_pos + #icons[i] - 1
+        icon_pos + #icons[i][1] - 1
       )
+      if type(icons[i][2]) == 'table' then
+        api.nvim_set_hl(0, icon_group, icons[i][2])
+      end
     end
   end
 

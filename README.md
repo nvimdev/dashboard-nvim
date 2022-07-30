@@ -53,6 +53,7 @@ db.custom_header  -- type can be nil,table or function(must be return table in f
                   -- if not config will use default banner
 db.custom_center  -- table type and in this table you can set icon,desc,shortcut,action keywords. desc must be exist and type is string
                   -- icon type is nil or string
+                  -- icon_hl table type { fg ,bg} see `:h vim.api.nvim_set_hl` opts
                   -- shortcut type is nil or string also like icon
                   -- action type can be string or function or nil.
                   -- if you don't need any one of icon shortcut action ,you can ignore it.
