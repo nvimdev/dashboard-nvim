@@ -139,12 +139,15 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
     }
 ```
 
-2. How to work with indentLine plugin?
+2. How to work with indentLine or whitespace plugin alike?
 
 If you installed some indentline plugin. you need to set it to ignore the filetype `dashboard`. For example:
 
-```
-vim.g.indentLine_fileTypeExclude = { 'dashboard' }
+```viml
+" For 'Yggdroot/indentLine' and 'lukas-reineke/indent-blankline.nvim' "
+let g:indentLine_fileTypeExclude = ['dashboard']
+" For 'ntpeters/vim-better-whitespace' "
+let g:better_whitespace_filetypes_blacklist = ['dashboard']
 ```
 
 Or in a `plugins.lua` config context:
