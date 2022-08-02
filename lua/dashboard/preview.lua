@@ -8,7 +8,8 @@ local height = db.preview_file_height
 local row, col
 
 local get_script_path = function()
-  local path = packer_plugins['dashboard-nvim'].path
+  local str = debug.getinfo(2, "S").source:sub(2)
+  local path = str:match("(.*/).*/.*/")
 
   if path == nil then
     error('Does not find the dashboard dir')
