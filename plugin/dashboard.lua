@@ -13,11 +13,20 @@ api.nvim_create_autocmd('Vimenter', {
   end,
 })
 
-api.nvim_create_autocmd({ 'WinLeave', 'BufEnter' }, {
+local not_close = {
+  ['packer'] = true,
+  ['NvimTree'] = true,
+  ['NeoTree'] = true,
+  ['dashboard'] = true,
+}
+
+api.nvim_create_autocmd({ 'BufEnter' }, {
   group = db_autogroup,
   pattern = '*',
   callback = function()
-    require('dashboard.preview').close_preview_window()
+    if not not_close[vim.bo.filetype] then
+      require('dashboard.preview').close_preview_window()
+    end
   end,
 })
 

@@ -8,14 +8,14 @@ local height = db.preview_file_height
 local row, col
 
 local get_script_path = function()
-  local str = debug.getinfo(2, "S").source:sub(2)
-  local path = str:match("(.*/).*/.*/")
+  local str = debug.getinfo(2, 'S').source:sub(2)
+  local path = str:match('(.*/).*/.*/')
 
   if path == nil then
     error('Does not find the dashboard dir')
     return
   end
-  return path .. '/scripts/ueberzug.sh '
+  return path .. 'scripts/'
 end
 
 local open_window = function(bn)
@@ -66,13 +66,24 @@ local preview_command = function()
     return
   end
 
-  if db.preview_command ~= 'ueberzug' then
+  local script_path = get_script_path()
+
+  if db.preview_command ~= 'ueberzug' and db.preview_command ~= 'wezterm' then
     return db.preview_command .. ' ' .. file_path
   end
 
-  local script_path = get_script_path()
+  if db.preview_command == 'wezterm' then
+    local image_view = script_path .. 'imageview '
+    return image_view
+      .. space
+      .. file_path
+      .. space
+      .. db.image_width_pixel
+      .. space
+      .. db.image_height_pixel
+  end
 
-  local ueberzug = 'bash ' .. script_path
+  local ueberzug = 'bash ' .. script_path .. 'ueberzug.sh '
   -- filepath x y
   return ueberzug
     .. file_path
