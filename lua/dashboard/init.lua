@@ -215,7 +215,7 @@ end
 local render_header = function(bufnr)
   if #db.preview_command > 0 then
     local preview = require('dashboard.preview')
-    preview.open_preview()
+    preview:open_preview()
   end
   local graphics = get_length_with_graphics('header')
   graphics = draw_center(graphics)
@@ -389,7 +389,7 @@ local dashboard_loaded = false
 local load_from_cache = function(bufnr, window)
   if #db.preview_command > 0 then
     local preview = require('dashboard.preview')
-    preview.open_preview()
+    preview:open_preview()
   end
 
   set_line_with_highlight(bufnr, 1, #cache_data.header, cache_data.header, hl_group[1])
@@ -485,6 +485,10 @@ function db.instance(on_vimenter, ...)
     pattern = 'DashboardReady',
     modeline = false,
   })
+
+  local augroup = require('dashboard.events')
+  -- register dashboard autocmds
+  augroup:dashboard_events()
 
   -- clear
   icons, shortcuts, margin = {}, {}, {}

@@ -18,7 +18,9 @@ local get_script_path = function()
   return path .. 'scripts/'
 end
 
-local open_window = function(bn)
+local view = {}
+
+function view:open_window(bn)
   row = math.floor(height / 5)
   col = math.floor((vim.o.columns - width) / 2)
 
@@ -31,27 +33,25 @@ local open_window = function(bn)
     style = 'minimal',
   }
 
-  local bufnr = bn or nil
+  self.bufnr = bn or nil
 
-  if not bufnr then
-    bufnr = api.nvim_create_buf(false, true)
+  if not self.bufnr then
+    self.bufnr = api.nvim_create_buf(false, true)
   end
-  local winid = api.nvim_open_win(bufnr, false, opts)
-  api.nvim_win_set_option(winid, 'winhl', 'Normal:DashboardTerminal')
+  api.nvim_buf_set_option(self.bufnr, 'filetype', 'dashboardpreview')
+  self.winid = api.nvim_open_win(self.bufnr, false, opts)
+  api.nvim_win_set_option(self.winid, 'winhl', 'Normal:DashboardTerminal')
   api.nvim_set_hl(0, 'DashboardTerminal', { bg = 'none' })
-  return { bufnr, winid }
+  return { self.bufnr, self.winid }
 end
 
-local close_preview_window = function()
-  local ok, wininfo = pcall(api.nvim_win_get_var, 0, 'dashboard_preview_wininfo')
-  if ok then
-    if api.nvim_buf_is_loaded(wininfo[1]) then
-      api.nvim_buf_delete(wininfo[1], { force = true })
-    end
+function view:close_preview_window()
+  if self.bufnr and api.nvim_buf_is_loaded(self.bufnr) then
+    api.nvim_buf_delete(self.bufnr, { force = true })
+  end
 
-    if api.nvim_win_is_valid(wininfo[2]) then
-      api.nvim_win_close(wininfo[2], true)
-    end
+  if self.winid and api.nvim_win_is_valid(self.winid) then
+    api.nvim_win_close(self.winid, true)
   end
 end
 
@@ -98,26 +98,21 @@ local preview_command = function()
 end
 
 local async_preview = uv.new_async(vim.schedule_wrap(function()
-  local wininfo = open_window()
+  local wininfo = view:open_window()
   local cmd = preview_command()
 
   api.nvim_buf_call(wininfo[1], function()
     vim.fn.termopen(cmd, {
       on_exit = function()
-        close_preview_window()
+        view:close_preview_window()
       end,
     })
   end)
   api.nvim_win_set_var(0, 'dashboard_preview_wininfo', wininfo)
 end))
 
-local open_preview = function()
+function view:open_preview()
   async_preview:send()
 end
 
-return {
-  get_script_path = get_script_path,
-  open_window = open_window,
-  open_preview = open_preview,
-  close_preview_window = close_preview_window,
-}
+return view
