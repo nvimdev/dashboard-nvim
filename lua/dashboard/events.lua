@@ -21,7 +21,10 @@ function au:dashboard_events()
     callback = function()
       if not not_close[vim.bo.filetype] then
         require('dashboard.preview'):close_preview_window()
-        api.nvim_del_augroup_by_id(self.au_group)
+        -- neovim-qt requires that conditional
+        if self.au_group ~= nil then
+          api.nvim_del_augroup_by_id(self.au_group)
+        end
         self.au_group = nil
       end
     end,
