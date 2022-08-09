@@ -22,7 +22,7 @@ function au:dashboard_events()
       if not not_close[vim.bo.filetype] then
         require('dashboard.preview'):close_preview_window()
         -- neovim-qt requires that conditional
-        if self.au_group ~= nil then
+        if self.au_group then
           api.nvim_del_augroup_by_id(self.au_group)
         end
         self.au_group = nil
@@ -30,8 +30,12 @@ function au:dashboard_events()
     end,
   })
 
+  if self.au_line == nil then
+    self.au_line = api.nvim_create_augroup('dashboard_line_augroup',{ clear = true})
+  end
+
   api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
-    group = self.au_group,
+    group = self.au_line,
     callback = function()
       if vim.bo.filetype == 'dashboard' then
         return
@@ -42,6 +46,11 @@ function au:dashboard_events()
 
       if vim.opt.showtabline:get() == 0 then
         vim.opt.showtabline = db.user_showtabline_value
+      end
+
+      if self.au_line then
+        api.nvim_del_augroup_by_id(self.au_line)
+        self.au_line = nil
       end
     end,
   })
