@@ -12,6 +12,20 @@ api.nvim_create_autocmd('Vimenter', {
   end,
 })
 
+api.nvim_create_autocmd('FileType', {
+  group = dashboard_start,
+  pattern = 'dashboard',
+  callback = function()
+    if db.hide_statusline then
+      vim.opt.laststatus = 0
+    end
+
+    if db.hide_tabline then
+      vim.opt.showtabline = 0
+    end
+  end,
+})
+
 api.nvim_create_user_command('Dashboard', function()
   require('dashboard').instance(false)
 end, {})

@@ -30,20 +30,6 @@ function au:dashboard_events()
     end,
   })
 
-  api.nvim_create_autocmd('FileType', {
-    group = self.au_group,
-    pattern = 'dashboard',
-    callback = function()
-      if db.hide_statusline then
-        vim.opt.laststatus = 0
-      end
-
-      if db.hide_tabline then
-        vim.opt.showtabline = 0
-      end
-    end,
-  })
-
   api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
     group = self.au_group,
     callback = function()
