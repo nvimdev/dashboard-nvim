@@ -429,7 +429,7 @@ function db.instance(on_vimenter, ...)
     return
   end
 
-  if not vim.o.hidden and vim.bo.modfied then
+  if not vim.o.hidden and vim.bo.modified then
     vim.notify('Save your change first', 'info', { title = 'Dashboard' })
     return
   end
