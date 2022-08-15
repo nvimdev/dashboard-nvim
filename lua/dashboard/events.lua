@@ -31,7 +31,7 @@ function au:dashboard_events()
   })
 
   if self.au_line == nil then
-    self.au_line = api.nvim_create_augroup('dashboard_line_augroup',{ clear = true})
+    self.au_line = api.nvim_create_augroup('dashboard_line_augroup', { clear = true })
   end
 
   api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {

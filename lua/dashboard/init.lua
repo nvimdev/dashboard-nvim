@@ -32,6 +32,7 @@ db.session_directory = ''
 db.header_pad = 1
 db.center_pad = 1
 db.footer_pad = 1
+db.disable_at_vimenter = false
 
 local generate_empty_table = function(length)
   local empty_tbl = {}
