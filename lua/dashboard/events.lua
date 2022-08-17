@@ -1,6 +1,7 @@
 local api = vim.api
 local au = {}
 local db = require('dashboard')
+local preview = require('dashboard.preview')
 
 local not_close = {
   ['packer'] = true,
@@ -15,10 +16,18 @@ function au:dashboard_events()
     self.au_group = api.nvim_create_augroup('dashboard-nvim', { clear = true })
   end
 
-  api.nvim_create_autocmd({ 'BufEnter' }, {
+  api.nvim_create_autocmd({ 'BufWinEnter' }, {
     group = self.au_group,
-    pattern = '*',
     callback = function()
+      if not_close[vim.bo.filetype] then
+        preview:close_preview_window()
+        if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
+          api.nvim_buf_call(db.bufnr, function()
+            preview:open_preview(1.5, vim.o.columns)
+          end)
+        end
+      end
+
       if not not_close[vim.bo.filetype] then
         require('dashboard.preview'):close_preview_window()
         -- neovim-qt requires that conditional
@@ -67,7 +76,7 @@ function au:dashboard_events()
         api.nvim_del_augroup_by_id(db.cursor_moved_id)
         db.cursor_moved_id = nil
       end
-      db.instance(false, true)
+      db:instance(false, true)
     end,
   })
 end

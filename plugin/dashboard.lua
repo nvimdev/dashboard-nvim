@@ -3,17 +3,15 @@ local db = require('dashboard')
 
 local dashboard_start = api.nvim_create_augroup('dashboard_start', { clear = true })
 
-if not db.disable_at_vimenter then
-  api.nvim_create_autocmd('Vimenter', {
-    group = dashboard_start,
-    nested = true,
-    callback = function()
-      if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
-        db.instance(true)
-      end
-    end,
-  })
-end
+api.nvim_create_autocmd('Vimenter', {
+  group = dashboard_start,
+  nested = true,
+  callback = function()
+    if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
+      db:instance(true)
+    end
+  end,
+})
 
 api.nvim_create_autocmd('FileType', {
   group = dashboard_start,
@@ -30,7 +28,7 @@ api.nvim_create_autocmd('FileType', {
 })
 
 api.nvim_create_user_command('Dashboard', function()
-  require('dashboard').instance(false)
+  require('dashboard'):instance(false)
 end, {})
 
 api.nvim_create_user_command('DashboardNewFile', function()

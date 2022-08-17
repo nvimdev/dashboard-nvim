@@ -424,7 +424,7 @@ function db.new_file()
 end
 
 -- create dashboard instance
-function db.instance(on_vimenter, ...)
+function db:instance(on_vimenter, ...)
   local mode = api.nvim_get_mode().mode
   if on_vimenter and (mode == 'i' or not vim.bo.modifiable) then
     return
@@ -435,17 +435,17 @@ function db.instance(on_vimenter, ...)
     return
   end
 
-  local bufnr
+  self.bufnr = nil
 
   if vim.fn.line2byte('$') ~= -1 then
     vim.cmd('noautocmd')
-    bufnr = api.nvim_create_buf(false, true)
+    self.bufnr = api.nvim_create_buf(false, true)
   else
-    bufnr = api.nvim_get_current_buf()
+    self.bufnr = api.nvim_get_current_buf()
   end
 
-  local window = api.nvim_get_current_win()
-  api.nvim_win_set_buf(window, bufnr)
+  self.window = api.nvim_get_current_win()
+  api.nvim_win_set_buf(self.window, self.bufnr)
 
   -- cache the user config and restore it see #144
   db.user_laststatus_value = vim.opt.laststatus:get()
@@ -457,15 +457,15 @@ function db.instance(on_vimenter, ...)
   local force = args[1] or false
 
   if dashboard_loaded and not force then
-    load_from_cache(bufnr, window)
+    load_from_cache(self.bufnr, self.window)
   else
-    render_header(bufnr)
-    render_center(bufnr, window)
-    render_footer(bufnr)
+    render_header(self.bufnr)
+    render_center(self.bufnr, self.window)
+    render_footer(self.bufnr)
     dashboard_loaded = true
   end
 
-  set_keymap(bufnr)
+  set_keymap(self.bufnr)
 
   if db.cursor_moved_id == nil then
     db.cursor_moved_id = api.nvim_create_augroup('Dashboard CursorMoved Autocmd', {})
@@ -473,12 +473,12 @@ function db.instance(on_vimenter, ...)
 
   api.nvim_create_autocmd('CursorMoved', {
     group = db.cursor_moved_id,
-    buffer = bufnr,
+    buffer = self.bufnr,
     callback = function()
       if vim.bo.filetype ~= 'dashboard' then
         return
       end
-      set_cursor(bufnr, window)
+      set_cursor(self.bufnr, self.window)
     end,
   })
 

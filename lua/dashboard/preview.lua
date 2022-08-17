@@ -20,9 +20,11 @@ end
 
 local view = {}
 
-function view:open_window(bn)
+function view:open_window(factor, win_width)
   row = math.floor(height / 5)
-  col = math.floor((vim.o.columns - width) / 2)
+  factor = factor or 2
+  win_width = win_width or vim.fn.winwidth(0)
+  col = math.floor((win_width - width) / factor)
 
   local opts = {
     relative = 'editor',
@@ -31,13 +33,10 @@ function view:open_window(bn)
     width = width,
     height = height,
     style = 'minimal',
+    noautocmd = true,
   }
 
-  self.bufnr = bn or nil
-
-  if not self.bufnr then
-    self.bufnr = api.nvim_create_buf(false, true)
-  end
+  self.bufnr = api.nvim_create_buf(false, true)
   api.nvim_buf_set_option(self.bufnr, 'filetype', 'dashboardpreview')
   self.winid = api.nvim_open_win(self.bufnr, false, opts)
   api.nvim_win_set_option(self.winid, 'winhl', 'Normal:DashboardTerminal')
@@ -97,8 +96,8 @@ local preview_command = function()
     .. height
 end
 
-local async_preview = uv.new_async(vim.schedule_wrap(function()
-  local wininfo = view:open_window()
+local async_preview = uv.new_async(vim.schedule_wrap(function(factor, win_width)
+  local wininfo = view:open_window(factor, win_width)
   local cmd = preview_command()
 
   api.nvim_buf_call(wininfo[1], function()
@@ -111,8 +110,8 @@ local async_preview = uv.new_async(vim.schedule_wrap(function()
   api.nvim_win_set_var(0, 'dashboard_preview_wininfo', wininfo)
 end))
 
-function view:open_preview()
-  async_preview:send()
+function view:open_preview(factor, win_width)
+  async_preview:send(factor, win_width)
 end
 
 return view
