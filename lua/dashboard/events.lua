@@ -22,9 +22,7 @@ function au:dashboard_events()
       if not_close[vim.bo.filetype] then
         preview:close_preview_window()
         if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
-          api.nvim_buf_call(db.bufnr, function()
-            preview:open_preview(1.5, vim.o.columns)
-          end)
+          preview:open_preview(1.5, vim.o.columns)
         end
       end
 

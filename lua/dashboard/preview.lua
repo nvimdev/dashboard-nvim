@@ -47,10 +47,12 @@ end
 function view:close_preview_window()
   if self.bufnr and api.nvim_buf_is_loaded(self.bufnr) then
     api.nvim_buf_delete(self.bufnr, { force = true })
+    self.bufnr = nil
   end
 
   if self.winid and api.nvim_win_is_valid(self.winid) then
     api.nvim_win_close(self.winid, true)
+    self.winid = nil
   end
 end
 
@@ -102,9 +104,7 @@ local async_preview = uv.new_async(vim.schedule_wrap(function(factor, win_width)
 
   api.nvim_buf_call(wininfo[1], function()
     vim.fn.termopen(cmd, {
-      on_exit = function()
-        view:close_preview_window()
-      end,
+      on_exit = function() end,
     })
   end)
   api.nvim_win_set_var(0, 'dashboard_preview_wininfo', wininfo)
