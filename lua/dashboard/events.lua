@@ -20,9 +20,10 @@ function au:dashboard_events()
     group = self.au_group,
     callback = function()
       if not_close[vim.bo.filetype] then
-        preview:close_preview_window()
         if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
-          preview:open_preview(1.5, vim.o.columns)
+          local winconfig = api.nvim_win_get_config(preview.winid)
+          winconfig['col'][false] = vim.o.columns / 1.4
+          api.nvim_win_set_config(preview.winid, winconfig)
         end
       end
 

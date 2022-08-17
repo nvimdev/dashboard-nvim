@@ -20,11 +20,10 @@ end
 
 local view = {}
 
-function view:open_window(factor, win_width)
+function view:open_window()
   row = math.floor(height / 5)
-  factor = factor or 2
-  win_width = win_width or vim.fn.winwidth(0)
-  col = math.floor((win_width - width) / factor)
+  local win_width = vim.fn.winwidth(0)
+  col = math.floor((win_width - width) / 2)
 
   local opts = {
     relative = 'editor',
@@ -98,8 +97,8 @@ local preview_command = function()
     .. height
 end
 
-local async_preview = uv.new_async(vim.schedule_wrap(function(factor, win_width)
-  local wininfo = view:open_window(factor, win_width)
+local async_preview = uv.new_async(vim.schedule_wrap(function()
+  local wininfo = view:open_window()
   local cmd = preview_command()
 
   api.nvim_buf_call(wininfo[1], function()
@@ -110,8 +109,8 @@ local async_preview = uv.new_async(vim.schedule_wrap(function(factor, win_width)
   api.nvim_win_set_var(0, 'dashboard_preview_wininfo', wininfo)
 end))
 
-function view:open_preview(factor, win_width)
-  async_preview:send(factor, win_width)
+function view:open_preview()
+  async_preview:send()
 end
 
 return view
