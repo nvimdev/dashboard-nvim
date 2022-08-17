@@ -54,9 +54,13 @@ function au:dashboard_events()
     group = self.au_group,
     callback = function()
       if vim.bo.filetype == 'dashboard' and not find_filetype() then
-        local winconfig = api.nvim_win_get_config(preview.winid)
-        winconfig['col'][false] = center_col
-        api.nvim_win_set_config(preview.winid, winconfig)
+        if preview.winid and api.nvim_win_is_valid(preview.winid) then
+          local winconfig = api.nvim_win_get_config(preview.winid)
+          if center_col ~= 0 then
+            winconfig['col'][false] = center_col
+          end
+          api.nvim_win_set_config(preview.winid, winconfig)
+        end
       end
     end,
   })
