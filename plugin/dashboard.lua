@@ -7,7 +7,7 @@ api.nvim_create_autocmd('Vimenter', {
   group = dashboard_start,
   nested = true,
   callback = function()
-    if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
+    if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 and not db.disable_at_vimenter then
       db:instance(true)
     end
   end,
