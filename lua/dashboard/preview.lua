@@ -38,8 +38,8 @@ function view:open_window()
   self.bufnr = api.nvim_create_buf(false, true)
   api.nvim_buf_set_option(self.bufnr, 'filetype', 'dashboardpreview')
   self.winid = api.nvim_open_win(self.bufnr, false, opts)
-  api.nvim_win_set_option(self.winid, 'winhl', 'Normal:DashboardTerminal')
-  api.nvim_set_hl(0, 'DashboardTerminal', { bg = 'none' })
+  api.nvim_win_set_option(self.winid, 'winhl', 'Normal:DashboadrPreview')
+  api.nvim_set_hl(0, 'DashboardPreview', { bg = 'none' })
   return { self.bufnr, self.winid }
 end
 
