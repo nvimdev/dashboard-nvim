@@ -9,19 +9,6 @@ local re_render = {
   ['NeoTree'] = true,
 }
 
-local function find_filetype()
-  local buffers = vim.fn.getbufinfo()
-  for _, buf in pairs(buffers) do
-    local filetype = api.nvim_buf_get_option(buf['bufnr'], 'filetype')
-    if re_render[filetype] then
-      return true
-    end
-  end
-  return false
-end
-
-local center_col = 0
-
 function au:dashboard_events()
   if not self.au_group then
     self.au_group = api.nvim_create_augroup('dashboard-nvim', { clear = true })
@@ -33,8 +20,8 @@ function au:dashboard_events()
       if re_render[vim.bo.filetype] then
         if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
           local winconfig = api.nvim_win_get_config(preview.winid)
-          center_col = winconfig['col'][false]
-          winconfig['col'][false] = center_col + 30
+          self.center_col = winconfig['col'][false]
+          winconfig['col'][false] = self.center_col + 30
           api.nvim_win_set_config(preview.winid, winconfig)
         end
       end
@@ -53,11 +40,12 @@ function au:dashboard_events()
   api.nvim_create_autocmd('BufEnter', {
     group = self.au_group,
     callback = function()
-      if vim.bo.filetype == 'dashboard' and not find_filetype() then
+      if vim.bo.filetype == 'dashboard' then
         if preview.winid and api.nvim_win_is_valid(preview.winid) then
           local winconfig = api.nvim_win_get_config(preview.winid)
-          if center_col ~= 0 then
-            winconfig['col'][false] = center_col
+          if self.center_col then
+            winconfig['col'][false] = self.center_col
+            self.center_col = nil
           end
           api.nvim_win_set_config(preview.winid, winconfig)
         end
