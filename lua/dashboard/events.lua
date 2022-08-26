@@ -93,6 +93,16 @@ function au:dashboard_events()
       db:instance(false, true)
     end,
   })
+
+  api.nvim_create_autocmd('SessionLoadPost', {
+    group = self.au_group,
+    callback = function()
+      if preview.winid and api.nvim_win_is_valid(preview.winid) then
+        pcall(api.nvim_win_close, preview.winid, true)
+      end
+    end,
+    desc = 'if load from session close the preview window',
+  })
 end
 
 return au
