@@ -109,8 +109,8 @@ You need install `lolcat` and pass it this Ascii logo (Thanks [@sunjon](https://
   db.preview_command = 'ueberzug'
   --
   db.preview_file_path = home .. '/.config/nvim/static/neovim.cat'
-  db.preview_file_height = 12
-  db.preview_file_width = 80
+  db.preview_file_height = 11
+  db.preview_file_width = 70
   db.custom_center = {
       {icon = '  ',
       desc = 'Recently latest session                  ',
