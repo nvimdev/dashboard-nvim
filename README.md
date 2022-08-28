@@ -37,6 +37,8 @@
 | ---   | ---   |
 |<img src="https://user-images.githubusercontent.com/41671631/173181227-dd8f46c3-0aae-444a-b2e8-fe8ed592e28f.png" width=80% height=50%/> | <img src="https://user-images.githubusercontent.com/41671631/180594217-49567435-f7b6-4282-bf52-2d70eeb6b476.png" width=90% height=50%>|
 
+> I hate someone stealing my ideas and code.
+
 ## Install
 
 - Packer
