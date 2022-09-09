@@ -75,6 +75,7 @@ db.footer_pad           -- number type default is 1
 -- example of db.custom_center for new lua coder,the value of nil mean if you
 -- don't need this filed you can not write it
 db.custom_center = {
+  {icon_hl={fg="color_code"},icon ="some icon",desc="some desc"} --correct
   { icon = 'some icon' desc = 'some description here' } --correct if you don't action filed
   { desc = 'some description here' }                    --correct if you don't action and icon filed
   { desc = 'some description here' action = 'Telescope find files'} --correct if you don't icon filed
