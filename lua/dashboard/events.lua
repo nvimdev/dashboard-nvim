@@ -33,6 +33,9 @@ function au:dashboard_events()
           api.nvim_del_augroup_by_id(self.au_group)
         end
         self.au_group = nil
+        if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
+          api.nvim_buf_delete(db.bufnr, { force = true })
+        end
       end
     end,
   })
