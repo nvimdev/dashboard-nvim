@@ -7,6 +7,7 @@ local re_render = {
   ['packer'] = true,
   ['NvimTree'] = true,
   ['NeoTree'] = true,
+  ['nerdtree'] = true,
 }
 
 function au:dashboard_events()
