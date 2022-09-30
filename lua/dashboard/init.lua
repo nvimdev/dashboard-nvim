@@ -423,8 +423,10 @@ function db.new_file()
     vim.opt_local.showtabline = db.user_showtabline_value
   end
 
-  if vim.opt_local.winbar == "" then
-    vim.opt_local.winbar = db.user_winbar_value
+  if vim.fn.has('nvim-0.8') == 1 then
+    if vim.opt_local.winbar == '' then
+      vim.opt_local.winbar = db.user_winbar_value
+    end
   end
 end
 
@@ -455,7 +457,9 @@ function db:instance(on_vimenter, ...)
   -- cache the user config and restore it see #144
   db.user_laststatus_value = vim.opt.laststatus:get()
   db.user_showtabline_value = vim.opt.showtabline:get()
-  db.user_winbar_value = vim.opt.winbar
+  if vim.fn.has('nvim-0.8') == 1 then
+    db.user_winbar_value = vim.opt.winbar
+  end
 
   set_buf_local_options()
 

@@ -25,8 +25,10 @@ api.nvim_create_autocmd('FileType', {
       vim.opt.showtabline = 0
     end
 
-    if db.hide_winbar then
-      vim.opt.winbar = ""
+    if vim.fn.has('nvim-0.8') == 1 then
+      if db.hide_winbar then
+        vim.opt.winbar = ''
+      end
     end
   end,
 })
