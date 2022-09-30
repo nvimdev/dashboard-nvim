@@ -28,6 +28,7 @@ db.image_width_pixel = 0
 db.image_height_pixel = 0
 db.hide_statusline = true
 db.hide_tabline = true
+db.hide_winbar = true
 db.session_directory = ''
 db.header_pad = 1
 db.center_pad = 1
@@ -421,6 +422,10 @@ function db.new_file()
   if vim.opt_local.showtabline:get() == 0 then
     vim.opt_local.showtabline = db.user_showtabline_value
   end
+
+  if vim.opt_local.winbar == "" then
+    vim.opt_local.winbar = db.user_winbar_value
+  end
 end
 
 -- create dashboard instance
@@ -450,6 +455,7 @@ function db:instance(on_vimenter, ...)
   -- cache the user config and restore it see #144
   db.user_laststatus_value = vim.opt.laststatus:get()
   db.user_showtabline_value = vim.opt.showtabline:get()
+  db.user_winbar_value = vim.opt.winbar
 
   set_buf_local_options()
 

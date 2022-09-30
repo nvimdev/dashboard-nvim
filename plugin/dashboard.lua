@@ -24,6 +24,10 @@ api.nvim_create_autocmd('FileType', {
     if db.hide_tabline then
       vim.opt.showtabline = 0
     end
+
+    if db.hide_winbar then
+      vim.opt.winbar = ""
+    end
   end,
 })
 
