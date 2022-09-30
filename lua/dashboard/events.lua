@@ -75,6 +75,10 @@ function au:dashboard_events()
         vim.opt.showtabline = db.user_showtabline_value
       end
 
+      if vim.opt.winbar:get() == "" then
+        vim.opt.winbar = db.user_winbar_value
+      end
+
       if self.au_line then
         api.nvim_del_augroup_by_id(self.au_line)
         self.au_line = nil
