@@ -282,7 +282,7 @@ local render_default_center = function(bufnr, window)
 
   local icon_group
   for i, shortcut in pairs(shortcuts) do
-    local start_pos = graphics[i]:find(shortcut)
+    local start_pos = graphics[i]:find(shortcut .. '$')
     if start_pos ~= nil then
       api.nvim_buf_add_highlight(bufnr, 0, 'DashboardShortCut', margin[1] + i, start_pos - 1, -1)
     end
