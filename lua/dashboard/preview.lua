@@ -40,7 +40,7 @@ function view:open_window()
   self.winid = api.nvim_open_win(self.bufnr, false, opts)
   if vim.fn.has('nvim-0.8') == 1 then
     local normal = api.nvim_get_hl_by_name('Normal', true)
-    api.nvim_set_hl(0, 'DashboardPreview', normal)
+    pcall(api.nvim_set_hl, 0, 'DashboardPreview', normal)
   else
     api.nvim_set_hl(0, 'DashboardPreview', { bg = 'none' })
   end
