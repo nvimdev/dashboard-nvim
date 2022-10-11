@@ -79,6 +79,10 @@ function au:dashboard_events()
         if vim.opt.winbar == '' then
           vim.opt.winbar = db.user_winbar_value
         end
+
+        if vim.opt.cmdheight:get() == 0 then
+          vim.opt.cmdheight = db.user_cmdheight_value
+        end
       end
 
       if self.au_line then

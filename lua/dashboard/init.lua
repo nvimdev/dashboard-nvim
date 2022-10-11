@@ -29,6 +29,7 @@ db.image_height_pixel = 0
 db.hide_statusline = true
 db.hide_tabline = true
 db.hide_winbar = true
+db.hide_cmdline = true
 db.session_directory = ''
 db.header_pad = 1
 db.center_pad = 1
@@ -427,6 +428,10 @@ function db.new_file()
     if vim.opt_local.winbar == '' then
       vim.opt_local.winbar = db.user_winbar_value
     end
+
+    if vim.opt_local.cmdheight:get() == 0 then
+      vim.opt_local.cmdheight = db.user_cmdheight_value
+    end
   end
 end
 
@@ -459,6 +464,7 @@ function db:instance(on_vimenter, ...)
   db.user_showtabline_value = vim.opt.showtabline:get()
   if vim.fn.has('nvim-0.8') == 1 then
     db.user_winbar_value = vim.opt.winbar
+    db.user_cmdheight_value = vim.opt.cmdheight:get()
   end
 
   set_buf_local_options()

@@ -68,6 +68,7 @@ db.confirm_key          -- string type key that do confirm in center select
 db.hide_statusline      -- boolean default is true.it will hide statusline in dashboard buffer and auto open in other buffer
 db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
 db.hide_winbar          -- boolean default is true.it will hide the winbar in dashboard buffer and auto open in other buffer
+db.hide_cmdline         -- boolean default is true.it will hide cmdline in dashboard buffer and auto open in other buffer
 db.session_directory    -- string type the directory to store the session file
 db.header_pad           -- number type default is 1
 db.center_pad           -- number type default is 1

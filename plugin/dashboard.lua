@@ -29,6 +29,10 @@ api.nvim_create_autocmd('FileType', {
       if db.hide_winbar then
         vim.opt.winbar = ''
       end
+
+      if db.hide_cmdline then
+        vim.opt.cmdheight = 0
+      end
     end
   end,
 })
