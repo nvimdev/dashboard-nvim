@@ -31,6 +31,7 @@ db.hide_tabline = true
 db.hide_winbar = true
 db.session_directory = ''
 db.session_auto_save_on_exit = false
+db.session_verbose = true
 db.header_pad = 1
 db.center_pad = 1
 db.footer_pad = 1

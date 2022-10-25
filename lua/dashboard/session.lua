@@ -38,7 +38,11 @@ function session.session_save(name)
   local file_path = db.session_directory .. '/' .. file_name .. '.vim'
   api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
-  vim.notify('Session ' .. file_name .. ' is now persistent')
+  if db.session_verbose then
+    vim.notify('Session ' .. file_name .. ' is now persistent')
+  else
+    vim.notify('This session is now persistent')
+  end
 end
 
 function session.session_load(name)
@@ -57,11 +61,19 @@ function session.session_load(name)
       vim.opt.laststatus = 2
     end
 
-    vim.notify('Loaded ' .. file_path .. ' session')
+    if db.session_verbose then
+      vim.notify('Loaded ' .. file_path .. ' session')
+    else
+      vim.notify('Session loaded')
+    end
     return
   end
 
-  vim.notify('The session ' .. file_path .. ' does not exist')
+  if db.session_verbose then
+    vim.notify('The session ' .. file_path .. ' does not exist')
+  else
+    vim.notify('No saved session for this directory')
+  end
 end
 
 function session.session_exists(name)
