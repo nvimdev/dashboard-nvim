@@ -49,7 +49,7 @@ function session.session_load(name)
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
   end
 
-  if fn.filereadable(file_path) then
+  if fn.filereadable(file_path) > 0 then
     vim.cmd([[ noautocmd silent! %bwipeout!]])
     api.nvim_command('silent! source ' .. file_path)
 
