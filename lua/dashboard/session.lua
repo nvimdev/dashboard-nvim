@@ -64,6 +64,13 @@ function session.session_load(name)
   vim.notify('The session ' .. file_path .. ' does not exist')
 end
 
+function session.session_exists(name)
+  local file_name = name == nil and project_name() or name
+  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
+
+  return fn.filereadable(file_path) > 0
+end
+
 function session.session_list()
   return vim.split(fn.globpath(db.session_directory, '*.vim'), '\n')
 end

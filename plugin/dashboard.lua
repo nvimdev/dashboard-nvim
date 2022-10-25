@@ -1,5 +1,6 @@
 local api = vim.api
 local db = require('dashboard')
+local db_session = require('dashboard.session')
 
 local dashboard_start = api.nvim_create_augroup('dashboard_start', { clear = true })
 
@@ -32,6 +33,20 @@ api.nvim_create_autocmd('FileType', {
     end
   end,
 })
+
+if db.session_auto_save_on_exit then
+  local session_auto_save = api.nvim_create_augroup('session_auto_save', { clear = true })
+
+  api.nvim_create_autocmd('VimLeavePre', {
+    group = session_auto_save,
+    callback = function()
+      pcall(vim.cmd, "NvimTreeClose")
+      if db_session.session_exists() and vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 })) > 1 then
+        db_session.session_save()
+      end
+    end,
+  })
+end
 
 api.nvim_create_user_command('Dashboard', function()
   require('dashboard'):instance(false)
