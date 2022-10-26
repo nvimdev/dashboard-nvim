@@ -103,7 +103,7 @@ DashboardHeader DashboardCenter DashboardShortCut DashboardFooter
 -- Command
 
 DashboardNewFile  -- if you like use `enew` to create file,Please use this command,it's wrap enew and restore the statsuline and tabline
-SessionSave,SessionLoad
+SessionSave,SessionLoad,SessionDelete
 ```
 
 ### Ascii Header Examples

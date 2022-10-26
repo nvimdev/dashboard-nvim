@@ -70,3 +70,10 @@ end, {
   nargs = '?',
   complete = require('dashboard.session').session_list,
 })
+
+api.nvim_create_user_command('SessionDelete', function()
+  require('dashboard.session').session_delete()
+end, {
+  nargs = '?',
+  complete = require('dashboard.session').session_list,
+})

@@ -48,7 +48,7 @@ function session.session_load(name)
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
   end
 
-  if fn.filereadable(file_path) > 0 then
+  if fn.filereadable(file_path) == 1 then
     vim.cmd([[ noautocmd silent! %bwipeout!]])
     api.nvim_command('silent! source ' .. file_path)
 
@@ -75,7 +75,28 @@ function session.session_exists(name)
   local file_name = name == nil and project_name() or name
   local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
 
-  return fn.filereadable(file_path) > 0
+  return fn.filereadable(file_path) == 1
+end
+
+function session.session_delete(name)
+  local file_name = not name and project_name() or name
+  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
+
+  if fn.filereadable(file_path) == 1 then
+    fn.delete(file_path)
+    if db.session_verbose then
+      vim.notify('Session ' .. file_name .. ' deleted')
+    else
+      vim.notify('Session deleted')
+    end
+    return
+  end
+
+  if db.session_verbose then
+    vim.notify('The session ' .. file_path .. ' does not exist')
+  else
+    vim.notify('No saved session for this directory')
+  end
 end
 
 function session.session_list()
