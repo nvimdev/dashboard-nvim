@@ -4,6 +4,7 @@ local is_windows = #vim.fn.windowsversion() > 0
 local path_sep = is_windows and '\\' or '/'
 local session = {}
 local home = loop.os_homedir()
+local session_cp_name
 
 local project_name = function()
   local cwd = fn.resolve(fn.getcwd())
@@ -38,6 +39,7 @@ function session.session_save(name)
   else
     vim.notify('This session is now persistent')
   end
+  session_cp_name = project_name()
 end
 
 function session.session_load(name)
@@ -61,6 +63,7 @@ function session.session_load(name)
     else
       vim.notify('Session loaded')
     end
+    session_cp_name = project_name()
     return
   end
 
@@ -97,6 +100,11 @@ function session.session_delete(name)
   else
     vim.notify('No saved session for this directory')
   end
+end
+
+function session.should_auto_save()
+  return db.session_auto_save_on_exit and session.session_exists()
+      and session_cp_name == project_name()
 end
 
 function session.session_list()

@@ -40,7 +40,7 @@ if db.session_auto_save_on_exit then
   api.nvim_create_autocmd('VimLeavePre', {
     group = session_auto_save,
     callback = function()
-      if db_session.session_exists() and vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 })) > 1 then
+      if db_session.should_auto_save() then
         api.nvim_exec_autocmds('User', { pattern = 'DBSessionSavePre', modeline = false })
         db_session.session_save()
         api.nvim_exec_autocmds('User', { pattern = 'DBSessionSaveAfter', modeline = false })
