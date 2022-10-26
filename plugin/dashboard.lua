@@ -41,13 +41,9 @@ if db.session_auto_save_on_exit then
     group = session_auto_save,
     callback = function()
       if db_session.session_exists() and vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 })) > 1 then
-        if type(db.session_auto_save_pre) == 'function' then
-          db.session_auto_save_pre()
-        end
+        api.nvim_exec_autocmds('User', { pattern = 'DBSessionSavePre', modeline = false })
         db_session.session_save()
-        if type(db.db.session_auto_save_after) == 'function' then
-          db.session_auto_save_after()
-        end
+        api.nvim_exec_autocmds('User', { pattern = 'DBSessionSaveAfter', modeline = false })
       end
     end,
   })
