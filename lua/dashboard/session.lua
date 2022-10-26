@@ -1,20 +1,14 @@
 local fn, api, loop = vim.fn, vim.api, vim.loop
 local db = require('dashboard')
+local is_windows = #vim.fn.windowsversion() > 0
+local path_sep = is_windows and '\\' or '/'
 local session = {}
 local home = loop.os_homedir()
 
-local isWindows = function()
-  if loop.os_uname().sysname == 'Windows_NT' then
-    return true
-  else
-    return false
-  end
-end
-
 local project_name = function()
   local cwd = fn.resolve(fn.getcwd())
-  cwd = fn.substitute(cwd, '^' .. home .. '/', '', '')
-  if isWindows() then
+  cwd = fn.substitute(cwd, '^' .. home .. path_sep, '', '')
+  if is_windows then
     cwd = fn.fnamemodify(cwd, [[:p:gs?\?_?]])
     cwd = (string.gsub(cwd, 'C:', ''))
   else
@@ -24,7 +18,7 @@ local project_name = function()
   return cwd
 end
 
-if isWindows() then
+if is_windows then
   -- overwrite db.session_directory for Windows in this file
   db.session_directory = string.gsub(db.session_directory, '/', '\\')
 end
@@ -35,7 +29,7 @@ function session.session_save(name)
   end
 
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
+  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
   api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
 
@@ -48,7 +42,7 @@ end
 
 function session.session_load(name)
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
+  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
 
   if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
@@ -79,7 +73,7 @@ end
 
 function session.session_exists(name)
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. '/' .. file_name .. '.vim'
+  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
 
   return fn.filereadable(file_path) > 0
 end
