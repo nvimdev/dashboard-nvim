@@ -70,6 +70,8 @@ db.hide_tabline               -- boolean default is true.it will hide tabline in
 db.hide_winbar                -- boolean default is true.it will hide the winbar in dashboard buffer and auto open in other buffer
 db.session_directory          -- string type the directory to store the session file
 db.session_auto_save_on_exit  -- boolean default is false.it will auto-save the current session on neovim exit if a session exists and more than one buffer is loaded
+db.session_auto_save_pre      -- function default is nil.it will be called before auto-saving the current session on exit
+db.session_auto_save_after    -- function default is nil.it will be called after auto-saving the current session on exit
 db.session_verbose            -- boolean default true.it will display the session file path on SessionSave and SessionLoad
 db.header_pad                 -- number type default is 1
 db.center_pad                 -- number type default is 1

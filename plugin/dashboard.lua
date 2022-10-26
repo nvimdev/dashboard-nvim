@@ -40,9 +40,14 @@ if db.session_auto_save_on_exit then
   api.nvim_create_autocmd('VimLeavePre', {
     group = session_auto_save,
     callback = function()
-      pcall(vim.cmd, "NvimTreeClose")
       if db_session.session_exists() and vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 })) > 1 then
+        if type(db.session_auto_save_pre) == 'function' then
+          db.session_auto_save_pre()
+        end
         db_session.session_save()
+        if type(db.db.session_auto_save_after) == 'function' then
+          db.session_auto_save_after()
+        end
       end
     end,
   })

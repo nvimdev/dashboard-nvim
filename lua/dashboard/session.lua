@@ -38,6 +38,7 @@ function session.session_save(name)
   local file_path = db.session_directory .. '/' .. file_name .. '.vim'
   api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
+
   if db.session_verbose then
     vim.notify('Session ' .. file_name .. ' is now persistent')
   else
