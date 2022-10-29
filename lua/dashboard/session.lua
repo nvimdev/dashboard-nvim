@@ -5,6 +5,23 @@ local path_sep = is_windows and '\\' or '/'
 local session = {}
 local home = loop.os_homedir()
 local session_cp_name
+local msg_dict = {
+  [false] = {
+    save = 'This session is now persistent',
+    load = 'Session loaded',
+    load_failed = 'No saved session for this directory',
+    deleted = 'Session deleted',
+    delete_failed = 'No saved session for this directory',
+  },
+  [true] = {
+    save = 'Session %s is now persistent',
+    load = 'Loaded %s session',
+    load_failed = 'The session %s does not exist',
+    deleted = 'Session %s deleted',
+    delete_failed = 'The session %s does not exist',
+  }
+}
+msg_dict = msg_dict[db.session_verbose]
 
 local project_name = function()
   local cwd = fn.resolve(fn.getcwd())
@@ -34,11 +51,7 @@ function session.session_save(name)
   api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
 
-  if db.session_verbose then
-    vim.notify('Session ' .. file_name .. ' is now persistent')
-  else
-    vim.notify('This session is now persistent')
-  end
+  vim.notify(string.format(msg_dict.save, file_name))
   session_cp_name = project_name()
 end
 
@@ -58,20 +71,12 @@ function session.session_load(name)
       vim.opt.laststatus = 2
     end
 
-    if db.session_verbose then
-      vim.notify('Loaded ' .. file_path .. ' session')
-    else
-      vim.notify('Session loaded')
-    end
+    vim.notify(string.format(msg_dict.load, file_name))
     session_cp_name = project_name()
     return
   end
 
-  if db.session_verbose then
-    vim.notify('The session ' .. file_path .. ' does not exist')
-  else
-    vim.notify('No saved session for this directory')
-  end
+  vim.notify(string.format(msg_dict.load_failed, file_name))
 end
 
 function session.session_exists(name)
@@ -87,19 +92,11 @@ function session.session_delete(name)
 
   if fn.filereadable(file_path) == 1 then
     fn.delete(file_path)
-    if db.session_verbose then
-      vim.notify('Session ' .. file_name .. ' deleted')
-    else
-      vim.notify('Session deleted')
-    end
+    vim.notify(string.format(msg_dict.deleted, file_name))
     return
   end
 
-  if db.session_verbose then
-    vim.notify('The session ' .. file_path .. ' does not exist')
-  else
-    vim.notify('No saved session for this directory')
-  end
+  vim.notify(string.format(msg_dict.delete_failed, file_name))
 end
 
 function session.should_auto_save()
