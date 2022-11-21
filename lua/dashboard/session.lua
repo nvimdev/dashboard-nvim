@@ -19,7 +19,7 @@ local msg_dict = {
     load_failed = 'The session %s does not exist',
     deleted = 'Session %s deleted',
     delete_failed = 'The session %s does not exist',
-  }
+  },
 }
 msg_dict = msg_dict[db.session_verbose]
 
@@ -56,8 +56,7 @@ function session.session_save(name)
 end
 
 function session.session_load(name)
-  local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
+  local file_path = name and name or db.session_directory .. path_sep .. project_name() .. '.vim'
 
   if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
@@ -71,12 +70,12 @@ function session.session_load(name)
       vim.opt.laststatus = 2
     end
 
-    vim.notify(string.format(msg_dict.load, file_name))
+    vim.notify(string.format(msg_dict.load, file_path))
     session_cp_name = project_name()
     return
   end
 
-  vim.notify(string.format(msg_dict.load_failed, file_name))
+  vim.notify(string.format(msg_dict.load_failed, file_path))
 end
 
 function session.session_exists(name)
@@ -100,8 +99,9 @@ function session.session_delete(name)
 end
 
 function session.should_auto_save()
-  return db.session_auto_save_on_exit and session.session_exists()
-      and session_cp_name == project_name()
+  return db.session_auto_save_on_exit
+    and session.session_exists()
+    and session_cp_name == project_name()
 end
 
 function session.session_list()

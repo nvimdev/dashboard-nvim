@@ -64,8 +64,8 @@ end, {
   complete = require('dashboard.session').session_list,
 })
 
-api.nvim_create_user_command('SessionLoad', function()
-  require('dashboard.session').session_load()
+api.nvim_create_user_command('SessionLoad', function(args)
+  require('dashboard.session').session_load(args.args)
 end, {
   nargs = '?',
   complete = require('dashboard.session').session_list,
