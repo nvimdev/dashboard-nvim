@@ -55,8 +55,16 @@ function session.session_save(name)
   session_cp_name = project_name()
 end
 
+local function convert_home_base()
+  if db.session_directory:find('~') then
+    db.session_directory = db.session_directory:gsub('~', vim.env.HOME)
+  end
+end
+
 function session.session_load(name)
-  local file_path = name and name or db.session_directory .. path_sep .. project_name() .. '.vim'
+  convert_home_base()
+  local file_path = (name and #name > 0) and name
+    or db.session_directory .. path_sep .. project_name() .. '.vim'
 
   if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
