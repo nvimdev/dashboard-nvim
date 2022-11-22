@@ -56,8 +56,8 @@ function session.session_save(name)
 end
 
 local function convert_home_base()
-  if db.session_directory:find('~') then
-    db.session_directory = db.session_directory:gsub('~', vim.env.HOME)
+  if db.session_directory:find('^~/') then
+    db.session_directory = vim.fs.normalize(db.session_directory)
   end
 end
 
