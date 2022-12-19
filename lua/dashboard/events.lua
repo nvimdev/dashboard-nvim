@@ -76,7 +76,7 @@ function au:dashboard_events()
       end
 
       if vim.fn.has('nvim-0.8') == 1 then
-        if vim.opt.winbar == '' then
+        if vim.opt.winbar:get() == '' then
           vim.opt.winbar = db.user_winbar_value
         end
       end
