@@ -426,7 +426,7 @@ function db.new_file()
   end
 
   if vim.fn.has('nvim-0.8') == 1 then
-    if vim.opt_local.winbar == '' then
+    if vim.opt_local.winbar:get() == '' then
       vim.opt_local.winbar = db.user_winbar_value
     end
   end
@@ -460,7 +460,7 @@ function db:instance(on_vimenter, ...)
   db.user_laststatus_value = vim.opt.laststatus:get()
   db.user_showtabline_value = vim.opt.showtabline:get()
   if vim.fn.has('nvim-0.8') == 1 then
-    db.user_winbar_value = vim.opt.winbar
+    db.user_winbar_value = vim.opt.winbar:get()
   end
 
   set_buf_local_options()
