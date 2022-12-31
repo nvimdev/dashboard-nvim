@@ -155,6 +155,11 @@ local get_length_with_graphics = function(pos)
         local count = #vim.tbl_keys(packer_plugins)
         default_footer[2] = '🎉 neovim loaded ' .. count .. ' plugins'
       end
+      local status, lazy = pcall(require, "lazy")
+      if status then
+        local count = lazy.stats().count
+        default_footer[2] = '🎉 neovim loaded ' .. count .. ' plugins'
+      end
       return default_footer
     end
 
