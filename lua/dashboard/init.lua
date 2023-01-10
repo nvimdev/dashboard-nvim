@@ -72,7 +72,7 @@ local set_buf_local_options = function()
     vim.opt_local[opt] = val
   end
   if fn.has('nvim-0.9') == 1 then
-    vim.opt_local.stc = '',
+    vim.opt_local.stc = ''
   end
 end
 
