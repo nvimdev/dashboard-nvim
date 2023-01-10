@@ -75,8 +75,10 @@ function au:dashboard_events()
         vim.opt.showtabline = db.user_showtabline_value
       end
 
-      if vim.opt.stc == '' then
-        vim.opt.stc = db.user_stc_value
+      if vim.fn.has('nvim-0.9') == 1 then
+        if vim.opt.stc == '' then
+          vim.opt.stc = db.user_stc_value
+        end
       end
 
       if vim.fn.has('nvim-0.8') == 1 then
