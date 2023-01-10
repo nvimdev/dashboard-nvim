@@ -67,6 +67,7 @@ local set_buf_local_options = function()
     ['buftype'] = 'nofile',
     ['wrap'] = false,
     ['signcolumn'] = 'no',
+    ['stc'] = '',
   }
   for opt, val in pairs(opts) do
     vim.opt_local[opt] = val
@@ -116,7 +117,7 @@ local set_line_with_highlight = function(bufnr, line_start, line_end, tbl, hl)
 end
 
 local db_notify = function(msg)
-  vim.notify(msg, 'error', { title = 'Dashboard' })
+  vim.notify(msg, vim.log.levels.WARN, { title = 'Dashboard' })
 end
 
 local line_actions, icons, shortcuts = {}, {}, {}
@@ -155,7 +156,7 @@ local get_length_with_graphics = function(pos)
         local count = #vim.tbl_keys(packer_plugins)
         default_footer[2] = '🎉 neovim loaded ' .. count .. ' plugins'
       end
-      local status, lazy = pcall(require, "lazy")
+      local status, lazy = pcall(require, 'lazy')
       if status then
         local count = lazy.stats().count
         default_footer[2] = '🎉 neovim loaded ' .. count .. ' plugins'
@@ -445,7 +446,7 @@ function db:instance(on_vimenter, ...)
   end
 
   if not vim.o.hidden and vim.bo.modified then
-    vim.notify('Save your change first', 'info', { title = 'Dashboard' })
+    vim.notify('Save your change first', vim.log.levels.WARN, { title = 'Dashboard' })
     return
   end
 
@@ -466,6 +467,9 @@ function db:instance(on_vimenter, ...)
   db.user_showtabline_value = vim.opt.showtabline:get()
   if vim.fn.has('nvim-0.8') == 1 then
     db.user_winbar_value = vim.opt.winbar:get()
+  end
+  if vim.fn.has('nvim-0.9') == 1 then
+    db.user_stc_value = vim.opt.stc
   end
 
   set_buf_local_options()

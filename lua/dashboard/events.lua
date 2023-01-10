@@ -75,6 +75,10 @@ function au:dashboard_events()
         vim.opt.showtabline = db.user_showtabline_value
       end
 
+      if vim.opt.stc == '' then
+        vim.opt.stc = db.user_stc_value
+      end
+
       if vim.fn.has('nvim-0.8') == 1 then
         if vim.opt.winbar:get() == '' then
           vim.opt.winbar = db.user_winbar_value
