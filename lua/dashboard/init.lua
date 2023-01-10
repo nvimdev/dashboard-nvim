@@ -67,10 +67,12 @@ local set_buf_local_options = function()
     ['buftype'] = 'nofile',
     ['wrap'] = false,
     ['signcolumn'] = 'no',
-    ['stc'] = '',
   }
   for opt, val in pairs(opts) do
     vim.opt_local[opt] = val
+  end
+  if fn.has('nvim-0.9') == 1 then
+    vim.opt_local.stc = '',
   end
 end
 
