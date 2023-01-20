@@ -14,26 +14,6 @@ api.nvim_create_autocmd('Vimenter', {
   end,
 })
 
-api.nvim_create_autocmd('FileType', {
-  group = dashboard_start,
-  pattern = 'dashboard',
-  callback = function()
-    if db.hide_statusline then
-      vim.opt.laststatus = 0
-    end
-
-    if db.hide_tabline then
-      vim.opt.showtabline = 0
-    end
-
-    if vim.fn.has('nvim-0.8') == 1 then
-      if db.hide_winbar then
-        vim.opt.winbar = ''
-      end
-    end
-  end,
-})
-
 if db.session_auto_save_on_exit then
   local session_auto_save = api.nvim_create_augroup('session_auto_save', { clear = true })
 
