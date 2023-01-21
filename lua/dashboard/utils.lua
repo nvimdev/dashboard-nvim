@@ -1,4 +1,4 @@
-local uv = vim.loop
+local uv, api = vim.loop, vim.api
 local utils = {}
 
 function utils.path_join(...)
@@ -48,7 +48,7 @@ function utils.center_align(tbl)
   return centered_lines
 end
 
-function utils.generate_header(header, elements)
+function utils.generate_header(config)
   local default = {
     '',
     ' ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  ',
@@ -59,14 +59,19 @@ function utils.generate_header(header, elements)
     ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
     '',
   }
-  header = header or default
-  vim.list_extend(elements.lines, utils.center_align(header))
-  local header_highlight = function(bufnr, _)
+
+  if not config.preview then
+    local header = config.header or default
+    api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
+
     for i, _ in ipairs(header) do
-      vim.api.nvim_buf_add_highlight(bufnr, 0, 'DashboardHeader', i - 1, 0, -1)
+      vim.api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardHeader', i - 1, 0, -1)
     end
+    return
   end
-  table.insert(elements.fns, header_highlight)
+
+  local empty_table = utils.generate_empty_table(config.preview.file_height + 2)
+  api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
 end
 
 function utils.get_icon(ft)
@@ -109,7 +114,7 @@ function utils.generate_empty_table(length)
     return empty_tbl
   end
 
-  for _ = 1, length + 3 do
+  for _ = 1, length do
     table.insert(empty_tbl, '')
   end
   return empty_tbl

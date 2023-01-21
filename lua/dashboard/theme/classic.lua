@@ -1,67 +1,48 @@
 local api = vim.api
 local utils = require('dashboard.utils')
 
-local function generate_center(config, elements)
-  config = config or {}
+local function generate_center(config)
+  local center = vim.tbl_extend('force', {
+    { desc = 'Please config your own center section' },
+  }, config.center or {})
 
-  if vim.tbl_isempty(config) then
-    config = {
-      { desc = 'Please config your own center section' },
-    }
-  end
-  local first_line = #elements.lines + 1
-
-  vim.tbl_map(function(k)
-    if not k.desc then
-      vim.notify('[Dashboard.nvim] Missing desc keyword in center')
-      return
-    end
-    vim.list_extend(elements.lines, utils.center_align({ k.desc }))
-  end, config)
-
-  local center_fn = function(bufnr, _)
-    for i, item in pairs(config) do
-      api.nvim_buf_add_highlight(bufnr, 0, 'DashboardCenter', first_line + i - 2, 0, -1)
-      if item.keymap then
-        vim.keymap.set('n', item.keymap, function()
-          vim.cmd(item.action)
-        end, { buffer = bufnr, nowait = true, silent = true })
-      end
+  local lines = {}
+  for _, item in pairs(center) do
+    table.insert(lines, item.desc)
+    if item.keymap then
+      vim.keymap.set('n', item.keymap, function()
+        vim.cmd(item.action)
+      end, { buffer = config.bufnr, nowait = true, silent = true })
     end
   end
+  lines = utils.center_align(lines)
 
-  local set_cursor = function(bufnr, winid)
-    local line = api.nvim_buf_get_lines(bufnr, first_line - 1, first_line, false)[1]
-    local col = line:find('%w')
-    api.nvim_win_set_cursor(winid, { first_line, col - 1 })
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
+
+  for i = 1, #lines do
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardCenter', first_line + i - 2, 0, -1)
   end
 
-  vim.list_extend(elements.fns, { center_fn, set_cursor })
+  local line = api.nvim_buf_get_lines(config.bufnr, first_line, first_line + 1, false)[1]
+  local col = line:find('%w')
+  api.nvim_win_set_cursor(config.winid, { first_line + 1, col - 1 })
 end
 
-local function generate_footer(footer, elements)
-  footer = footer or { 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
-  footer = utils.center_align(footer)
-  local first_line = #elements.lines
-  vim.list_extend(elements.lines, footer)
-  local footer_highlight = function(bufnr, _)
-    for i, _ in pairs(footer) do
-      api.nvim_buf_add_highlight(bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
-    end
+local function generate_footer(config)
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  local footer = config.footer or { 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
+  for i = 1, #footer do
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
-  table.insert(elements.fns, footer_highlight)
 end
 
 ---@private
-local function theme_instance(opts)
-  local elements = {
-    lines = {},
-    fns = {},
-  }
-  utils.generate_header(opts.header, elements)
-  generate_center(opts.center, elements)
-  generate_footer(opts.footer, elements)
-  return elements
+local function theme_instance(config)
+  utils.generate_header(config)
+  generate_center(config)
+  generate_footer(config)
 end
 
 return setmetatable({}, {

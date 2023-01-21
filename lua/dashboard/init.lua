@@ -1,4 +1,5 @@
 local api, fn = vim.api, vim.fn
+local utils = require('dashboard.utils')
 local ctx = {}
 local db = {}
 
@@ -10,6 +11,7 @@ end
 local function default_options()
   return {
     theme = 'classic',
+    path = utils.path_join(vim.fn.stdpath('cache'), 'dashboard_cache'),
     config = {},
     hide = {
       statusline = true,
@@ -35,7 +37,6 @@ end
 function db.setup(opts)
   opts = opts or {}
   ctx.opts = vim.tbl_extend('force', default_options(), opts)
-  ctx.data = require('dashboard.theme.' .. ctx.opts.theme)(ctx.opts.config)
 end
 
 local function buf_local()
@@ -123,11 +124,18 @@ function db:instance()
   buf_local()
   self:cache_ui_options()
 
-  api.nvim_buf_set_lines(self.bufnr, 0, -1, false, self.data.lines)
-  vim.bo[self.bufnr].modifiable = false
-  for _, func in ipairs(self.data.fns) do
-    func(self.bufnr, self.winid)
+  local config = vim.tbl_extend(
+    'force',
+    self.opts.config,
+    { path = self.opts.path, bufnr = self.bufnr, winid = self.winid }
+  )
+
+  if #self.opts.preview.command > 0 then
+    config = vim.tbl_extend('force', config, self.opts.preview)
   end
+
+  require('dashboard.theme.' .. self.opts.theme)(config)
+  vim.bo[self.bufnr].modifiable = false
 end
 
 return setmetatable(ctx, db)

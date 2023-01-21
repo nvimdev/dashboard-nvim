@@ -1,187 +1,288 @@
-local api, uv = vim.api, vim.loop
+local api, uv, fn, keymap = vim.api, vim.loop, vim.fn, vim.keymap
 local utils = require('dashboard.utils')
+local ns = api.nvim_create_namespace('dashboard')
 
-local function gen_shortcut(shortcut, elements)
-  shortcut = shortcut or {}
+local function gen_shortcut(config)
+  local shortcut = vim.tbl_extend('force', {
+    { desc = '[  Github]', group = 'Title' },
+    { desc = '[  glepnir]', group = 'Title' },
+    { desc = '[  0.2.3]', group = 'Title' },
+  }, config.shortcut or {})
+
   if vim.tbl_isempty(shortcut) then
-    shortcut = {
-      { desc = '[  Github]', group = 'Title' },
-      { desc = '[  glepnir]', group = 'Title' },
-      { desc = '[  0.2.3]', group = 'Title' },
-    }
+    shortcut = {}
   end
 
   local lines = ''
   for _, item in pairs(shortcut) do
-    lines = lines .. '  ' .. item.desc
+    local str = item.desc
+    if item.key then
+      str = str .. '[' .. item.key .. ']'
+    end
+    lines = lines .. '  ' .. str
   end
 
-  local first_line = #elements.lines
-  vim.list_extend(elements.lines, utils.center_align({ lines }))
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align({ lines }))
 
-  local shortcut_highlight = function(bufnr, _)
-    local line = api.nvim_buf_get_lines(bufnr, first_line, first_line + 1, false)[1]
-    local start = line:find('[^%s]') - 1
-    for _, item in pairs(shortcut) do
-      local _end = start + api.nvim_strwidth(item.desc) + 2
-      api.nvim_buf_add_highlight(bufnr, 0, item.group, first_line, start, _end)
-      start = _end + 2
+  local line = api.nvim_buf_get_lines(config.bufnr, first_line, -1, false)[1]
+  local start = line:find('[^%s]') - 1
+  for _, item in pairs(shortcut) do
+    local _end = start + api.nvim_strwidth(item.desc) + 2
+    if item.key then
+      _end = _end + api.nvim_strwidth(item.key) + 2
+      keymap.set('n', item.key, function()
+        vim.cmd(item.action)
+      end, { buffer = config.bufnr, nowait = true, silent = true })
     end
-  end
-
-  table.insert(elements.fns, shortcut_highlight)
-
-  if shortcut[1].keymap then
-    local apply_map = function(bufnr, _)
-      for _, item in pairs(shortcut) do
-        vim.keymap.set('n', item.keymap, function()
-          vim.cmd(item.action)
-        end, { buffer = bufnr, nowait = true, silent = true })
-      end
-    end
-    table.insert(elements.fns, apply_map)
+    api.nvim_buf_add_highlight(config.bufnr, 0, item.group, first_line, start, _end)
+    start = _end + 2
   end
 end
 
-local function load_packages(packages, elements)
-  packages = packages or {}
-  if vim.tbl_isempty(packages) then
-    packages = {
-      '',
-      'neovim loaded ' .. utils.get_packages_count() .. ' packages',
-      '',
-      '',
-    }
+local function load_packages(config)
+  local packages = config.packages or {
+    enable = true,
+  }
+  if not packages.enable then
+    return
   end
-  local first_line = #elements.lines
-  vim.list_extend(elements.lines, utils.center_align(packages))
-  local packages_higlight = function(bufnr, _)
-    api.nvim_buf_add_highlight(bufnr, 0, 'Comment', first_line + 1, 0, -1)
+
+  local lines = {
+    '',
+    'neovim loaded ' .. utils.get_packages_count() .. ' packages',
+    '',
+    '',
+  }
+
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(lines))
+
+  for i, _ in pairs(lines) do
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'Comment', first_line + i - 1, 0, -1)
   end
-  table.insert(elements.fns, packages_higlight)
 end
 
-local function project_list(project, elements)
-  project = project or {}
-  if vim.tbl_isempty(project) then
-    project = {
-      path = utils.path_join(vim.fn.stdpath('cache'), 'dashboard_project.txt'),
-      jump_to_project = 'p',
-    }
-  end
-  if vim.fn.filereadable(project.path) == 0 then
-    local ok, fd = pcall(uv.fs_open, project.path, 'w', 420)
+local function project_list(config)
+  config.project = vim.tbl_extend('force', {
+    limit = 10,
+    jump_to_project = 'p',
+  }, config.project or {})
+
+  if vim.fn.filereadable(config.path) == 0 then
+    local ok, fd = pcall(uv.fs_open, config.path, 'w', 420)
     if not ok then
       vim.notify('[dashboard.nvim] create project tmp file failed', vim.log.levels.ERROR)
       return
     end
     uv.fs_close(fd)
   end
-  local fd = io.open(project.path, 'r')
+
+  local fd = io.open(config.path, 'r')
   local res = {
-    '異 Recently Projects: [' .. project.jump_to_project .. ']',
+    '異 Recently Projects: [' .. config.project.jump_to_project .. ']',
   }
   for line in fd:lines() do
-    table.insert(res, line)
+    table.insert(res, ' ' .. line)
   end
   fd:close()
 
-  res = utils.element_align(res)
-  res[1] = res[1] .. (' '):rep(6)
-
-  vim.list_extend(elements.lines, utils.center_align(res))
+  if #res == 1 then
+    table.insert(res, (' '):rep(3) .. ' empty project')
+  end
+  table.insert(res, '')
+  return res
 end
 
-local function mru_list(mru, elements)
-  mru = mru or {}
+local function mru_list(config)
+  config.mru = vim.tbl_extend('force', {
+    limit = 10,
+    jump_to_mru = 'm',
+  }, config.mru or {})
+
   local list = {
-    '  Recently Files: [' .. (mru.jump_to_mru or 'm') .. ']',
+    '  Most Recent Files: [' .. (config.mru.jump_to_mru or 'm') .. ']',
   }
+
   local groups = {}
-  local first_line = #elements.lines
-  for _, file in pairs(vim.list_slice(utils.get_mru_list(), 1, mru.limit or 8)) do
+  for _, file in pairs(vim.list_slice(utils.get_mru_list(), 1, config.mru.limit)) do
     local ft = vim.filetype.match({ filename = file })
     local icon, group = utils.get_icon(ft)
     file = file:gsub(vim.env.HOME, '~')
     file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
-    table.insert(list, file)
+    table.insert(list, (' '):rep(3) .. file)
   end
-  list = utils.element_align(list)
-  list[1] = list[1] .. (' '):rep(6)
-  list = utils.center_align(list)
-  vim.list_extend(elements.lines, list)
 
-  local mru_highlight = function(bufnr, _)
-    api.nvim_buf_add_highlight(bufnr, 0, 'DashboardRecentTitle', first_line, 0, -1)
-    for i, data in pairs(groups) do
-      local len, group = unpack(data)
-      local start_col = list[i + 1]:find('[^%s]') - 1
-      api.nvim_buf_add_highlight(bufnr, 0, group, first_line + i, start_col, start_col + len)
-      api.nvim_buf_add_highlight(bufnr, 0, 'DashboardFiles', first_line + i, start_col + len, -1)
-    end
-  end
-  table.insert(elements.fns, mru_highlight)
-
-  local mru_keymap = function(bufnr, winid)
-    local opts = { buffer = bufnr, nowait = true, silent = true }
-    vim.keymap.set('n', mru.jump_to_mru or 'm', function()
-      local line = api.nvim_buf_get_lines(bufnr, first_line + 1, first_line + 2, false)[1]
-      local start_col = line:find('%p')
-      api.nvim_win_set_cursor(winid, { first_line + 2, start_col })
-    end, opts)
-
-    vim.keymap.set('n', mru.open or '<CR>', function()
-      local curline = api.nvim_win_get_cursor(winid)[1]
-      if curline > first_line and curline < first_line + #list then
-        local content = api.nvim_get_current_line()
-        local start_col = content:find('%p')
-        local path = content:sub(start_col)
-        path = vim.fs.normalize(path)
-        vim.cmd('edit ' .. path)
-      end
-    end, opts)
-  end
-  table.insert(elements.fns, mru_keymap)
+  return list, groups
 end
 
-local function gen_footer(footer, elements)
-  footer = footer or {}
-  if vim.tbl_isempty(footer) then
-    footer = {
+local function gen_hotkey(config)
+  local list = {}
+  for _, item in pairs(config.shortcut) do
+    if item.key then
+      table.insert(list, item.key:byte())
+    end
+  end
+  table.insert(list, config.project.jump_to_project:byte())
+  table.insert(list, config.mru.jump_to_mru:byte())
+  return function()
+    while true do
+      local key = math.random(97, 122)
+      if not vim.tbl_contains(list, key) then
+        return key
+      end
+    end
+  end
+end
+
+local function gen_center(config)
+  local plist = project_list(config)
+  local mlist, mgroups = mru_list(config)
+  local plist_len = #plist
+  ---@diagnostic disable-next-line: param-type-mismatch
+  vim.list_extend(plist, mlist)
+  plist = utils.element_align(plist)
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  plist = utils.center_align(plist)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
+
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentProject', first_line, 0, -1)
+
+  local hotkey = gen_hotkey(config)
+  local start_col = plist[plist_len + 2]:find('[^%s]') - 1
+  for i = 2, plist_len do
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      'DashboardProjectIcon',
+      first_line + i - 1,
+      0,
+      start_col + 3
+    )
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      'DashboardFiles',
+      first_line + i - 1,
+      start_col + 3,
+      -1
+    )
+    local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
+    if text and text:find('%w') then
+      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
+        virt_text = { { string.char(hotkey()), 'title' } },
+        virt_text_pos = 'eol',
+      })
+    end
+  end
+
+  -- initialize the cursor pos
+  api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
+  local opts = { buffer = config.bufnr, nowait = true, silent = true }
+  keymap.set('n', config.project.jump_to_project, function()
+    api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
+  end, opts)
+
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentTitle', first_line + plist_len, 0, -1)
+  for i, data in pairs(mgroups) do
+    local len, group = unpack(data)
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      group,
+      first_line + i + plist_len,
+      start_col,
+      start_col + len
+    )
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      'DashboardFiles',
+      first_line + i + plist_len,
+      start_col + len,
+      -1
+    )
+
+    local text = api.nvim_buf_get_lines(
+      config.bufnr,
+      first_line + i + plist_len,
+      first_line + i + plist_len + 1,
+      false
+    )[1]
+    if text and text:find('%w') then
+      local key = string.char(hotkey())
+      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
+        virt_text = { { key, 'title' } },
+        virt_text_pos = 'eol',
+      })
+      keymap.set('n', key, function()
+        if text:find('~') then
+          local path = vim.split(text, '%s', { trimempty = true })
+          local fname = path[#path]
+          fname = vim.fs.normalize(fname)
+          local ext = fn.fnamemodify(path, ':e')
+          if #ext > 0 then
+            vim.cmd('edit ' .. fname)
+          end
+        end
+      end, { buffer = config.bufnr, nowait = true, silent = true })
+    end
+  end
+
+  keymap.set('n', config.mru.jump_to_mru, function()
+    api.nvim_win_set_cursor(config.winid, { plist_len + first_line + 2, start_col + 4 })
+  end, opts)
+end
+
+local function gen_footer(config)
+  local footer = vim.tbl_extend('force', {
+    enable = true,
+    content = {
       '',
       '',
       '',
       'Sharp tools make good work.',
-    }
+    },
+  }, config.footer or {})
+  if not footer.enable then
+    return
   end
-  local first_line = #elements.lines
-  vim.list_extend(elements.lines, utils.center_align(footer))
 
-  local footer_highlight = function(bufnr, _)
-    for i, _ in pairs(footer) do
-      api.nvim_buf_add_highlight(bufnr, 0, 'DashboardFooter', first_line + i, 0, -1)
-    end
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer.content))
+
+  for i, _ in pairs(footer.content) do
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i, 0, -1)
   end
-  table.insert(elements.fns, footer_highlight)
+end
+
+local function map_enter(bufnr)
+  keymap.set('n', '<CR>', function()
+    local line = api.nvim_get_current_line()
+    if line:find('~') then
+      local scol = line:find('%p')
+      local path = line:sub(scol)
+      path = vim.fs.normalize(path)
+      local ext = fn.fnamemodify(path, ':e')
+      if #ext > 0 then
+        vim.cmd('edit ' .. path)
+      end
+    end
+  end, { buffer = bufnr, silent = true, nowait = true })
 end
 
 local function theme_instance(config)
-  local elements = {
-    lines = {},
-    fns = {},
-  }
-  utils.generate_header(config.header, elements)
-  gen_shortcut(config.shortcut, elements)
-  load_packages(config.packages, elements)
-  project_list(config.project, elements)
-  mru_list(config.mru, elements)
-  gen_footer(config.footer, elements)
-  return elements
+  utils.generate_header(config)
+  gen_shortcut(config)
+  load_packages(config)
+  gen_center(config)
+  gen_footer(config)
+  map_enter(config.bufnr)
 end
 
 return setmetatable({}, {
   __call = function(_, t)
-    return theme_instance(t)
+    theme_instance(t)
   end,
 })
