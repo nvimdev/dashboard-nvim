@@ -89,12 +89,15 @@ end
 function db:cache_ui_options()
   if self.opts.hide.statusline then
     self.user_laststatus_value = vim.opt.laststatus:get()
+    vim.opt.laststatus = 0
   end
   if self.opts.hide.tabline then
     self.user_tabline_value = vim.opt.tabline:get()
+    vim.opt.tabline = 0
   end
   if self.opts.hide.winbar then
     self.user_winbar_value = vim.opt.winbar:get()
+    vim.opt.winbar = ''
   end
 end
 

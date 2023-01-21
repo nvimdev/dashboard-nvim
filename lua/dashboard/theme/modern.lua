@@ -118,7 +118,7 @@ local function mru_list(config)
 end
 
 local function gen_hotkey(config)
-  local list = {}
+  local list = { 106, 107 }
   for _, item in pairs(config.shortcut) do
     if item.key then
       table.insert(list, item.key:byte())
@@ -126,10 +126,12 @@ local function gen_hotkey(config)
   end
   table.insert(list, config.project.jump_to_project:byte())
   table.insert(list, config.mru.jump_to_mru:byte())
+  math.randomseed(os.time())
   return function()
     while true do
       local key = math.random(97, 122)
       if not vim.tbl_contains(list, key) then
+        table.insert(list, key)
         return key
       end
     end
@@ -221,7 +223,7 @@ local function gen_center(config)
           local path = vim.split(text, '%s', { trimempty = true })
           local fname = path[#path]
           fname = vim.fs.normalize(fname)
-          local ext = fn.fnamemodify(path, ':e')
+          local ext = fn.fnamemodify(fname, ':e')
           if #ext > 0 then
             vim.cmd('edit ' .. fname)
           end
