@@ -68,7 +68,7 @@ local function project_list(config, callback)
     limit = 8,
   }, config.project or {})
 
-  if vim.fn.filereadable(config.path) == 0 then
+  if fn.filereadable(config.path) == 0 then
     local ok, fd = pcall(uv.fs_open, config.path, 'w', 420)
     if not ok then
       vim.notify('[dashboard.nvim] create project tmp file failed', vim.log.levels.ERROR)
@@ -139,6 +139,21 @@ local function gen_hotkey(config)
       end
     end
   end
+end
+
+local function map_key(bufnr, key, text)
+  keymap.set('n', key, function()
+    text = text or api.nvim_get_current_line()
+    if text:find('~') then
+      local tbl = vim.split(text, '%s', { trimempty = true })
+      local path = tbl[#tbl]
+      path = vim.fs.normalize(path)
+      local stat = uv.fs_stat(path)
+      if stat.type == 'file' then
+        vim.cmd('edit ' .. path)
+      end
+    end
+  end, { buffer = bufnr, silent = true, nowait = true })
 end
 
 local function gen_center(plist, config)
@@ -216,17 +231,7 @@ local function gen_center(plist, config)
         virt_text = { { key, 'String' } },
         virt_text_pos = 'eol',
       })
-      keymap.set('n', key, function()
-        if text:find('~') then
-          local path = vim.split(text, '%s', { trimempty = true })
-          local fname = path[#path]
-          fname = vim.fs.normalize(fname)
-          local ext = fn.fnamemodify(fname, ':e')
-          if #ext > 0 then
-            vim.cmd('edit ' .. fname)
-          end
-        end
-      end, { buffer = config.bufnr, nowait = true, silent = true })
+      map_key(config.bufnr, key, text)
     end
   end
 end
@@ -253,21 +258,6 @@ local function gen_footer(config)
   end
 end
 
-local function map_enter(bufnr)
-  keymap.set('n', '<CR>', function()
-    local line = api.nvim_get_current_line()
-    if line:find('~') then
-      local scol = line:find('%p')
-      local path = line:sub(scol)
-      path = vim.fs.normalize(path)
-      local ext = fn.fnamemodify(path, ':e')
-      if #ext > 0 then
-        vim.cmd('edit ' .. path)
-      end
-    end
-  end, { buffer = bufnr, silent = true, nowait = true })
-end
-
 local function theme_instance(config)
   project_list(config, function(plist)
     utils.generate_header(config)
@@ -275,7 +265,7 @@ local function theme_instance(config)
     load_packages(config)
     gen_center(plist, config)
     gen_footer(config)
-    map_enter(config.bufnr)
+    map_key(config.bufnr, '<CR>')
     vim.bo[config.bufnr].modifiable = false
     require('dashboard.events').register_lsp_root(config.path)
   end)
