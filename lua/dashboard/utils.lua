@@ -82,6 +82,14 @@ function utils.get_icon(ft)
   return devicons.get_icon_by_filetype(ft, { default = true })
 end
 
+function utils.read_project_cache(path)
+  local fd = assert(uv.fs_open(path, 'r', tonumber('644', 8)))
+  local stat = uv.fs_fstat(fd)
+  local chunk = uv.fs_read(fd, stat.size, 0)
+  local dump = assert(loadstring(chunk))
+  return dump()
+end
+
 --- return the most recently files list
 function utils.get_mru_list()
   local mru = {}

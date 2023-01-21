@@ -1,123 +1,46 @@
-local api = vim.api
+local api, lsp, uv = vim.api, vim.lsp, vim.loop
 local au = {}
-local db = require('dashboard')
-local preview = require('dashboard.preview')
 
-local re_render = {
-  ['packer'] = true,
-  ['NvimTree'] = true,
-  ['NeoTree'] = true,
-  ['nerdtree'] = true,
-}
-
-function au:dashboard_events()
-  if not self.au_group then
-    self.au_group = api.nvim_create_augroup('dashboard-nvim', { clear = true })
-  end
-
-  api.nvim_create_autocmd({ 'BufWinEnter' }, {
-    group = self.au_group,
+function au.register_lsp_root(path)
+  api.nvim_create_autocmd('BufDelete', {
     callback = function()
-      if re_render[vim.bo.filetype] then
-        if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
-          local winconfig = api.nvim_win_get_config(preview.winid)
-          self.center_col = winconfig['col'][false]
-          winconfig['col'][false] = self.center_col + 30
-          api.nvim_win_set_config(preview.winid, winconfig)
+      local projects = {}
+      for _, client in pairs(lsp.get_active_clients() or {}) do
+        local root_dir = client.config.root_dir
+        if root_dir and not vim.tbl_contains(projects, root_dir) then
+          table.insert(projects, root_dir)
         end
-      end
 
-      if not re_render[vim.bo.filetype] then
-        require('dashboard.preview'):close_preview_window()
-        -- neovim-qt requires that conditional
-        if self.au_group then
-          api.nvim_del_augroup_by_id(self.au_group)
-        end
-        self.au_group = nil
-        if db.bufnr and api.nvim_buf_is_loaded(db.bufnr) then
-          api.nvim_buf_delete(db.bufnr, { force = true })
-        end
-      end
-    end,
-  })
-
-  api.nvim_create_autocmd('BufEnter', {
-    group = self.au_group,
-    callback = function()
-      if vim.bo.filetype == 'dashboard' then
-        if preview.winid and api.nvim_win_is_valid(preview.winid) then
-          local winconfig = api.nvim_win_get_config(preview.winid)
-          if self.center_col then
-            winconfig['col'][false] = self.center_col
-            self.center_col = nil
+        for _, folder in pairs(client.workspace_folders or {}) do
+          if not vim.tbl_contains(projects, folder.name) then
+            table.insert(projects, folder.name)
           end
-          api.nvim_win_set_config(preview.winid, winconfig)
         end
       end
-    end,
-  })
 
-  if self.au_line == nil then
-    self.au_line = api.nvim_create_augroup('dashboard_line_augroup', { clear = true })
-  end
-
-  api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
-    group = self.au_line,
-    callback = function()
-      if vim.bo.filetype == 'dashboard' then
+      if #projects == 0 then
         return
       end
-      if vim.opt.laststatus:get() == 0 then
-        vim.opt.laststatus = db.user_laststatus_value
-      end
 
-      if vim.opt.showtabline:get() == 0 then
-        vim.opt.showtabline = db.user_showtabline_value
-      end
-
-      if vim.fn.has('nvim-0.9') == 1 then
-        if vim.opt.stc == '' then
-          vim.opt.stc = db.user_stc_value
-        end
-      end
-
-      if vim.fn.has('nvim-0.8') == 1 then
-        if vim.opt.winbar:get() == '' then
-          vim.opt.winbar = db.user_winbar_value
-        end
-      end
-
-      if self.au_line then
-        api.nvim_del_augroup_by_id(self.au_line)
-        self.au_line = nil
-      end
+      uv.fs_open(path, 'rs+', tonumber('664', 8), function(err, fd)
+        assert(not err, err)
+        uv.fs_fstat(fd, function(err, stat)
+          assert(not err, err)
+          uv.fs_read(fd, stat.size, 0, function(err, data)
+            assert(not err, err)
+            local before = assert(loadstring(data))
+            local plist = before()
+            plist = vim.list_extend(plist or {}, projects)
+            local fn = assert(loadstring('return ' .. vim.inspect(plist)))
+            local dump = string.dump(fn)
+            uv.fs_write(fd, dump, 0, function(err, bytes)
+              assert(not err, err)
+              uv.fs_close(fd)
+            end)
+          end)
+        end)
+      end)
     end,
-  })
-
-  api.nvim_create_autocmd('VimResized', {
-    group = self.au_group,
-    callback = function()
-      if vim.bo.filetype ~= 'dashboard' then
-        return
-      end
-      require('dashboard.preview'):close_preview_window()
-      vim.opt_local.modifiable = true
-      if db.cursor_moved_id ~= nil then
-        api.nvim_del_augroup_by_id(db.cursor_moved_id)
-        db.cursor_moved_id = nil
-      end
-      db:instance(false, true)
-    end,
-  })
-
-  api.nvim_create_autocmd('SessionLoadPost', {
-    group = self.au_group,
-    callback = function()
-      if preview.winid and api.nvim_win_is_valid(preview.winid) then
-        pcall(api.nvim_win_close, preview.winid, true)
-      end
-    end,
-    desc = 'if load from session close the preview window',
   })
 end
 

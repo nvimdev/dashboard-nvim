@@ -65,8 +65,7 @@ end
 
 local function project_list(config)
   config.project = vim.tbl_extend('force', {
-    limit = 10,
-    jump_to_project = 'p',
+    limit = 8,
   }, config.project or {})
 
   if vim.fn.filereadable(config.path) == 0 then
@@ -78,14 +77,15 @@ local function project_list(config)
     uv.fs_close(fd)
   end
 
-  local fd = io.open(config.path, 'r')
   local res = {
-    '異 Recently Projects: [' .. config.project.jump_to_project .. ']',
+    '異 Recently Projects: ',
   }
-  for line in fd:lines() do
-    table.insert(res, ' ' .. line)
+
+  local list = utils.read_project_cache(config.path)
+  for _, dir in ipairs(list or {}) do
+    dir = dir:gsub(vim.env.HOME, '~')
+    table.insert(res, (' '):rep(3) .. ' ' .. dir)
   end
-  fd:close()
 
   if #res == 1 then
     table.insert(res, (' '):rep(3) .. ' empty project')
@@ -97,11 +97,10 @@ end
 local function mru_list(config)
   config.mru = vim.tbl_extend('force', {
     limit = 10,
-    jump_to_mru = 'm',
   }, config.mru or {})
 
   local list = {
-    '  Most Recent Files: [' .. (config.mru.jump_to_mru or 'm') .. ']',
+    '  Most Recent Files: ',
   }
 
   local groups = {}
@@ -124,8 +123,6 @@ local function gen_hotkey(config)
       table.insert(list, item.key:byte())
     end
   end
-  table.insert(list, config.project.jump_to_project:byte())
-  table.insert(list, config.mru.jump_to_mru:byte())
   math.randomseed(os.time())
   return function()
     while true do
@@ -173,7 +170,7 @@ local function gen_center(config)
     local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
     if text and text:find('%w') then
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
-        virt_text = { { string.char(hotkey()), 'title' } },
+        virt_text = { { string.char(hotkey()), 'String' } },
         virt_text_pos = 'eol',
       })
     end
@@ -182,9 +179,6 @@ local function gen_center(config)
   -- initialize the cursor pos
   api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
   local opts = { buffer = config.bufnr, nowait = true, silent = true }
-  keymap.set('n', config.project.jump_to_project, function()
-    api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
-  end, opts)
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentTitle', first_line + plist_len, 0, -1)
   for i, data in pairs(mgroups) do
@@ -215,7 +209,7 @@ local function gen_center(config)
     if text and text:find('%w') then
       local key = string.char(hotkey())
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
-        virt_text = { { key, 'title' } },
+        virt_text = { { key, 'String' } },
         virt_text_pos = 'eol',
       })
       keymap.set('n', key, function()
@@ -231,10 +225,6 @@ local function gen_center(config)
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
   end
-
-  keymap.set('n', config.mru.jump_to_mru, function()
-    api.nvim_win_set_cursor(config.winid, { plist_len + first_line + 2, start_col + 4 })
-  end, opts)
 end
 
 local function gen_footer(config)
@@ -281,6 +271,7 @@ local function theme_instance(config)
   gen_center(config)
   gen_footer(config)
   map_enter(config.bufnr)
+  require('dashboard.events').register_lsp_root(config.path)
 end
 
 return setmetatable({}, {

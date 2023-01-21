@@ -8,14 +8,13 @@ local height = db.preview_file_height
 local row, col
 
 local get_script_path = function()
-  local str = debug.getinfo(2, 'S').source:sub(2)
-  local path = str:match('(.*/).*/.*/')
+  local path = api.nvim_get_runtime_file('scripts/ueberzug.sh', true)[1]
 
   if path == nil then
     error('Does not find the dashboard dir')
     return
   end
-  return path .. 'scripts/'
+  return path
 end
 
 local view = {}
