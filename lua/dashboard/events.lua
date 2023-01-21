@@ -2,7 +2,7 @@ local api, lsp, uv = vim.api, vim.lsp, vim.loop
 local au = {}
 
 function au.register_lsp_root(path)
-  api.nvim_create_autocmd('BufDelete', {
+  api.nvim_create_autocmd('VimLeavePre', {
     callback = function()
       local projects = {}
       for _, client in pairs(lsp.get_active_clients() or {}) do
@@ -30,7 +30,10 @@ function au.register_lsp_root(path)
             assert(not err, err)
             local before = assert(loadstring(data))
             local plist = before()
-            plist = vim.list_extend(plist or {}, projects)
+            plist = vim.tbl_filter(function(k)
+              return not vim.tbl_contains(projects, k)
+            end, plist or {})
+            plist = vim.list_extend(plist, projects)
             local fn = assert(loadstring('return ' .. vim.inspect(plist)))
             local dump = string.dump(fn)
             uv.fs_write(fd, dump, 0, function(err, bytes)
