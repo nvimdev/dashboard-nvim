@@ -63,7 +63,7 @@ local function load_packages(config)
   end
 end
 
-local function project_list(config)
+local function project_list(config, callback)
   config.project = vim.tbl_extend('force', {
     limit = 8,
   }, config.project or {})
@@ -81,17 +81,23 @@ local function project_list(config)
     '異 Recently Projects: ',
   }
 
-  local list = utils.read_project_cache(config.path)
-  for _, dir in ipairs(list or {}) do
-    dir = dir:gsub(vim.env.HOME, '~')
-    table.insert(res, (' '):rep(3) .. ' ' .. dir)
-  end
+  utils.async_read(
+    config.path,
+    vim.schedule_wrap(function(data)
+      local dump = assert(loadstring(data))
+      local list = dump()
+      for _, dir in ipairs(list or {}) do
+        dir = dir:gsub(vim.env.HOME, '~')
+        table.insert(res, (' '):rep(3) .. ' ' .. dir)
+      end
 
-  if #res == 1 then
-    table.insert(res, (' '):rep(3) .. ' empty project')
-  end
-  table.insert(res, '')
-  return res
+      if #res == 1 then
+        table.insert(res, (' '):rep(3) .. ' empty project')
+      end
+      table.insert(res, '')
+      callback(res)
+    end)
+  )
 end
 
 local function mru_list(config)
@@ -135,8 +141,7 @@ local function gen_hotkey(config)
   end
 end
 
-local function gen_center(config)
-  local plist = project_list(config)
+local function gen_center(plist, config)
   local mlist, mgroups = mru_list(config)
   local plist_len = #plist
   ---@diagnostic disable-next-line: param-type-mismatch
@@ -178,7 +183,6 @@ local function gen_center(config)
 
   -- initialize the cursor pos
   api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
-  local opts = { buffer = config.bufnr, nowait = true, silent = true }
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentTitle', first_line + plist_len, 0, -1)
   for i, data in pairs(mgroups) do
@@ -265,13 +269,16 @@ local function map_enter(bufnr)
 end
 
 local function theme_instance(config)
-  utils.generate_header(config)
-  gen_shortcut(config)
-  load_packages(config)
-  gen_center(config)
-  gen_footer(config)
-  map_enter(config.bufnr)
-  require('dashboard.events').register_lsp_root(config.path)
+  project_list(config, function(plist)
+    utils.generate_header(config)
+    gen_shortcut(config)
+    load_packages(config)
+    gen_center(plist, config)
+    gen_footer(config)
+    map_enter(config.bufnr)
+    vim.bo[config.bufnr].modifiable = false
+    require('dashboard.events').register_lsp_root(config.path)
+  end)
 end
 
 return setmetatable({}, {

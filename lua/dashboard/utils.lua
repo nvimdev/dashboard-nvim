@@ -90,6 +90,23 @@ function utils.read_project_cache(path)
   return dump()
 end
 
+function utils.async_read(path, callback)
+  local uv = vim.loop
+  uv.fs_open(path, 'r', 438, function(err, fd)
+    assert(not err, err)
+    uv.fs_fstat(fd, function(err, stat)
+      assert(not err, err)
+      uv.fs_read(fd, stat.size, 0, function(err, data)
+        assert(not err, err)
+        uv.fs_close(fd, function(err)
+          assert(not err, err)
+          return callback(data)
+        end)
+      end)
+    end)
+  end)
+end
+
 --- return the most recently files list
 function utils.get_mru_list()
   local mru = {}
