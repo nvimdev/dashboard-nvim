@@ -91,12 +91,15 @@ local function project_list(config, callback)
     vim.schedule_wrap(function(data)
       local dump = assert(loadstring(data))
       local list = dump()
-      for _, dir in ipairs(list or {}) do
+      if list then
+        list = vim.list_slice(list, #list - config.project.limit)
+      end
+      for _, dir in ipairs( list or {}) do
         dir = dir:gsub(vim.env.HOME, '~')
         table.insert(res, (' '):rep(3) .. ' ' .. dir)
       end
 
-      if #res == 1 then
+      if #res == 0 then
         table.insert(res, (' '):rep(3) .. ' empty project')
       else
         reverse(res)

@@ -1,5 +1,4 @@
 
-
 if vim.g.loaded_dashboard then
   return
 end
