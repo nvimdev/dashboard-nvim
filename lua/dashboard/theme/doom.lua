@@ -5,7 +5,7 @@ local function generate_center(config)
   local lines = {}
   for _, item in
     pairs(config.center or {
-      { desc = 'Please config your own center section', key = 'p'},
+      { desc = 'Please config your own center section', key = 'p' },
     })
   do
     table.insert(lines, item.desc)
@@ -38,7 +38,8 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = config.footer or { '', '','neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  local footer = config.footer
+    or { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
   for i = 1, #footer do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
