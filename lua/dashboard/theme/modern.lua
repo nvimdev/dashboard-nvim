@@ -63,9 +63,16 @@ local function load_packages(config)
   end
 end
 
+local function reverse(tbl)
+  for i = 1, math.floor(#tbl / 2) do
+    tbl[i], tbl[#tbl - i + 1] = tbl[#tbl - i + 1], tbl[i]
+  end
+end
+
 local function project_list(config, callback)
   config.project = vim.tbl_extend('force', {
     limit = 8,
+    action = 'Telescope find_files cwd=',
   }, config.project or {})
 
   if fn.filereadable(config.path) == 0 then
@@ -77,9 +84,7 @@ local function project_list(config, callback)
     uv.fs_close(fd)
   end
 
-  local res = {
-    '異 Recently Projects: ',
-  }
+  local res = {}
 
   utils.async_read(
     config.path,
@@ -93,7 +98,10 @@ local function project_list(config, callback)
 
       if #res == 1 then
         table.insert(res, (' '):rep(3) .. ' empty project')
+      else
+        reverse(res)
       end
+      table.insert(res, 1, '異 Recently Projects: ')
       table.insert(res, '')
       callback(res)
     end)
@@ -110,7 +118,9 @@ local function mru_list(config)
   }
 
   local groups = {}
-  for _, file in pairs(vim.list_slice(utils.get_mru_list(), 1, config.mru.limit)) do
+  local mlist = utils.get_mru_list()
+
+  for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local ft = vim.filetype.match({ filename = file })
     local icon, group = utils.get_icon(ft)
     file = file:gsub(vim.env.HOME, '~')
@@ -119,12 +129,15 @@ local function mru_list(config)
     table.insert(list, (' '):rep(3) .. file)
   end
 
+  if #list == 1 then
+    table.insert(list, (' '):rep(3) .. ' empty files')
+  end
   return list, groups
 end
 
 local function gen_hotkey(config)
   local list = { 106, 107 }
-  for _, item in pairs(config.shortcut) do
+  for _, item in pairs(config.shortcut or {}) do
     if item.key then
       table.insert(list, item.key:byte())
     end
@@ -141,7 +154,7 @@ local function gen_hotkey(config)
   end
 end
 
-local function map_key(bufnr, key, text)
+local function map_key(config, key, text)
   keymap.set('n', key, function()
     text = text or api.nvim_get_current_line()
     if text:find('~') then
@@ -151,9 +164,11 @@ local function map_key(bufnr, key, text)
       local stat = uv.fs_stat(path)
       if stat.type == 'file' then
         vim.cmd('edit ' .. path)
+      elseif stat.type == 'directory' then
+        vim.cmd(config.project.action .. path)
       end
     end
-  end, { buffer = bufnr, silent = true, nowait = true })
+  end, { buffer = config.bufnr, silent = true, nowait = true })
 end
 
 local function gen_center(plist, config)
@@ -189,10 +204,12 @@ local function gen_center(plist, config)
     )
     local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
     if text and text:find('%w') then
+      local key = string.char(hotkey())
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
-        virt_text = { { string.char(hotkey()), 'String' } },
+        virt_text = { { key, 'String' } },
         virt_text_pos = 'eol',
       })
+      map_key(config, key, text)
     end
   end
 
@@ -231,7 +248,7 @@ local function gen_center(plist, config)
         virt_text = { { key, 'String' } },
         virt_text_pos = 'eol',
       })
-      map_key(config.bufnr, key, text)
+      map_key(config, key, text)
     end
   end
 end
@@ -242,8 +259,7 @@ local function gen_footer(config)
     content = {
       '',
       '',
-      '',
-      'Sharp tools make good work.',
+      ' 🚀 Sharp tools make good work.',
     },
   }, config.footer or {})
   if not footer.enable then
@@ -265,7 +281,7 @@ local function theme_instance(config)
     load_packages(config)
     gen_center(plist, config)
     gen_footer(config)
-    map_key(config.bufnr, '<CR>')
+    map_key(config, '<CR>')
     vim.bo[config.bufnr].modifiable = false
     require('dashboard.events').register_lsp_root(config.path)
   end)

@@ -1,35 +1,17 @@
-local uv = vim.loop
 local api = vim.api
-local db = require('dashboard')
-local space = ' '
-
-local width = db.preview_file_width
-local height = db.preview_file_height
-local row, col
-
-local get_script_path = function()
-  local path = api.nvim_get_runtime_file('scripts/ueberzug.sh', true)[1]
-
-  if path == nil then
-    error('Does not find the dashboard dir')
-    return
-  end
-  return path
-end
 
 local view = {}
 
-function view:open_window()
-  row = math.floor(height / 5)
-  local win_width = vim.fn.winwidth(0)
-  col = math.floor((win_width - width) / 2)
+function view:open_window(opt)
+  local row = math.floor(opt.height / 5)
+  local col = math.floor((vim.o.columns - opt.width) / 2)
 
   local opts = {
     relative = 'editor',
     row = row,
     col = col,
-    width = width,
-    height = height,
+    width = opt.width,
+    height = opt.height,
     style = 'minimal',
     noautocmd = true,
   }
@@ -59,62 +41,103 @@ function view:close_preview_window()
   end
 end
 
-local preview_command = function()
-  local file_path = ''
-  if type(db.preview_file_path) == 'string' then
-    file_path = db.preview_file_path
-  elseif type(db.preview_file_path) == 'function' then
-    file_path = db.preview_file_path()
+function view:preview_events()
+  local group =
+    api.nvim_create_augroup('DashboardClosePreview' .. self.preview_bufnr, { clear = true })
+
+  --refresh the preview window col position.
+  local function refresh_preview_wincol()
+    local winconfig = api.nvim_win_get_config(self.preview_winid)
+    local cur_width = api.nvim_win_get_width(self.main_winid)
+    if cur_width ~= self.win_width then
+      local wins = api.nvim_list_wins()
+      if #wins == 2 then
+        local scol = bit.rshift(vim.o.columns, 1) - bit.rshift(winconfig.width, 1)
+        winconfig.col[false] = scol
+        api.nvim_win_set_config(self.preview_winid, winconfig)
+        self.win_width = cur_width
+        return
+      end
+
+      if #wins == 3 then
+        local new_win = vim.tbl_filter(function(k)
+          return k ~= self.main_winid and k ~= self.preview_winid
+        end, wins)[1]
+        winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
+        api.nvim_win_set_config(self.preview_winid, winconfig)
+        self.win_width = cur_width
+      end
+    end
+  end
+
+  api.nvim_create_autocmd('BufEnter', {
+    group = group,
+    callback = function(opt)
+      local ignored = { 'prompt', 'nofile' }
+      if vim.tbl_contains(ignored, vim.bo[opt.buf].buftype) then
+        return
+      end
+
+      if
+        vim.bo[opt.buf].filetype ~= 'dashboard'
+        and opt.buf ~= self.preview_bufnr
+        and self.winid
+        and api.nvim_win_is_valid(self.preview_winid)
+      then
+        api.nvim_win_close(self.preview_winid, true)
+        self.preview_winid = nil
+        self.preview_bufnr = nil
+        self.main_winid = nil
+        self.win_width = nil
+        pcall(api.nvim_del_augroup_by_id, group)
+      end
+    end,
+    desc = 'Dashboard close or regenerate preview window',
+  })
+
+  local function winresized()
+    api.nvim_create_autocmd('WinResized', {
+      group = group,
+      callback = function()
+        refresh_preview_wincol()
+      end,
+      desc = ' Dashboard preview window resized for nvim 0.9',
+    })
+  end
+
+  api.nvim_create_autocmd('VimResized', {
+    group = group,
+    callback = function()
+      refresh_preview_wincol()
+    end,
+  })
+
+  if vim.fn.has('nvim-0.9') == 1 then
+    winresized()
   else
-    vim.notify('wrong type of preview_file_path')
-    return
+    ---@deprecated when 0.9 version release remove
+    api.nvim_create_autocmd('BufEnter', {
+      group = group,
+      callback = function()
+        refresh_preview_wincol()
+      end,
+      desc = 'dashboard preview window resize for neovim 0.8+ version',
+    })
   end
-
-  local script_path = get_script_path()
-
-  if db.preview_command ~= 'ueberzug' and db.preview_command ~= 'wezterm' then
-    return db.preview_command .. ' ' .. file_path
-  end
-
-  if db.preview_command == 'wezterm' then
-    local image_view = script_path .. 'imageview '
-    return image_view
-      .. space
-      .. file_path
-      .. space
-      .. db.image_width_pixel
-      .. space
-      .. db.image_height_pixel
-  end
-
-  local ueberzug = 'bash ' .. script_path .. 'ueberzug.sh '
-  -- filepath x y
-  return ueberzug
-    .. file_path
-    .. space
-    .. col + 5
-    .. space
-    .. row + 3
-    .. space
-    .. width
-    .. space
-    .. height
 end
 
-local async_preview = uv.new_async(vim.schedule_wrap(function()
-  local wininfo = view:open_window()
-  local cmd = preview_command()
+function view:open_preview(opt)
+  self.preview_bufnr, self.preview_winid = unpack(view:open_window(opt))
 
-  api.nvim_buf_call(wininfo[1], function()
-    vim.fn.termopen(cmd, {
+  api.nvim_buf_call(self.preview_bufnr, function()
+    vim.fn.termopen(opt.cmd, {
       on_exit = function() end,
     })
   end)
-  api.nvim_win_set_var(0, 'dashboard_preview_wininfo', wininfo)
-end))
+  self.main_winid = api.nvim_get_current_win()
+  self.win_width = api.nvim_win_get_width(self.main_winid)
 
-function view:open_preview()
-  async_preview:send()
+  self:preview_events()
 end
 
 return view

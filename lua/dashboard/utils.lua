@@ -60,7 +60,7 @@ function utils.generate_header(config)
     '',
   }
 
-  if not config.preview then
+  if not config.command then
     local header = config.header or default
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
 
@@ -70,8 +70,14 @@ function utils.generate_header(config)
     return
   end
 
-  local empty_table = utils.generate_empty_table(config.preview.file_height + 2)
+  local empty_table = utils.generate_empty_table(config.file_height + 2)
   api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
+  local preview = require('dashboard.preview')
+  preview:open_preview({
+    width = config.file_width,
+    height = config.file_height,
+    cmd = config.command .. ' ' .. config.file_path,
+  })
 end
 
 function utils.get_icon(ft)

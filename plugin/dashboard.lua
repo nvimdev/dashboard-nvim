@@ -1,7 +1,13 @@
-local api = vim.api
 
-api.nvim_create_autocmd('UIEnter', {
-  group = api.nvim_create_augroup('Dashboard', { clear = true }),
+
+if vim.g.loaded_dashboard then
+  return
+end
+
+vim.g.loaded_dashboard = 1
+
+vim.api.nvim_create_autocmd('UIEnter', {
+  group = vim.api.nvim_create_augroup('Dashboard', { clear = true }),
   callback = function()
     if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
       require('dashboard'):instance()
