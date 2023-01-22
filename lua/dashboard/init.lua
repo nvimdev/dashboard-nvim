@@ -27,9 +27,9 @@ local function default_options()
       image_height_pixel = 0,
     },
     session = {
+      enable = true,
       dir = '',
       auto_save_on_exit = false,
-      session_verbose = true,
     },
   }
 end
@@ -88,12 +88,35 @@ function db:cache_ui_options()
   end
   if self.opts.hide.tabline then
     self.user_tabline_value = vim.opt.tabline:get()
-    vim.opt.tabline = 0
+    vim.opt.showtabline = 0
   end
   if self.opts.hide.winbar then
     self.user_winbar_value = vim.opt.winbar:get()
     vim.opt.winbar = ''
   end
+
+  api.nvim_create_autocmd('BufEnter', {
+    callback = function(opt)
+      local ignored = { 'prompt', 'nofile', 'terminal' }
+      if vim.tbl_contains(ignored, vim.bo[opt.buf].buftype) then
+        return
+      end
+
+      if self.user_winbar_value then
+        vim.opt.winbar = self.user_winbar_value
+      end
+
+      if self.user_laststatus_value then
+        vim.opt.laststatus = self.user_laststatus_value
+      end
+
+      if self.user_tabline_value then
+        vim.opt.showtabline = self.user_tabline_value
+      end
+      pcall(api.nvim_del_autocmd, opt.id)
+    end,
+    desc = 'Dashboard resotre the options value',
+  })
 end
 
 -- create dashboard instance
@@ -139,6 +162,9 @@ function db.setup(opts)
   opts = opts or {}
   ctx.opts = vim.tbl_extend('force', default_options(), opts)
   ctx.path = ctx.opts.path
+  if ctx.opts.session.enable then
+    require('dashboard.session').command(ctx.opts.session)
+  end
 end
 
 return setmetatable(ctx, db)

@@ -1,32 +1,23 @@
-local fn, api, loop = vim.fn, vim.api, vim.loop
-local db = require('dashboard')
-local is_windows = #vim.fn.windowsversion() > 0
-local path_sep = is_windows and '\\' or '/'
+local fn, api = vim.fn, vim.api
+local utils = require('dashboard.utils')
 local session = {}
-local home = loop.os_homedir()
-local session_cp_name
-local msg_dict = {
-  [false] = {
-    save = 'This session is now persistent',
-    load = 'Session loaded',
-    load_failed = 'No saved session for this directory',
-    deleted = 'Session deleted',
-    delete_failed = 'No saved session for this directory',
-  },
-  [true] = {
+
+local function output_msg(type)
+  local msg_dict = {
     save = 'Session %s is now persistent',
     load = 'Loaded %s session',
     load_failed = 'The session %s does not exist',
     deleted = 'Session %s deleted',
     delete_failed = 'The session %s does not exist',
-  },
-}
-msg_dict = msg_dict[db.session_verbose]
+  }
+  return msg_dict[type]
+end
 
-local project_name = function()
+local function project_name()
   local cwd = fn.resolve(fn.getcwd())
-  cwd = fn.substitute(cwd, '^' .. home .. path_sep, '', '')
-  if is_windows then
+  local path_sep = utils.is_windows and '\\' or '/'
+  cwd = fn.substitute(cwd, '^' .. vim.env.HOME .. path_sep, '', '')
+  if utils.is_windows then
     cwd = fn.fnamemodify(cwd, [[:p:gs?\?_?]])
     cwd = (string.gsub(cwd, 'C:', ''))
   else
@@ -36,35 +27,39 @@ local project_name = function()
   return cwd
 end
 
-if is_windows then
-  -- overwrite db.session_directory for Windows in this file
-  db.session_directory = string.gsub(db.session_directory, '/', '\\')
+local function get_session_dir()
+  local dir = require('dashboard').opts.session.dir
+  if #dir == 0 then
+    dir = utils.path_join(fn.stdpath('cache'), 'session')
+  end
+  return dir
 end
 
-function session.session_save(name)
-  if fn.isdirectory(db.session_directory) == 0 then
-    fn.mkdir(db.session_directory, 'p')
+local function session_save(name)
+  local dir = get_session_dir()
+  if fn.isdirectory(dir) == 0 then
+    fn.mkdir(dir, 'p')
   end
 
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
+  local file_path = utils.path_join(dir, file_name .. '.vim')
   api.nvim_command('mksession! ' .. fn.fnameescape(file_path))
   vim.v.this_session = file_path
 
-  vim.notify(string.format(msg_dict.save, file_name))
-  session_cp_name = project_name()
+  vim.notify(string.format(output_msg('save'), file_name), vim.log.levels.INFO)
 end
 
 local function convert_home_base()
-  if db.session_directory:find('^~/') then
-    db.session_directory = vim.fs.normalize(db.session_directory)
+  local dir = get_session_dir()
+  if dir:find('^~/') then
+    dir = vim.fs.normalize(dir)
   end
+  return dir
 end
 
-function session.session_load(name)
-  convert_home_base()
-  local file_path = (name and #name > 0) and name
-    or db.session_directory .. path_sep .. project_name() .. '.vim'
+local function session_load(name)
+  local dir = convert_home_base()
+  local file_path = (name and #name > 0) and name or utils.path_join(dir, project_name() .. '.vim')
 
   if vim.v.this_session ~= '' and fn.exists('g:SessionLoad') == 0 then
     api.nvim_command('mksession! ' .. fn.fnameescape(vim.v.this_session))
@@ -78,42 +73,81 @@ function session.session_load(name)
       vim.opt.laststatus = 2
     end
 
-    vim.notify(string.format(msg_dict.load, file_path))
-    session_cp_name = project_name()
+    vim.notify(string.format(output_msg('load'), file_path), vim.log.levels.INFO)
     return
   end
 
-  vim.notify(string.format(msg_dict.load_failed, file_path))
+  vim.notify(string.format(output_msg('load_failed'), file_path), vim.log.levels.ERROR)
 end
 
-function session.session_exists(name)
+local function path_in_session(fname)
+  local dir = convert_home_base()
+  return utils.path_join(dir, fname .. '.vim')
+end
+
+local function session_exists(name)
   local file_name = name == nil and project_name() or name
-  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
+  local file_path = path_in_session(file_name)
 
   return fn.filereadable(file_path) == 1
 end
 
-function session.session_delete(name)
+local function session_delete(name)
   local file_name = not name and project_name() or name
-  local file_path = db.session_directory .. path_sep .. file_name .. '.vim'
+  local file_path = path_in_session(file_name)
 
   if fn.filereadable(file_path) == 1 then
     fn.delete(file_path)
-    vim.notify(string.format(msg_dict.deleted, file_name))
+    vim.notify(string.format(output_msg('deleted'), file_name), vim.log.levels.INFO)
     return
   end
 
-  vim.notify(string.format(msg_dict.delete_failed, file_name))
+  vim.notify(string.format(output_msg('delete_failed'), file_name), vim.log.levels.ERROR)
 end
 
-function session.should_auto_save()
-  return db.session_auto_save_on_exit
-    and session.session_exists()
-    and session_cp_name == project_name()
+local function session_list()
+  local dir = convert_home_base()
+  return vim.split(fn.globpath(dir, '*.vim'), '\n')
 end
 
-function session.session_list()
-  return vim.split(fn.globpath(db.session_directory, '*.vim'), '\n')
+function session.command(opt)
+  if opt.auto_save_on_exit then
+    local function should_auto_save()
+      return opt.session_auto_save_on_exit and session_exists()
+    end
+
+    api.nvim_create_autocmd('VimLeavePre', {
+      group = api.nvim_create_augroup('session_auto_save', { clear = true }),
+      callback = function()
+        if should_auto_save() then
+          api.nvim_exec_autocmds('User', { pattern = 'DBSessionSavePre', modeline = false })
+          session_save()
+          api.nvim_exec_autocmds('User', { pattern = 'DBSessionSaveAfter', modeline = false })
+        end
+      end,
+    })
+  end
+
+  api.nvim_create_user_command('SessionSave', function()
+    session_save()
+  end, {
+    nargs = '?',
+    complete = session_list,
+  })
+
+  api.nvim_create_user_command('SessionLoad', function(args)
+    session_load(args.args)
+  end, {
+    nargs = '?',
+    complete = session_list,
+  })
+
+  api.nvim_create_user_command('SessionDelete', function()
+    session_delete()
+  end, {
+    nargs = '?',
+    complete = session_list,
+  })
 end
 
 return session
