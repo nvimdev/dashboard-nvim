@@ -8,10 +8,13 @@ db.__newindex = function(t, k, v)
   rawset(t, k, v)
 end
 
+local function cache_path()
+  return utils.path_join(vim.fn.stdpath('cache'), 'dashboard_cache')
+end
+
 local function default_options()
   return {
     theme = 'classic',
-    path = utils.path_join(vim.fn.stdpath('cache'), 'dashboard_cache'),
     config = {},
     hide = {
       statusline = true,
@@ -149,7 +152,7 @@ function db:instance()
   local config = vim.tbl_extend(
     'force',
     self.opts.config,
-    { path = self.opts.path, bufnr = self.bufnr, winid = self.winid }
+    { path = cache_path(), bufnr = self.bufnr, winid = self.winid }
   )
 
   if #self.opts.preview.command > 0 then
@@ -169,7 +172,6 @@ end
 function db.setup(opts)
   opts = opts or {}
   ctx.opts = vim.tbl_extend('force', default_options(), opts)
-  ctx.path = ctx.opts.path
   if ctx.opts.session.enable then
     require('dashboard.session').command(ctx.opts.session)
   end
