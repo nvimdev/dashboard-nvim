@@ -94,7 +94,7 @@ local function project_list(config, callback)
       if list then
         list = vim.list_slice(list, #list - config.project.limit)
       end
-      for _, dir in ipairs( list or {}) do
+      for _, dir in ipairs(list or {}) do
         dir = dir:gsub(vim.env.HOME, '~')
         table.insert(res, (' '):rep(3) .. ' ' .. dir)
       end
