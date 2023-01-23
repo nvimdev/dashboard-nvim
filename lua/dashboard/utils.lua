@@ -60,6 +60,9 @@ function utils.generate_header(config)
     '',
   }
 
+  if not vim.bo[config.bufnr].modifiable then
+    vim.bo[config.bufnr].modifiable = true
+  end
   if not config.command then
     local header = config.header or default
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))

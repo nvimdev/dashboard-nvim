@@ -91,6 +91,7 @@ function db:cache_ui_options()
     vim.opt.showtabline = 0
   end
   if self.opts.hide.winbar then
+    ---@diagnostic disable-next-line: undefined-field
     self.user_winbar_value = vim.opt.winbar:get()
     vim.opt.winbar = ''
   end
@@ -156,6 +157,13 @@ function db:instance()
   end
 
   require('dashboard.theme.' .. self.opts.theme)(config)
+  api.nvim_create_autocmd('VimResized', {
+    buffer = self.bufnr,
+    callback = function()
+      require('dashboard.theme.' .. self.opts.theme)(config)
+      vim.bo[self.bufnr].modifiable = false
+    end,
+  })
 end
 
 function db.setup(opts)
