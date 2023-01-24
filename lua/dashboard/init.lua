@@ -14,8 +14,21 @@ local function clean_ctx()
   end
 end
 
+local function cache_dir()
+  local dir = utils.path_join(vim.fn.stdpath('cache'), 'dashboard')
+  if fn.isdirectory(dir) == 0 then
+    fn.mkdir(dir, 'p')
+  end
+  return dir
+end
+
 local function cache_path()
-  return utils.path_join(vim.fn.stdpath('cache'), 'dashboard_cache')
+  local dir = cache_dir()
+  return utils.path_join(dir, 'cache')
+end
+
+local function conf_cache_path()
+  return utils.path_join(cache_dir(), 'conf')
 end
 
 local function default_options()
@@ -90,16 +103,16 @@ end
 
 -- cache the user options value restore after leave the dahsboard buffer
 -- or use DashboardNewFile command
-function db:cache_ui_options()
-  if self.opts.hide.statusline then
+function db:cache_ui_options(opts)
+  if opts.hide.statusline then
     self.user_laststatus_value = vim.opt.laststatus:get()
     vim.opt.laststatus = 0
   end
-  if self.opts.hide.tabline then
+  if opts.hide.tabline then
     self.user_tabline_value = vim.opt.tabline:get()
     vim.opt.showtabline = 0
   end
-  if self.opts.hide.winbar then
+  if opts.hide.winbar then
     ---@diagnostic disable-next-line: undefined-field
     self.user_winbar_value = vim.opt.winbar:get()
     vim.opt.winbar = ''
@@ -129,6 +142,74 @@ function db:cache_ui_options()
   })
 end
 
+function db:cache_opts()
+  if not self.opts then
+    return
+  end
+  local uv = vim.loop
+  local path = conf_cache_path()
+  local dump = vim.json.encode(self.opts)
+  uv.fs_open(path, 'w+', tonumber('664', 8), function(err, fd)
+    assert(not err, err)
+    uv.fs_write(fd, dump, 0, function(err, _)
+      assert(not err, err)
+      uv.fs_close(fd)
+    end)
+  end)
+end
+
+function db:get_opts(callback)
+  utils.async_read(
+    conf_cache_path(),
+    vim.schedule_wrap(function(data)
+      if not data or #data == 0 then
+        return
+      end
+      local obj = vim.json.decode(data)
+      if obj then
+        callback(obj)
+      end
+    end)
+  )
+end
+
+function db:load_theme(opts)
+  self:cache_ui_options(opts)
+  local config = vim.tbl_extend(
+    'force',
+    opts.config,
+    { path = cache_path(), bufnr = self.bufnr, winid = self.winid }
+  )
+
+  if #opts.preview.command > 0 then
+    config = vim.tbl_extend('force', config, self.opts.preview)
+  end
+
+  require('dashboard.theme.' .. opts.theme)(config)
+  api.nvim_create_autocmd('VimResized', {
+    buffer = self.bufnr,
+    callback = function()
+      require('dashboard.theme.' .. opts.theme)(config)
+      vim.bo[self.bufnr].modifiable = false
+    end,
+  })
+
+  api.nvim_create_autocmd('BufEnter', {
+    callback = function(opt)
+      local bufs = api.nvim_list_bufs()
+      bufs = vim.tbl_filter(function(k)
+        return vim.bo[k].filetype == 'dashboard'
+      end, bufs)
+      if #bufs == 0 then
+        self:cache_opts()
+        clean_ctx()
+        pcall(api.nvim_del_autocmd, opt.id)
+      end
+    end,
+    desc = '[Dashboard] clean dashboard data reduce memory',
+  })
+end
+
 -- create dashboard instance
 function db:instance()
   local mode = api.nvim_get_mode().mode
@@ -153,40 +234,13 @@ function db:instance()
   api.nvim_win_set_buf(self.winid, self.bufnr)
 
   buf_local()
-  self:cache_ui_options()
-
-  local config = vim.tbl_extend(
-    'force',
-    self.opts.config,
-    { path = cache_path(), bufnr = self.bufnr, winid = self.winid }
-  )
-
-  if #self.opts.preview.command > 0 then
-    config = vim.tbl_extend('force', config, self.opts.preview)
+  if self.opts then
+    self:load_theme(self.opts)
+  else
+    self:get_opts(function(obj)
+      self:load_theme(obj)
+    end)
   end
-
-  require('dashboard.theme.' .. self.opts.theme)(config)
-  api.nvim_create_autocmd('VimResized', {
-    buffer = self.bufnr,
-    callback = function()
-      require('dashboard.theme.' .. self.opts.theme)(config)
-      vim.bo[self.bufnr].modifiable = false
-    end,
-  })
-
-  api.nvim_create_autocmd('BufEnter', {
-    callback = function(opt)
-      local bufs = api.nvim_list_bufs()
-      bufs = vim.tbl_filter(function(k)
-        return vim.bo[k].filetype == 'dashboard'
-      end, bufs)
-      if #bufs == 0 then
-        clean_ctx()
-        pcall(api.nvim_del_autocmd, opt.id)
-      end
-    end,
-    desc = '[Dashboard] clean dashboard data reduce memory',
-  })
 end
 
 function db.setup(opts)

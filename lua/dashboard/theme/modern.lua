@@ -75,15 +75,6 @@ local function project_list(config, callback)
     action = 'Telescope find_files cwd=',
   }, config.project or {})
 
-  if fn.filereadable(config.path) == 0 then
-    local ok, fd = pcall(uv.fs_open, config.path, 'w', 420)
-    if not ok then
-      vim.notify('[dashboard.nvim] create project tmp file failed', vim.log.levels.ERROR)
-      return
-    end
-    uv.fs_close(fd)
-  end
-
   local res = {}
 
   utils.async_read(
