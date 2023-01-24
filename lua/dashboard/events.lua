@@ -1,5 +1,4 @@
 local api, lsp, uv = vim.api, vim.lsp, vim.loop
-local utils = require('dashboard.utils')
 local au = {}
 
 function au.register_lsp_root(path)
