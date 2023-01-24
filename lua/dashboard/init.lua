@@ -117,29 +117,20 @@ function db:cache_ui_options(opts)
     self.user_winbar_value = vim.opt.winbar:get()
     vim.opt.winbar = ''
   end
+end
 
-  api.nvim_create_autocmd('BufEnter', {
-    callback = function(opt)
-      local ignored = { 'prompt', 'nofile', 'terminal' }
-      if vim.tbl_contains(ignored, vim.bo[opt.buf].buftype) then
-        return
-      end
+function db:restore_options()
+  if self.user_winbar_value then
+    vim.opt.winbar = self.user_winbar_value
+  end
 
-      if self.user_winbar_value then
-        vim.opt.winbar = self.user_winbar_value
-      end
+  if self.user_laststatus_value then
+    vim.opt.laststatus = self.user_laststatus_value
+  end
 
-      if self.user_laststatus_value then
-        vim.opt.laststatus = self.user_laststatus_value
-      end
-
-      if self.user_tabline_value then
-        vim.opt.showtabline = self.user_tabline_value
-      end
-      pcall(api.nvim_del_autocmd, opt.id)
-    end,
-    desc = 'Dashboard resotre the options value',
-  })
+  if self.user_tabline_value then
+    vim.opt.showtabline = self.user_tabline_value
+  end
 end
 
 function db:cache_opts()
@@ -151,6 +142,7 @@ function db:cache_opts()
   local dump = vim.json.encode(self.opts)
   uv.fs_open(path, 'w+', tonumber('664', 8), function(err, fd)
     assert(not err, err)
+    ---@diagnostic disable-next-line: redefined-local
     uv.fs_write(fd, dump, 0, function(err, _)
       assert(not err, err)
       uv.fs_close(fd)
@@ -202,6 +194,7 @@ function db:load_theme(opts)
       end, bufs)
       if #bufs == 0 then
         self:cache_opts()
+        self:restore_options()
         clean_ctx()
         pcall(api.nvim_del_autocmd, opt.id)
       end
@@ -246,9 +239,6 @@ end
 function db.setup(opts)
   opts = opts or {}
   ctx.opts = vim.tbl_extend('force', default_options(), opts)
-  if ctx.opts.session.enable then
-    require('dashboard.session').command(ctx.opts.session)
-  end
 end
 
 return setmetatable(ctx, db)
