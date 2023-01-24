@@ -8,6 +8,12 @@ db.__newindex = function(t, k, v)
   rawset(t, k, v)
 end
 
+local function clean_ctx()
+  for k, _ in pairs(ctx) do
+    ctx[k] = nil
+  end
+end
+
 local function cache_path()
   return utils.path_join(vim.fn.stdpath('cache'), 'dashboard_cache')
 end
@@ -166,6 +172,20 @@ function db:instance()
       require('dashboard.theme.' .. self.opts.theme)(config)
       vim.bo[self.bufnr].modifiable = false
     end,
+  })
+
+  api.nvim_create_autocmd('BufEnter', {
+    callback = function(opt)
+      local bufs = api.nvim_list_bufs()
+      bufs = vim.tbl_filter(function(k)
+        return vim.bo[k].filetype == 'dashboard'
+      end, bufs)
+      if #bufs == 0 then
+        clean_ctx()
+        pcall(api.nvim_del_autocmd, opt.id)
+      end
+    end,
+    desc = '[Dashboard] clean dashboard data reduce memory',
   })
 end
 

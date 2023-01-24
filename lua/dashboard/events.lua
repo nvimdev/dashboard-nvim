@@ -1,4 +1,5 @@
 local api, lsp, uv = vim.api, vim.lsp, vim.loop
+local utils = require('dashboard.utils')
 local au = {}
 
 function au.register_lsp_root(path)
@@ -22,25 +23,18 @@ function au.register_lsp_root(path)
         return
       end
 
-      uv.fs_open(path, 'rs+', tonumber('664', 8), function(err, fd)
-        assert(not err, err)
-        uv.fs_fstat(fd, function(err, stat)
+      utils.async_write(path, function(fd, data)
+        local before = assert(loadstring(data))
+        local plist = before()
+        plist = vim.tbl_filter(function(k)
+          return not vim.tbl_contains(projects, k)
+        end, plist or {})
+        plist = vim.list_extend(plist, projects)
+        local fn = assert(loadstring('return ' .. vim.inspect(plist)))
+        local dump = string.dump(fn)
+        uv.fs_write(fd, dump, 0, function(err, _)
           assert(not err, err)
-          uv.fs_read(fd, stat.size, 0, function(err, data)
-            assert(not err, err)
-            local before = assert(loadstring(data))
-            local plist = before()
-            plist = vim.tbl_filter(function(k)
-              return not vim.tbl_contains(projects, k)
-            end, plist or {})
-            plist = vim.list_extend(plist, projects)
-            local fn = assert(loadstring('return ' .. vim.inspect(plist)))
-            local dump = string.dump(fn)
-            uv.fs_write(fd, dump, 0, function(err, bytes)
-              assert(not err, err)
-              uv.fs_close(fd)
-            end)
-          end)
+          uv.fs_close(fd)
         end)
       end)
     end,
