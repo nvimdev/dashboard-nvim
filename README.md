@@ -98,7 +98,12 @@ dashboard will use default highlight group like `String Number Title`
 
 ### Highlight
 
-all highlight groups `DashboardHeader DashboardCenter DashboardFooter`
+all highlight groups 
+
+```
+DashboardHeader DashboardCenter DashboardFooter DashboardProjectIcon
+DashboardFiles DashboardRecentTitle DashboardRecentProject
+```
 
 ### Changed
 
