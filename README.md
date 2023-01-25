@@ -104,6 +104,10 @@ all highlight groups `DashboardHeader DashboardCenter DashboardFooter`
 - I will write a plugin to implement some popular terminal evalutors image protocol then I think
   can make it work with dashboard
 
+# Backers
+
+[@RakerZh](https://github.com/RakerZh)
+
 # Donate
 
 [![](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/bobbyhub)
