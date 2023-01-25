@@ -23,12 +23,14 @@ local function generate_center(config)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
 
   local ns = api.nvim_create_namespace('DashboardDoom')
-  local seed = 1
+  local seed = 0
+  local pos_map = {}
   for i = 1, #lines do
     local scol = lines[i]:find('%w')
     if scol then
       local idx = i == 1 and i or i - seed
       seed = seed + 1
+      pos_map[i] = idx
       api.nvim_buf_add_highlight(
         config.bufnr,
         0,
@@ -39,7 +41,6 @@ local function generate_center(config)
       )
 
       if config.center[idx].icon then
-        print(idx, config.center[idx].icon_hi)
         api.nvim_buf_add_highlight(
           config.bufnr,
           0,
@@ -82,6 +83,14 @@ local function generate_center(config)
       end,
     })
   end, 0)
+
+  vim.keymap.set('n', '<CR>', function()
+    local curline = api.nvim_win_get_cursor(0)[1]
+    local index = pos_map[curline - first_line]
+    if index and config.center[index].action then
+      vim.cmd(config.center[index].action)
+    end
+  end, { buffer = config.bufnr, nowait = true, silent = true })
 end
 
 local function generate_footer(config)
