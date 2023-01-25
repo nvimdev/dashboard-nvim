@@ -94,7 +94,7 @@ config = {
 ```
 
 notice if you don't link config every highlight group. you can ignore this key.
-dashboard will use default highlight group like `String Number Title`
+dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 
 ### Highlight
 
@@ -103,6 +103,7 @@ all highlight groups
 ```
 DashboardHeader DashboardCenter DashboardFooter DashboardProjectIcon
 DashboardFiles DashboardRecentTitle DashboardRecentProject
+DashboardDesc DashboardKey DashboardIcon
 ```
 
 ### Changed

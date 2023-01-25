@@ -26,15 +26,17 @@ local function generate_center(config)
   local seed = 0
   local pos_map = {}
   for i = 1, #lines do
-    local scol = lines[i]:find('%w')
-    if scol then
+    if lines[i]:find('%w') then
       local idx = i == 1 and i or i - seed
       seed = seed + 1
       pos_map[i] = idx
+      local pattern = config.center[idx].icon and config.center[idx].icon or '%w'
+      local _, scol = lines[i]:find(pattern)
+
       api.nvim_buf_add_highlight(
         config.bufnr,
         0,
-        config.center[idx].desc_hi or 'Number',
+        config.center[idx].desc_hi or 'DashboardDesc',
         first_line + i - 1,
         scol - 1,
         -1
@@ -44,7 +46,7 @@ local function generate_center(config)
         api.nvim_buf_add_highlight(
           config.bufnr,
           0,
-          config.center[idx].icon_hi or 'String',
+          config.center[idx].icon_hi or 'DashboardIcon',
           first_line + i - 1,
           0,
           scol - 1
@@ -54,7 +56,7 @@ local function generate_center(config)
       if config.center[idx].key then
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
           virt_text_pos = 'eol',
-          virt_text = { { config.center[idx].key, config.center[idx].key_hi or 'Title' } },
+          virt_text = { { config.center[idx].key, 'DashboardKey' } },
         })
       end
     end
