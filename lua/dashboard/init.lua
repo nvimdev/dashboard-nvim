@@ -33,7 +33,7 @@ end
 
 local function default_options()
   return {
-    theme = 'classic',
+    theme = 'hyper',
     config = {},
     hide = {
       statusline = true,
@@ -45,13 +45,6 @@ local function default_options()
       file_path = nil,
       file_height = 0,
       file_width = 0,
-      image_width_pixel = 0,
-      image_height_pixel = 0,
-    },
-    session = {
-      enable = true,
-      dir = '',
-      auto_save_on_exit = false,
     },
   }
 end

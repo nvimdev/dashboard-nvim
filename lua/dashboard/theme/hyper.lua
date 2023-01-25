@@ -249,21 +249,15 @@ end
 
 local function gen_footer(config)
   local footer = vim.tbl_extend('force', {
-    enable = true,
-    content = {
-      '',
-      '',
-      ' 🚀 Sharp tools make good work.',
-    },
+    '',
+    '',
+    ' 🚀 Sharp tools make good work.',
   }, config.footer or {})
-  if not footer.enable then
-    return
-  end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer.content))
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
 
-  for i, _ in pairs(footer.content) do
+  for i, _ in pairs(footer) do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i, 0, -1)
   end
 end

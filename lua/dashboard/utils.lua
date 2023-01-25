@@ -73,7 +73,7 @@ function utils.generate_header(config)
     return
   end
 
-  local empty_table = utils.generate_empty_table(config.file_height + 2)
+  local empty_table = utils.generate_empty_table(config.file_height + 4)
   api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
   local preview = require('dashboard.preview')
   preview:open_preview({
