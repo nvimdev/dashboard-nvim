@@ -15,7 +15,7 @@
 # Install
 
 - Lazy.nvim
-  
+
 ```lua
 require('lazy').setup({
   {'glepnir/dashboard-nvim', event = 'VimEnter', config = function()
@@ -98,7 +98,7 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 
 ### Highlight
 
-all highlight groups 
+all highlight groups
 
 ```
 DashboardHeader  DashboardFooter DashboardProjectIcon
@@ -110,7 +110,7 @@ DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 
 - Removed Session as a start screen plugin speed is first.
 - Removed Ueberzug script. since the ueberzug author delete the repo.
-  
+
 ### TODO
 
 - I will write a plugin to implement some popular terminal evaluators image protocol then I think
