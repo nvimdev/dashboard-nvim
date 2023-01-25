@@ -101,9 +101,9 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 all highlight groups 
 
 ```
-DashboardHeader DashboardCenter DashboardFooter DashboardProjectIcon
+DashboardHeader  DashboardFooter DashboardProjectIcon
 DashboardFiles DashboardRecentTitle DashboardRecentProject
-DashboardDesc DashboardKey DashboardIcon
+DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
 
 ### Changed

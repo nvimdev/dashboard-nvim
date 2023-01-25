@@ -1,12 +1,12 @@
-local api, uv, fn, keymap = vim.api, vim.loop, vim.fn, vim.keymap
+local api, uv, keymap = vim.api, vim.loop, vim.keymap
 local utils = require('dashboard.utils')
 local ns = api.nvim_create_namespace('dashboard')
 
 local function gen_shortcut(config)
   local shortcut = vim.tbl_extend('force', {
-    { desc = '[  Github]', group = 'Title' },
-    { desc = '[  glepnir]', group = 'Title' },
-    { desc = '[  0.2.3]', group = 'Title' },
+    { desc = '[  Github]', group = 'DashboardShortCut' },
+    { desc = '[  glepnir]', group = 'DashboardShortCut' },
+    { desc = '[  0.2.3]', group = 'DashboardShortCut' },
   }, config.shortcut or {})
 
   if vim.tbl_isempty(shortcut) then
