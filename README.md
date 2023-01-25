@@ -17,21 +17,27 @@
 - Lazy.nvim
 
 ```lua
-require('lazy').setup({
-  {'glepnir/dashboard-nvim', event = 'VimEnter', config = function()
-    require('dashboard').setup({ --config -- })
-  end}
-})
+{
+  'glepnir/dashboard-nvim',
+  event = 'VimEnter',
+  opts = {
+    -- config
+  },
+}
 ```
 
 - Packer
 
 ```lua
-use({
-  'glepnir/dashboard-nvim', event = 'VimEnter', config = function()
-    require('dashboard').setup({ --config -- })
+use {
+  'glepnir/dashboard-nvim',
+  event = 'VimEnter',
+  config = function()
+    require('dashboard').setup {
+      -- config
+    }
   end
-})
+}
 ```
 
 # Configuration
@@ -66,14 +72,13 @@ when use `hyper` theme the available options in `config` is
 config = {
   header = {}, -- ascii text in there
   shortcut = {
-    {desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key'}
+    { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
-  project = { limit = 8 , action = 'Telescope find_files cwd='} -- limit how many projects list, action when you press key or enter it will run this action.
-  mru = { limit = 10 } -- how many files in list
-  footer = { } -- footer
+  project = { limit = 8, action = 'Telescope find_files cwd=' }, -- limit how many projects list, action when you press key or enter it will run this action.
+  mru = { limit = 10 }, -- how many files in list
+  footer = {}, -- footer
 }
-
 ```
 
 ### Doom
@@ -85,10 +90,15 @@ config = {
   header = {},
   center = {
     {
-        icon = '', icon_hl = 'group' , desc = 'description',desc_hl = 'group',
-        key= 'shortcut key in dashboard buffer not keymap !!',key_hl = 'group',action = ''
+      icon = '',
+      icon_hl = 'group',
+      desc = 'description',
+      desc_hl = 'group',
+      key = 'shortcut key in dashboard buffer not keymap !!',
+      key_hl = 'group',
+      action = '',
     },
-  }
+  },
   footer = {},
 }
 ```
@@ -101,7 +111,7 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 all highlight groups
 
 ```
-DashboardHeader  DashboardFooter DashboardProjectIcon
+DashboardHeader DashboardFooter DashboardProjectIcon
 DashboardFiles DashboardRecentTitle DashboardRecentProject
 DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
