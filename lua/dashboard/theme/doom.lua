@@ -30,17 +30,8 @@ local function generate_center(config)
       local idx = i == 1 and i or i - seed
       seed = seed + 1
       pos_map[i] = idx
-      local pattern = config.center[idx].icon and config.center[idx].icon or '%w'
-      local _, scol = lines[i]:find(pattern)
-
-      api.nvim_buf_add_highlight(
-        config.bufnr,
-        0,
-        config.center[idx].desc_hi or 'DashboardDesc',
-        first_line + i - 1,
-        scol - 1,
-        -1
-      )
+      local _, scol = lines[i]:find('%s+')
+      local ecol = scol + (config.center[idx].icon and #config.center[idx].icon or 0)
 
       if config.center[idx].icon then
         api.nvim_buf_add_highlight(
@@ -49,9 +40,18 @@ local function generate_center(config)
           config.center[idx].icon_hi or 'DashboardIcon',
           first_line + i - 1,
           0,
-          scol - 1
+          ecol
         )
       end
+
+      api.nvim_buf_add_highlight(
+        config.bufnr,
+        0,
+        config.center[idx].desc_hi or 'DashboardDesc',
+        first_line + i - 1,
+        ecol,
+        -1
+      )
 
       if config.center[idx].key then
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
