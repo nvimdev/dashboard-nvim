@@ -1,4 +1,4 @@
-
+-- version 0.2.3
 if vim.g.loaded_dashboard then
   return
 end
