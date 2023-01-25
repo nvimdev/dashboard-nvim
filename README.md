@@ -108,7 +108,7 @@ DashboardFiles DashboardRecentTitle DashboardRecentProject
 ### Changed
 
 - Removed Session as a start screen plugin speed is first.
-- Removed Ueberzug script. since the ueberzug autoher delete the repo.
+- Removed Ueberzug script. since the ueberzug author delete the repo.
   
 ### TODO
 
