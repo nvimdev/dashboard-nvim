@@ -15,23 +15,29 @@
 # Install
 
 - Lazy.nvim
-  
+
 ```lua
-require('lazy').setup({
-  {'glepnir/dahsboard-nvim', event = 'VimEnter', config = funciont()
-    require('dashboard').setup({ --config -- })
-  end}
-})
+{
+  'glepnir/dashboard-nvim',
+  event = 'VimEnter',
+  opts = {
+    -- config
+  },
+}
 ```
 
 - Packer
 
 ```lua
-use({
-  'glepnir/dashbaord-nvim', event = 'VimEnter', config = function()
-    require('dashboard').setup({ --config -- })
+use {
+  'glepnir/dashboard-nvim',
+  event = 'VimEnter',
+  config = function()
+    require('dashboard').setup {
+      -- config
+    }
   end
-})
+}
 ```
 
 # Configuration
@@ -49,7 +55,7 @@ hide = {
 preview = {
   command       -- preview command
   file_path     -- preview file path
-  file_height   -- prefview file height
+  file_height   -- preview file height
   file_width    -- preview file width
 },
 ```
@@ -66,14 +72,13 @@ when use `hyper` theme the available options in `config` is
 config = {
   header = {}, -- ascii text in there
   shortcut = {
-    {desc = string, group = 'highlight group', key = 'shorcut key', action = 'action when you press key'}
+    { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
-  project = { limit = 8 , action = 'Telescope find_files cwd='} -- limit how many projects list, action when you press key or enter it will run this action.
-  mru = { limit = 10 } -- how many files in list
-  footer = { } -- footer
+  project = { limit = 8, action = 'Telescope find_files cwd=' }, -- limit how many projects list, action when you press key or enter it will run this action.
+  mru = { limit = 10 }, -- how many files in list
+  footer = {}, -- footer
 }
-
 ```
 
 ### Doom
@@ -85,10 +90,15 @@ config = {
   header = {},
   center = {
     {
-        icon = '', icon_hl = 'group' , desc = 'desciption',desc_hl = 'group',
-        key= 'shorcut key in dashbaord buffer not keymap !!',key_hl = 'groupp',action = ''
+      icon = '',
+      icon_hl = 'group',
+      desc = 'description',
+      desc_hl = 'group',
+      key = 'shortcut key in dashboard buffer not keymap !!',
+      key_hl = 'group',
+      action = '',
     },
-  }
+  },
   footer = {},
 }
 ```
@@ -98,10 +108,10 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 
 ### Highlight
 
-all highlight groups 
+all highlight groups
 
 ```
-DashboardHeader  DashboardFooter DashboardProjectIcon
+DashboardHeader DashboardFooter DashboardProjectIcon
 DashboardFiles DashboardRecentTitle DashboardRecentProject
 DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
@@ -110,10 +120,10 @@ DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 
 - Removed Session as a start screen plugin speed is first.
 - Removed Ueberzug script. since the ueberzug author delete the repo.
-  
+
 ### TODO
 
-- I will write a plugin to implement some popular terminal evalutors image protocol then I think
+- I will write a plugin to implement some popular terminal evaluators image protocol then I think
   can make it work with dashboard
 
 # Backers
