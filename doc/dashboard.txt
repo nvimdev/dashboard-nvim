@@ -125,7 +125,13 @@ key. dashboard will use default highlight group like `String Number Title`
 
 HIGHLIGHT ~
 
-all highlight groups `DashboardHeader DashboardCenter DashboardFooter`
+all highlight groups
+
+>
+    DashboardHeader DashboardCenter DashboardFooter DashboardProjectIcon
+    DashboardFiles DashboardRecentTitle DashboardRecentProject
+<
+
 
 CHANGED ~
 
