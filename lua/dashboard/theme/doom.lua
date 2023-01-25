@@ -23,7 +23,7 @@ local function generate_center(config)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
 
   local ns = api.nvim_create_namespace('DashboardDoom')
-  local seed = 1
+  local seed = 0
   for i = 1, #lines do
     local scol = lines[i]:find('%w')
     if scol then
