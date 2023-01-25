@@ -110,12 +110,18 @@ when use `doom` theme the available options in `config` is
     config = {
       header = {},
       center = {
-        {desc = 'desciption', key= 'shorcut key in dashbaord buffer not keymap !!', action = ''},
+        {
+            icon = '', icon_hl = 'group' , desc = 'desciption',desc_hl = 'group',
+            key= 'shorcut key in dashbaord buffer not keymap !!',key_hl = 'groupp',action = ''
+        },
       }
       footer = {},
     }
 <
 
+
+notice if you don’t link config every highlight group. you can ignore this
+key. dashboard will use default highlight group like `String Number Title`
 
 HIGHLIGHT ~
 
