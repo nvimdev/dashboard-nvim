@@ -87,11 +87,6 @@ function db:new_file()
     vim.opt_local.showtabline = self.user_showtabline_value
     self.user_showtabline_value = nil
   end
-
-  if self.user_winbar_value then
-    vim.opt_local.winbar = self.user_winbar_value
-    self.user_winbar_value = nil
-  end
 end
 
 -- cache the user options value restore after leave the dahsboard buffer
