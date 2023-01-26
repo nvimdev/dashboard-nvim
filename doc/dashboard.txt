@@ -61,7 +61,7 @@ Fancy and Blazing Fast start screen plugin of neovim
           -- config
         }
       end,
-      require = { {'nvim-tree/nvim-web-devicons'}}
+      requires = {'nvim-tree/nvim-web-devicons'}
     }
 <
 
