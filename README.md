@@ -121,7 +121,7 @@ DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 example config of screenshot
 
 <details>
-<summary>Hyper<summary/>
+<summary> Hyper </summary>
 
 ```lua
   db.setup({
