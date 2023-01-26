@@ -22,6 +22,10 @@ local function generate_center(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
 
+  if not config.center then
+    return
+  end
+
   local ns = api.nvim_create_namespace('DashboardDoom')
   local seed = 0
   local pos_map = {}

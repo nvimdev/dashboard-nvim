@@ -104,11 +104,11 @@ end
 
 function db:restore_options()
   if self.user_laststatus_value then
-    vim.opt.laststatus = self.user_laststatus_value
+    vim.opt.laststatus = tonumber(self.user_laststatus_value)
   end
 
   if self.user_tabline_value then
-    vim.opt.showtabline = self.user_tabline_value
+    vim.opt.showtabline = tonumber(self.user_tabline_value)
   end
 end
 
