@@ -116,6 +116,77 @@ DashboardFiles DashboardRecentTitle DashboardRecentProject
 DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
 
+### Example config
+
+example config of screenshot
+
+<details>
+<summary>Hyper<summary/>
+
+```lua
+  db.setup({
+    theme = 'hyper',
+    config = {
+      shortcut = {
+        { desc = ' Update', group = '@property', action = 'Lazy update', key = 'u' },
+        {
+          desc = ' Files',
+          group = 'Label',
+          action = 'Telescope find_files',
+          key = 'f',
+        },
+        {
+          desc = ' Apps',
+          group = 'DiagnosticHint',
+          action = 'Telescope app',
+          key = 'a',
+        },
+        {
+          desc = ' dotfiles',
+          group = 'Number',
+          action = 'Telescope dotfiles',
+          key = 'd',
+        },
+      },
+    },
+  })
+```
+</details>
+
+<details>
+<summary> Doom </summary>
+
+```lua
+db.setup({
+  theme = 'doom',
+  config = {
+    header = {}, --your header
+    center = {
+      {
+        icon = ' ',
+        icon_hi = 'Title',
+        desc = 'Find File',
+        desc_hi = 'String',
+        key = 'b',
+        key_hi = 'Number',
+        action = 'lua print(2)'
+      },
+      {
+        icon = ' ',
+        icon_hi = 'Title',
+        desc = 'Find Dotfiles',
+        desc_hi = 'String',
+        key = 'f',
+        key_hi = 'Number',
+        action = 'lua print(3)'
+      },
+    }
+    footer = {}  --your footer
+  }
+})
+```
+</details
+
 ### Changed
 
 - Removed Session as a start screen plugin speed is first.
