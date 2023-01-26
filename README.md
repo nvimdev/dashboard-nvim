@@ -37,7 +37,7 @@ use {
     require('dashboard').setup {
       -- config
     }
-  end
+  end,
   require = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
