@@ -38,7 +38,7 @@ use {
       -- config
     }
   end,
-  require = { {'nvim-tree/nvim-web-devicons'}}
+  requires = {'nvim-tree/nvim-web-devicons'}
 }
 ```
 
