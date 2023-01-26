@@ -120,7 +120,7 @@ local function mru_list(config)
     if not utils.is_win then
       file = file:gsub(vim.env.HOME, '~')
     end
-    file = icon .. ' ' .. file
+    file = (icon or ' ') .. ' ' .. file
     table.insert(groups, { #icon, group })
     table.insert(list, (' '):rep(3) .. file)
   end

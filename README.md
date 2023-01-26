@@ -23,6 +23,7 @@
   opts = {
     -- config
   },
+  dependices = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
 
@@ -37,6 +38,7 @@ use {
       -- config
     }
   end
+  require = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
 
