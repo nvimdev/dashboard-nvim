@@ -154,8 +154,6 @@ example config of screenshot
 
 Hyper
 
-<summary/>
-
 >
       db.setup({
         theme = 'hyper',
