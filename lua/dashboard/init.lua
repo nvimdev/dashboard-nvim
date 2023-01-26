@@ -37,8 +37,7 @@ local function default_options()
     config = {},
     hide = {
       statusline = true,
-      abline = true,
-      winbar = true,
+      tabline = true,
     },
     preview = {
       command = '',
@@ -67,6 +66,7 @@ local function buf_local()
     ['buftype'] = 'nofile',
     ['wrap'] = false,
     ['signcolumn'] = 'no',
+    ['winbar'] = '',
   }
   for opt, val in pairs(opts) do
     vim.opt_local[opt] = val
@@ -105,18 +105,9 @@ function db:cache_ui_options(opts)
     self.user_tabline_value = vim.opt.tabline:get()
     vim.opt.showtabline = 0
   end
-  if opts.hide.winbar then
-    ---@diagnostic disable-next-line: undefined-field
-    self.user_winbar_value = vim.opt.winbar:get()
-    vim.opt.winbar = ''
-  end
 end
 
 function db:restore_options()
-  if self.user_winbar_value then
-    vim.opt.winbar = self.user_winbar_value
-  end
-
   if self.user_laststatus_value then
     vim.opt.laststatus = self.user_laststatus_value
   end
