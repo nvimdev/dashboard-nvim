@@ -1,9 +1,10 @@
 local uv, api = vim.loop, vim.api
 local utils = {}
 
+utils.is_win = uv.os_uname().version == 'WindowsNT'
+
 function utils.path_join(...)
-  local is_win = uv.os_uname().version == 'WindowsNT'
-  local path_sep = is_win and '\\' or '/'
+  local path_sep = utils.is_win and '\\' or '/'
   return table.concat({ ... }, path_sep)
 end
 

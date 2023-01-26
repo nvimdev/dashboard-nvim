@@ -117,7 +117,9 @@ local function mru_list(config)
   for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local ft = vim.filetype.match({ filename = file })
     local icon, group = utils.get_icon(ft)
-    file = file:gsub(vim.env.HOME, '~')
+    if not utils.is_win then
+      file = file:gsub(vim.env.HOME, '~')
+    end
     file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
     table.insert(list, (' '):rep(3) .. file)
@@ -151,16 +153,16 @@ end
 local function map_key(config, key, text)
   keymap.set('n', key, function()
     text = text or api.nvim_get_current_line()
-    if text:find('~') then
-      local tbl = vim.split(text, '%s', { trimempty = true })
-      local path = tbl[#tbl]
-      path = vim.fs.normalize(path)
-      local stat = uv.fs_stat(path)
-      if stat.type == 'file' then
-        vim.cmd('edit ' .. path)
-      elseif stat.type == 'directory' then
-        vim.cmd(config.project.action .. path)
-      end
+    local scol = text:find('%p')
+    text = text:sub(scol)
+    local tbl = vim.split(text, '%s', { trimempty = true })
+    local path = tbl[#tbl]
+    path = vim.fs.normalize(path)
+    local stat = uv.fs_stat(path)
+    if stat.type == 'file' then
+      vim.cmd('edit ' .. path)
+    elseif stat.type == 'directory' then
+      vim.cmd(config.project.action .. path)
     end
   end, { buffer = config.bufnr, silent = true, nowait = true })
 end
