@@ -159,7 +159,6 @@ function db:get_opts(callback)
 end
 
 function db:load_theme(opts)
-  self:cache_ui_options(opts)
   local config = vim.tbl_extend(
     'force',
     opts.config,
@@ -171,6 +170,8 @@ function db:load_theme(opts)
   end
 
   require('dashboard.theme.' .. opts.theme)(config)
+  self:cache_ui_options(opts)
+
   api.nvim_create_autocmd('VimResized', {
     buffer = self.bufnr,
     callback = function()
