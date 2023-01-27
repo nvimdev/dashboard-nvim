@@ -1,4 +1,4 @@
-local uv, api = vim.loop, vim.api
+local uv = vim.loop
 local utils = {}
 
 utils.is_win = uv.os_uname().version == 'WindowsNT'
