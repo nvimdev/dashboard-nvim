@@ -166,11 +166,10 @@ local function map_key(config, key, text)
     local tbl = vim.split(text, '%s', { trimempty = true })
     local path = tbl[#tbl]
     path = vim.fs.normalize(path)
-    local stat = uv.fs_stat(path)
-    if stat.type == 'file' then
-      vim.cmd('edit ' .. path)
-    elseif stat.type == 'directory' then
+    if vim.fn.isdirectory(path) == 1 then
       vim.cmd(config.project.action .. path)
+    else
+      vim.cmd('edit ' .. path)
     end
   end, { buffer = config.bufnr, silent = true, nowait = true })
 end

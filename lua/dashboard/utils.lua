@@ -86,7 +86,7 @@ end
 function utils.get_mru_list()
   local mru = {}
   for _, file in pairs(vim.v.oldfiles or {}) do
-    if file and uv.fs_stat(file) then
+    if file and vim.fn.filereadable(file) == 1 then
       table.insert(mru, file)
     end
   end
