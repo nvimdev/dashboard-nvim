@@ -3,12 +3,16 @@ local utils = require('dashboard.utils')
 
 local function generate_center(config)
   local lines = {}
+  local fill_space = (' '):rep(math.floor(vim.o.columns / 3))
   for _, item in
     pairs(config.center or {
       { desc = 'Please config your own center section', key = 'p' },
     })
   do
-    table.insert(lines, item.icon and item.icon .. item.desc or item.desc)
+    table.insert(
+      lines,
+      item.icon and item.icon .. item.desc .. fill_space or item.desc .. fill_space
+    )
     table.insert(lines, '')
     if item.key then
       vim.keymap.set('n', item.key, function()
@@ -60,7 +64,10 @@ local function generate_center(config)
       if config.center[idx].key then
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
           virt_text_pos = 'eol',
-          virt_text = { { config.center[idx].key, 'DashboardKey' } },
+          virt_text = {
+            { config.center[idx].keymap or nil, 'DashboardShortCut' },
+            { ' [' .. config.center[idx].key .. ']', 'DashboardKey' },
+          },
         })
       end
     end
