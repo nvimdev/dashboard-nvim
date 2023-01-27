@@ -114,6 +114,7 @@ local function theme_instance(config)
   require('dashboard.theme.header').generate_header(config)
   generate_center(config)
   generate_footer(config)
+  api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
 end
 
 return setmetatable({}, {
