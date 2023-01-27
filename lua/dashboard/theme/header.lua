@@ -88,10 +88,13 @@ local function default_header()
   }
 end
 
-local function week_header()
+local function week_header(concat, append)
   local week = week_ascii_text()
   local tbl = week[os.date('%A')]
-  table.insert(tbl, os.date('%Y-%m-%d %H:%M:%S'))
+  table.insert(tbl, os.date('%Y-%m-%d %H:%M:%S ') .. (concat or ''))
+  if append then
+    vim.list_extend(tbl, append)
+  end
   table.insert(tbl, '')
   return tbl
 end
@@ -101,7 +104,9 @@ local function generate_header(config)
     vim.bo[config.bufnr].modifiable = true
   end
   if not config.command then
-    local header = config.use_week_header and week_header() or (config.header or default_header())
+    local header = config.week_header.enable
+        and week_header(config.week_header.concat, config.week_header.append)
+      or (config.header or default_header())
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
 
     for i, _ in ipairs(header) do

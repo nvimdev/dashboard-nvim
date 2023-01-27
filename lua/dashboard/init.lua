@@ -34,7 +34,13 @@ end
 local function default_options()
   return {
     theme = 'hyper',
-    config = {},
+    config = {
+      week_header = {
+        enable = false,
+        concat = nil,
+        append = nil,
+      }
+    },
     hide = {
       statusline = true,
       tabline = true,

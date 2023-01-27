@@ -4,7 +4,7 @@
 
 | <center>Hyper</center> | <center>Doom</center> |
 | ---   | ---   |
-| <center><img src="https://user-images.githubusercontent.com/41671631/215013525-58aba397-03f8-4f48-8af7-ecf7f3134de9.png" width=80% height=80%/></center>|<center> <img src="https://user-images.githubusercontent.com/41671631/214518543-d7d6afbf-f405-4a6f-a505-568c5a101e92.png" width=80% height=80%/> </center>|
+| <center><img src="https://user-images.githubusercontent.com/41671631/215015845-b13343c4-427e-45d6-9f92-267ab909eff1.png" width=80% height=80%/></center>|<center> <img src="https://user-images.githubusercontent.com/41671631/214518543-d7d6afbf-f405-4a6f-a505-568c5a101e92.png" width=80% height=80%/> </center>|
 
 # Feature
 
@@ -68,8 +68,12 @@ the `config` field is used for theme. general field
 
 ```lua
 config = {
-  header -- type is table
-  use_week_header  -- type is boolean then the header will be day in week changed every day
+  header -- type is table def
+  week_header = {
+    enable  --boolean use a week header
+    concat  --concat string after time string line
+    append  --table append after time string line
+  }
 }
 ```
 
@@ -140,6 +144,9 @@ example config of screenshot
   db.setup({
     theme = 'hyper',
     config = {
+      week_header = {
+       enable = true,
+      },
       shortcut = {
         { desc = ' Update', group = '@property', action = 'Lazy update', key = 'u' },
         {
