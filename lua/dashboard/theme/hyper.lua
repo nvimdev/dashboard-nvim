@@ -192,7 +192,7 @@ local function gen_center(plist, config)
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.list_extend(plist, mlist)
   local max_len = utils.get_max_len(plist)
-  if max_len <= math.floor(vim.o.columns / 2) then
+  if max_len <= math.ceil(vim.o.columns / 3) and vim.o.columns < 100 then
     local fill = (' '):rep(math.floor(vim.o.columns / 4))
     for i, v in pairs(plist) do
       plist[i] = v .. fill
