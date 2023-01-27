@@ -33,13 +33,25 @@ local function gen_shortcut(config)
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
         if type(item.action) == 'string' then
-          vim.cmd(item.action)
+          local dump = loadstring(item.action)
+          if not dump then
+            vim.cmd(item.action)
+          else
+            dump()
+          end
         elseif type(item.action) == 'function' then
           item.action()
         end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
-    api.nvim_buf_add_highlight(config.bufnr, 0, item.group, first_line, start, _end)
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      item.group or 'DashboardShortCut',
+      first_line,
+      start,
+      _end
+    )
     start = _end + 2
   end
 end
