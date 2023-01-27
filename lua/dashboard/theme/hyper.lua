@@ -301,6 +301,33 @@ local function gen_footer(config)
   end
 end
 
+local function project_delete()
+  api.nvim_create_user_command('DbProjectDelete', function(args)
+    local path = utils.path_join(vim.fn.stdpath('cache'), 'dashboard', 'cache')
+    utils.async_read(
+      path,
+      vim.schedule_wrap(function(data)
+        local dump = assert(loadstring(data))
+        local list = dump()
+        local count = tonumber(args.args)
+        if vim.tbl_count(list) < count then
+          return
+        end
+        list = vim.list_slice(list, count + 1)
+        local str = string.dump(assert(loadstring('return ' .. vim.inspect(list))))
+        local handle = io.open(path, 'w+')
+        if not handle then
+          return
+        end
+        handle:write(str)
+        handle:close()
+      end)
+    )
+  end, {
+    nargs = '+',
+  })
+end
+
 local function theme_instance(config)
   project_list(config, function(plist)
     require('dashboard.theme.header').generate_header(config)
@@ -312,6 +339,7 @@ local function theme_instance(config)
     vim.bo[config.bufnr].modifiable = false
     require('dashboard.events').register_lsp_root(config.path)
   end)
+  project_delete()
 end
 
 return setmetatable({}, {
