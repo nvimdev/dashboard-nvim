@@ -111,7 +111,7 @@ end
 
 ---@private
 local function theme_instance(config)
-  utils.generate_header(config)
+  require('dashboard.theme.header').generate_header(config)
   generate_center(config)
   generate_footer(config)
 end

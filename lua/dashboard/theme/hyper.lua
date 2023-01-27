@@ -292,7 +292,7 @@ end
 
 local function theme_instance(config)
   project_list(config, function(plist)
-    utils.generate_header(config)
+    require('dashboard.theme.header').generate_header(config)
     gen_shortcut(config)
     load_packages(config)
     gen_center(plist, config)

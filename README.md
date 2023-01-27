@@ -64,7 +64,14 @@ preview = {
 
 ## Theme config
 
-the `config` field is used for theme.
+the `config` field is used for theme. general field
+
+```lua
+config = {
+  header -- type is table
+  use_week_header  -- type is boolean then the header will be day in week changed every day
+}
+```
 
 ### Hyper
 
@@ -72,7 +79,6 @@ when use `hyper` theme the available options in `config` is
 
 ```lua
 config = {
-  header = {}, -- ascii text in there
   shortcut = {
     -- action can be a function type
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
@@ -91,7 +97,6 @@ when use `doom` theme the available options in `config` is
 
 ```lua
 config = {
-  header = {},
   center = {
     {
       icon = '',

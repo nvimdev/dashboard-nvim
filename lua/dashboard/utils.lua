@@ -49,41 +49,6 @@ function utils.center_align(tbl)
   return centered_lines
 end
 
-function utils.generate_header(config)
-  local default = {
-    '',
-    ' ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  ',
-    ' ██╔══██╗██╔══██╗██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██╔══██╗ ',
-    ' ██║  ██║███████║███████╗███████║██████╔╝██║   ██║███████║██████╔╝██║  ██║ ',
-    ' ██║  ██║██╔══██║╚════██║██╔══██║██╔══██╗██║   ██║██╔══██║██╔══██╗██║  ██║ ',
-    ' ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ',
-    ' ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ',
-    '',
-  }
-
-  if not vim.bo[config.bufnr].modifiable then
-    vim.bo[config.bufnr].modifiable = true
-  end
-  if not config.command then
-    local header = config.header or default
-    api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
-
-    for i, _ in ipairs(header) do
-      vim.api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardHeader', i - 1, 0, -1)
-    end
-    return
-  end
-
-  local empty_table = utils.generate_empty_table(config.file_height + 4)
-  api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
-  local preview = require('dashboard.preview')
-  preview:open_preview({
-    width = config.file_width,
-    height = config.file_height,
-    cmd = config.command .. ' ' .. config.file_path,
-  })
-end
-
 function utils.get_icon(ft)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
