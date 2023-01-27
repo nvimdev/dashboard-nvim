@@ -89,8 +89,8 @@ config = {
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
   -- limit how many projects list, action when you press key or enter it will run this action.
-  project = { limit = 8, icon = 'your icon', action = 'Telescope find_files cwd=' },
-  mru = { limit = 10, icon = 'your icon' },
+  project = { limit = 8, icon = 'your icon', label = 'your label', action = 'Telescope find_files cwd=' },
+  mru = { limit = 10, icon = 'your icon', label = 'your label' },
   footer = {}, -- footer
 }
 ```

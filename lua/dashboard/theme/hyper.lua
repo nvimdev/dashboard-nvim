@@ -89,6 +89,7 @@ local function project_list(config, callback)
     icon = ' ',
     icon_hl = 'DashboardRecentProjectIcon',
     action = 'Telescope find_files cwd=',
+    label = ' Recent Projects: ',
   }, config.project or {})
 
   local res = {}
@@ -112,7 +113,7 @@ local function project_list(config, callback)
         reverse(res)
       end
       table.insert(res, 1, '')
-      table.insert(res, 2, config.project.icon .. ' Recently Projects: ')
+      table.insert(res, 2, config.project.icon .. config.project.label)
       table.insert(res, '')
       callback(res)
     end)
@@ -124,10 +125,11 @@ local function mru_list(config)
     icon = ' ',
     limit = 10,
     icon_hl = 'DashboardMruIcon',
+    label = ' Most Recent Files: ',
   }, config.mru or {})
 
   local list = {
-    config.mru.icon .. ' Most Recent Files: ',
+    config.mru.icon .. config.mru.label,
   }
 
   local groups = {}
