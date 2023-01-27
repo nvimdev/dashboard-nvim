@@ -3,16 +3,12 @@ local utils = require('dashboard.utils')
 
 local function generate_center(config)
   local lines = {}
-  local fill_space = (' '):rep(math.floor(vim.o.columns / 3))
   for _, item in
     pairs(config.center or {
       { desc = 'Please config your own center section', key = 'p' },
     })
   do
-    table.insert(
-      lines,
-      item.icon and item.icon .. item.desc .. fill_space or item.desc .. fill_space
-    )
+    table.insert(lines, item.icon and item.icon .. item.desc or item.desc)
     table.insert(lines, '')
     if item.key then
       vim.keymap.set('n', item.key, function()
