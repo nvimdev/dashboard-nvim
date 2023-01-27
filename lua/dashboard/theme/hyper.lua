@@ -35,7 +35,7 @@ local function gen_shortcut(config)
         if type(item.action) == 'string' then
           vim.cmd(item.action)
         elseif type(item.action) == 'function' then
-          vim.cmd(item.action())
+          item.action()
         end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
