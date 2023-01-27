@@ -67,7 +67,6 @@ local function load_packages(config)
   local lines = {
     '',
     'neovim loaded ' .. utils.get_packages_count() .. ' packages',
-    '',
   }
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
@@ -112,7 +111,8 @@ local function project_list(config, callback)
       else
         reverse(res)
       end
-      table.insert(res, 1, config.project.icon .. ' Recently Projects: ')
+      table.insert(res, 1, '')
+      table.insert(res, 2, config.project.icon .. ' Recently Projects: ')
       table.insert(res, '')
       callback(res)
     end)
@@ -217,7 +217,7 @@ local function gen_center(plist, config)
 
   local hotkey = gen_hotkey(config)
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
-  for i = 2, plist_len do
+  for i = 3, plist_len do
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
@@ -246,7 +246,7 @@ local function gen_center(plist, config)
   end
 
   -- initialize the cursor pos
-  api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
+  api.nvim_win_set_cursor(config.winid, { first_line + 3, start_col + 4 })
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardMruTitle', first_line + plist_len, 0, -1)
   api.nvim_buf_add_highlight(
