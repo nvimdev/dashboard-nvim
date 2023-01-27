@@ -1,4 +1,4 @@
-local api, uv, keymap = vim.api, vim.loop, vim.keymap
+local api, keymap = vim.api, vim.keymap
 local utils = require('dashboard.utils')
 local ns = api.nvim_create_namespace('dashboard')
 
@@ -157,9 +157,9 @@ local function gen_hotkey(config)
   end
 end
 
-local function map_key(config, key, text)
+local function map_key(config, key, content)
   keymap.set('n', key, function()
-    text = text or api.nvim_get_current_line()
+    local text = content or api.nvim_get_current_line()
     local scol = text:find('%p')
     text = text:sub(scol)
     local tbl = vim.split(text, '%s', { trimempty = true })
