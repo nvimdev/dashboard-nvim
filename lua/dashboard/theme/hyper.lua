@@ -76,6 +76,8 @@ end
 local function project_list(config, callback)
   config.project = vim.tbl_extend('force', {
     limit = 8,
+    icon = ' ',
+    icon_hl = 'DashboardRecentProjectIcon',
     action = 'Telescope find_files cwd=',
   }, config.project or {})
 
@@ -99,7 +101,7 @@ local function project_list(config, callback)
       else
         reverse(res)
       end
-      table.insert(res, 1, '異 Recently Projects: ')
+      table.insert(res, 1, config.project.icon .. ' Recently Projects: ')
       table.insert(res, '')
       callback(res)
     end)
@@ -108,11 +110,13 @@ end
 
 local function mru_list(config)
   config.mru = vim.tbl_extend('force', {
+    icon = ' ',
     limit = 10,
+    icon_hl = 'DashboardMruIcon',
   }, config.mru or {})
 
   local list = {
-    '  Most Recent Files: ',
+    config.mru.icon .. ' Most Recent Files: ',
   }
 
   local groups = {}
@@ -181,7 +185,16 @@ local function gen_center(plist, config)
   plist = utils.center_align(plist)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentProject', first_line, 0, -1)
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line, 0, -1)
+  local _, scol = plist[1]:find('%s+')
+  api.nvim_buf_add_highlight(
+    config.bufnr,
+    0,
+    'DashboardProjectTitleIcon',
+    first_line,
+    0,
+    scol + #config.project.icon
+  )
 
   local hotkey = gen_hotkey(config)
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
@@ -216,7 +229,16 @@ local function gen_center(plist, config)
   -- initialize the cursor pos
   api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
 
-  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardRecentTitle', first_line + plist_len, 0, -1)
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardMruTitle', first_line + plist_len, 0, -1)
+  api.nvim_buf_add_highlight(
+    config.bufnr,
+    0,
+    'DashboardMruIcon',
+    first_line + plist_len,
+    0,
+    scol + #config.mru.icon
+  )
+
   for i, data in pairs(mgroups) do
     local len, group = unpack(data)
     api.nvim_buf_add_highlight(

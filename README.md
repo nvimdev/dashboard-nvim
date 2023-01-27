@@ -78,8 +78,9 @@ config = {
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
-  project = { limit = 8, action = 'Telescope find_files cwd=' }, -- limit how many projects list, action when you press key or enter it will run this action.
-  mru = { limit = 10 }, -- how many files in list
+  -- limit how many projects list, action when you press key or enter it will run this action.
+  project = { limit = 8, icon = 'your icon', action = 'Telescope find_files cwd=' },
+  mru = { limit = 10, icon = 'your icon' },
   footer = {}, -- footer
 }
 ```
@@ -114,8 +115,12 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 all highlight groups
 
 ```
-DashboardHeader DashboardFooter DashboardProjectIcon
-DashboardFiles DashboardRecentTitle DashboardRecentProject
+-- General
+DashboardHeader DashboardFooter
+-- Hyper theme
+DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
+DashboardMruTitle DashboardMruIcon DashboardFiles 
+-- Doome theme
 DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
 
@@ -176,11 +181,8 @@ db.setup({
       },
       {
         icon = ' ',
-        icon_hi = 'Title',
         desc = 'Find Dotfiles',
-        desc_hi = 'String',
         key = 'f',
-        key_hi = 'Number',
         action = 'lua print(3)'
       },
     }
