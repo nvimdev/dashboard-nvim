@@ -104,7 +104,8 @@ local function generate_header(config)
     vim.bo[config.bufnr].modifiable = true
   end
   if not config.command then
-    local header = config.week_header.enable
+    local header = config.week_header
+        and config.week_header.enable
         and week_header(config.week_header.concat, config.week_header.append)
       or (config.header or default_header())
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
