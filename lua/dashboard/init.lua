@@ -39,7 +39,7 @@ local function default_options()
         enable = false,
         concat = nil,
         append = nil,
-      }
+      },
     },
     hide = {
       statusline = true,
