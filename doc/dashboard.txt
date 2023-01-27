@@ -149,6 +149,13 @@ notice if you don’t link config every highlight group. you can ignore this
 key. dashboard will use default highlight group like `DashboardKey/Icon/Desc`
 instead
 
+COMMANDS ~
+
+
+- `Dashboard` open dashboard
+- `DbProjectDelete count` delete project in cache works for hyper theme. count is number
+
+
 HIGHLIGHT ~
 
 all highlight groups
