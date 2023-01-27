@@ -56,7 +56,6 @@ local function load_packages(config)
     '',
     'neovim loaded ' .. utils.get_packages_count() .. ' packages',
     '',
-    '',
   }
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
@@ -166,6 +165,7 @@ local function map_key(config, key, text)
     local tbl = vim.split(text, '%s', { trimempty = true })
     local path = tbl[#tbl]
     path = vim.fs.normalize(path)
+    path = vim.fn.fnameescape(path)
     if vim.fn.isdirectory(path) == 1 then
       vim.cmd(config.project.action .. path)
     else
