@@ -94,8 +94,12 @@ the `config` field is used for theme. general field
 
 >
     config = {
-      header -- type is table
-      use_week_header  -- type is boolean then the header will be day in week changed every day
+      header -- type is table def
+      week_header = {
+        enable  --boolean use a week header
+        concat  --concat string after time string line
+        append  --table append after time string line
+      }
     }
 <
 
@@ -170,6 +174,9 @@ Hyper
       db.setup({
         theme = 'hyper',
         config = {
+          week_header = {
+           enable = true,
+          },
           shortcut = {
             { desc = ' Update', group = '@property', action = 'Lazy update', key = 'u' },
             {
