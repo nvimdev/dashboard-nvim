@@ -165,7 +165,7 @@ local function map_key(config, key, content)
     local tbl = vim.split(text, '%s', { trimempty = true })
     local path = tbl[#tbl]
     path = vim.fs.normalize(path)
-    path = vim.fn.fnameescape(path)
+    path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
       vim.cmd(config.project.action .. path)
     else
