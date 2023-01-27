@@ -32,7 +32,11 @@ local function gen_shortcut(config)
     if item.key then
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
-        vim.cmd(item.action)
+        if type(item.action) == 'string' then
+          vim.cmd(item.action)
+        elseif type(item.action) == 'function' then
+          vim.cmd(item.action())
+        end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
     api.nvim_buf_add_highlight(config.bufnr, 0, item.group, first_line, start, _end)

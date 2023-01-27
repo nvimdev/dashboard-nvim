@@ -74,6 +74,7 @@ when use `hyper` theme the available options in `config` is
 config = {
   header = {}, -- ascii text in there
   shortcut = {
+    -- action can be a function type
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
