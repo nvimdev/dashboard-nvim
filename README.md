@@ -4,7 +4,7 @@
 
 | <center>Hyper</center> | <center>Doom</center> |
 | ---   | ---   |
-| <center><img src="https://user-images.githubusercontent.com/41671631/213870957-ee345d45-7e5e-41ba-bdf3-c371e65544b9.png" width=80% height=80%/></center>|<center> <img src="https://user-images.githubusercontent.com/41671631/214518543-d7d6afbf-f405-4a6f-a505-568c5a101e92.png" width=80% height=80%/> </center>|
+| <center><img src="https://user-images.githubusercontent.com/41671631/215013525-58aba397-03f8-4f48-8af7-ecf7f3134de9.png" width=80% height=80%/></center>|<center> <img src="https://user-images.githubusercontent.com/41671631/214518543-d7d6afbf-f405-4a6f-a505-568c5a101e92.png" width=80% height=80%/> </center>|
 
 # Feature
 

@@ -90,7 +90,10 @@ end
 
 local function week_header()
   local week = week_ascii_text()
-  return week[os.date('%A')]
+  local tbl = week[os.date('%A')]
+  table.insert(tbl, os.date('%Y-%m-%d %H:%M:%S'))
+  table.insert(tbl, '')
+  return tbl
 end
 
 local function generate_header(config)
