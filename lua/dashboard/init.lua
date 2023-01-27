@@ -103,7 +103,7 @@ function db:cache_ui_options(opts)
     vim.opt.laststatus = 0
   end
   if opts.hide.tabline then
-    self.user_tabline_value = vim.opt.tabline:get()
+    self.user_tabline_value = vim.opt.showtabline:get()
     vim.opt.showtabline = 0
   end
 end
