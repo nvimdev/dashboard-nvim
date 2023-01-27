@@ -25,6 +25,18 @@ function utils.element_align(tbl)
   return res
 end
 
+function utils.get_max_len(contents)
+  vim.validate({
+    contents = { contents, 't' },
+  })
+  local cells = {}
+  for _, v in pairs(contents) do
+    table.insert(cells, vim.api.nvim_strwidth(v))
+  end
+  table.sort(cells)
+  return cells[#cells]
+end
+
 -- draw the graphics into the screen center
 function utils.center_align(tbl)
   vim.validate({

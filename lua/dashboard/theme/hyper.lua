@@ -191,6 +191,14 @@ local function gen_center(plist, config)
   local plist_len = #plist
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.list_extend(plist, mlist)
+  local max_len = utils.get_max_len(plist)
+  if max_len <= math.floor(vim.o.columns / 2) then
+    local fill = (' '):rep(math.floor(vim.o.columns / 4))
+    for i, v in pairs(plist) do
+      plist[i] = v .. fill
+    end
+  end
+
   plist = utils.element_align(plist)
   local first_line = api.nvim_buf_line_count(config.bufnr)
   plist = utils.center_align(plist)
