@@ -90,7 +90,15 @@ OPTIONS                                                    *dashboard-options*
 
 THEME CONFIG                                          *dashboard-theme-config*
 
-the `config` field is used for theme.
+the `config` field is used for theme. general field
+
+>
+    config = {
+      header -- type is table
+      use_week_header  -- type is boolean then the header will be day in week changed every day
+    }
+<
+
 
 HYPER ~
 
@@ -98,7 +106,6 @@ when use `hyper` theme the available options in `config` is
 
 >
     config = {
-      header = {}, -- ascii text in there
       shortcut = {
         -- action can be a function type
         { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
@@ -118,7 +125,6 @@ when use `doom` theme the available options in `config` is
 
 >
     config = {
-      header = {},
       center = {
         {
           icon = '',
