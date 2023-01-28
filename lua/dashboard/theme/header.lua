@@ -90,7 +90,10 @@ end
 
 local function week_header(concat, append)
   local week = week_ascii_text()
-  local tbl = week[os.date('%A')]
+  local daysoftheweek =
+    { 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thrusday', 'Friday', 'Saturday' }
+  local day = daysoftheweek[os.date('*t').wday]
+  local tbl = week[day]
   table.insert(tbl, os.date('%Y-%m-%d %H:%M:%S ') .. (concat or ''))
   if append then
     vim.list_extend(tbl, append)
