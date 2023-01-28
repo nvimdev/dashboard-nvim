@@ -206,7 +206,6 @@ local function gen_center(plist, config)
   plist = utils.center_align(plist)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  print(first_line)
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line + 1, 0, -1)
   local _, scol = plist[2]:find('%s+')
   api.nvim_buf_add_highlight(
