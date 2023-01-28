@@ -41,7 +41,7 @@ local function generate_center(config)
         api.nvim_buf_add_highlight(
           config.bufnr,
           0,
-          config.center[idx].icon_hi or 'DashboardIcon',
+          config.center[idx].icon_hl or 'DashboardIcon',
           first_line + i - 1,
           0,
           ecol
@@ -51,7 +51,7 @@ local function generate_center(config)
       api.nvim_buf_add_highlight(
         config.bufnr,
         0,
-        config.center[idx].desc_hi or 'DashboardDesc',
+        config.center[idx].desc_hl or 'DashboardDesc',
         first_line + i - 1,
         ecol,
         -1
@@ -62,7 +62,10 @@ local function generate_center(config)
         if config.center[idx].keymap then
           table.insert(virt_tbl, { config.center[idx].keymap, 'DashboardShortCut' })
         end
-        table.insert(virt_tbl, { ' [' .. config.center[idx].key .. ']', 'DashboardKey' })
+        table.insert(
+          virt_tbl,
+          { ' [' .. config.center[idx].key .. ']', config.center[idx].key_hl or 'DashboardKey' }
+        )
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
           virt_text_pos = 'eol',
           virt_text = virt_tbl,
