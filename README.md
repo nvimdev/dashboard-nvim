@@ -73,7 +73,8 @@ config = {
     enable  --boolean use a week header
     concat  --concat string after time string line
     append  --table append after time string line
-  }
+  },
+  disable_move  -- boolean default is false disable move key
 }
 ```
 

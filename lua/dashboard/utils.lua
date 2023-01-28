@@ -94,6 +94,13 @@ function utils.async_read(path, callback)
   end)
 end
 
+function utils.disable_move_key(bufnr)
+  local keys = { 'w', 'f', 'b', 'h', 'j', 'k', 'l', '<Up>', '<Down>', '<Left>', '<Right>' }
+  vim.tbl_map(function(k)
+    vim.keymap.set('n', k, '<Nop>', { buffer = bufnr })
+  end, keys)
+end
+
 --- return the most recently files list
 function utils.get_mru_list()
   local mru = {}

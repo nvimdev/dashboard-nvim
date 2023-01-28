@@ -41,6 +41,7 @@ local function default_options()
         append = nil,
       },
     },
+    disable_move = false,
     hide = {
       statusline = true,
       tabline = true,
