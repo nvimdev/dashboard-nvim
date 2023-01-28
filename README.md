@@ -193,7 +193,7 @@ db.setup({
         desc = 'Find File',
         desc_hi = 'String',
         key = 'b',
-        keymap = 'SPC f f'
+        keymap = 'SPC f f',
         key_hi = 'Number',
         action = 'lua print(2)'
       },
@@ -201,7 +201,7 @@ db.setup({
         icon = ' ',
         desc = 'Find Dotfiles',
         key = 'f',
-        keymap = 'SPC f d'
+        keymap = 'SPC f d',
         action = 'lua print(3)'
       },
     }
