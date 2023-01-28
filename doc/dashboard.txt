@@ -1,4 +1,4 @@
-*dashboard.txt*           For Nvim 0.8.0          Last change: 2023 January 27
+*dashboard.txt*           For Nvim 0.8.0          Last change: 2023 January 28
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -116,8 +116,8 @@ when use `hyper` theme the available options in `config` is
       },
       packages = { enable = true }, -- show how many plugins neovim loaded
       -- limit how many projects list, action when you press key or enter it will run this action.
-      project = { limit = 8, icon = 'your icon', action = 'Telescope find_files cwd=' },
-      mru = { limit = 10, icon = 'your icon' },
+      project = { limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
+      mru = { limit = 10, icon = 'your icon', label = '', },
       footer = {}, -- footer
     }
 <
