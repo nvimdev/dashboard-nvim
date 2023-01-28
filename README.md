@@ -190,12 +190,12 @@ db.setup({
     center = {
       {
         icon = ' ',
-        icon_hi = 'Title',
+        icon_hl = 'Title',
         desc = 'Find File',
-        desc_hi = 'String',
+        desc_hl = 'String',
         key = 'b',
         keymap = 'SPC f f',
-        key_hi = 'Number',
+        key_hl = 'Number',
         action = 'lua print(2)'
       },
       {
