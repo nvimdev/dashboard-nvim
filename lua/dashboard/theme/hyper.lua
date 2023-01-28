@@ -67,7 +67,6 @@ local function load_packages(config)
   local lines = {
     '',
     'neovim loaded ' .. utils.get_packages_count() .. ' packages',
-    '',
   }
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
@@ -90,6 +89,7 @@ local function project_list(config, callback)
     icon = ' ',
     icon_hl = 'DashboardRecentProjectIcon',
     action = 'Telescope find_files cwd=',
+    label = ' Recent Projects:',
   }, config.project or {})
 
   local res = {}
@@ -112,7 +112,8 @@ local function project_list(config, callback)
       else
         reverse(res)
       end
-      table.insert(res, 1, config.project.icon .. ' Recently Projects: ')
+      table.insert(res, 1, config.project.icon .. config.project.label)
+      table.insert(res, 1, '')
       table.insert(res, '')
       callback(res)
     end)
@@ -124,10 +125,11 @@ local function mru_list(config)
     icon = ' ',
     limit = 10,
     icon_hl = 'DashboardMruIcon',
+    label = ' Most Recent Files:',
   }, config.mru or {})
 
   local list = {
-    config.mru.icon .. ' Most Recent Files: ',
+    config.mru.icon .. config.mru.label,
   }
 
   local groups = {}
@@ -192,7 +194,7 @@ local function gen_center(plist, config)
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.list_extend(plist, mlist)
   local max_len = utils.get_max_len(plist)
-  if max_len <= math.ceil(vim.o.columns / 3) and vim.o.columns < 100 then
+  if max_len <= 40 then
     local fill = (' '):rep(math.floor(vim.o.columns / 4))
     for i, v in pairs(plist) do
       plist[i] = v .. fill
@@ -204,20 +206,21 @@ local function gen_center(plist, config)
   plist = utils.center_align(plist)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line, 0, -1)
-  local _, scol = plist[1]:find('%s+')
+  print(first_line)
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line + 1, 0, -1)
+  local _, scol = plist[2]:find('%s+')
   api.nvim_buf_add_highlight(
     config.bufnr,
     0,
     'DashboardProjectTitleIcon',
-    first_line,
+    first_line + 1,
     0,
     scol + #config.project.icon
   )
 
   local hotkey = gen_hotkey(config)
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
-  for i = 2, plist_len do
+  for i = 3, plist_len do
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
@@ -246,7 +249,7 @@ local function gen_center(plist, config)
   end
 
   -- initialize the cursor pos
-  api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
+  api.nvim_win_set_cursor(config.winid, { first_line + 3, start_col + 4 })
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardMruTitle', first_line + plist_len, 0, -1)
   api.nvim_buf_add_highlight(
