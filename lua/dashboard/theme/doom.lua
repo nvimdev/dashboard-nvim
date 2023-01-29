@@ -10,10 +10,17 @@ local function generate_center(config)
   do
     table.insert(lines, item.icon and item.icon .. item.desc or item.desc)
     table.insert(lines, '')
-    if item.key then
+    if item.key and type(item.action) == 'string' then
       vim.keymap.set('n', item.key, function()
         vim.cmd(item.action)
       end, { buffer = config.bufnr, nowait = true, silent = true })
+    elseif item.key and type(item.action) == "function" then
+        vim.keymap.set(
+           'n',
+           item.key,
+           item.action,
+          { buffer = config.bufnr, nowait = true, silent = true }
+        )
     end
   end
   lines = utils.element_align(lines)
@@ -102,7 +109,13 @@ local function generate_center(config)
     local curline = api.nvim_win_get_cursor(0)[1]
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
-      vim.cmd(config.center[index].action)
+      if type(config.center[index].action) == 'string' then
+        vim.cmd(config.center[index].action)
+      elseif type(config.center[index].action) == 'function' then
+        config.center[index].action()
+      else
+        print('Error with action, check your config')
+      end
     end
   end, { buffer = config.bufnr, nowait = true, silent = true })
 end
