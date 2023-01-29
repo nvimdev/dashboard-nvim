@@ -1,13 +1,28 @@
 local api = vim.api
 local utils = require('dashboard.utils')
 
+local function align_desc(center)
+  local descs = {}
+  vim.tbl_map(function(k)
+    table.insert(descs, k.desc)
+  end, center)
+
+  descs = utils.element_align(descs)
+  for i, item in pairs(center) do
+    item.desc = descs[i]
+  end
+end
+
 local function generate_center(config)
   local lines = {}
-  for _, item in
-    pairs(config.center or {
+  local center = config.center
+    or {
       { desc = 'Please config your own center section', key = 'p' },
-    })
-  do
+    }
+
+  align_desc(config.center)
+
+  for _, item in pairs(center) do
     local line = (item.icon or '') .. item.desc
     if item.key then
       line = line .. (' '):rep(3)
