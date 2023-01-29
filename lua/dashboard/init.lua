@@ -135,6 +135,16 @@ function db:cache_opts()
     end
   end
 
+  if self.opts.config.center then
+    for _, item in pairs(self.opts.config.center) do
+      if type(item.action) == 'function' then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        local dump = assert(string.dump(item.action))
+        item.action = dump
+      end
+    end
+  end
+
   local dump = vim.json.encode(self.opts)
   uv.fs_open(path, 'w+', tonumber('664', 8), function(err, fd)
     assert(not err, err)

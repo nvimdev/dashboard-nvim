@@ -12,7 +12,12 @@ local function generate_center(config)
     table.insert(lines, '')
     if item.key and type(item.action) == 'string' then
       vim.keymap.set('n', item.key, function()
-        vim.cmd(item.action)
+        local dump = loadstring(item.action)
+        if not dump then
+          vim.cmd(item.action)
+        else
+          dump()
+        end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     elseif item.key and type(item.action) == 'function' then
       vim.keymap.set(
@@ -110,7 +115,12 @@ local function generate_center(config)
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
       if type(config.center[index].action) == 'string' then
-        vim.cmd(config.center[index].action)
+        local dump = loadstring(config.center[index].action)
+        if not dump then
+          vim.cmd(config.center[index].action)
+        else
+          dump()
+        end
       elseif type(config.center[index].action) == 'function' then
         config.center[index].action()
       else
