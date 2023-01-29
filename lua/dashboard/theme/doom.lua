@@ -8,26 +8,35 @@ local function generate_center(config)
       { desc = 'Please config your own center section', key = 'p' },
     })
   do
-    table.insert(lines, item.icon and item.icon .. item.desc or item.desc)
-    table.insert(lines, '')
-    if item.key and type(item.action) == 'string' then
-      vim.keymap.set('n', item.key, function()
-        local dump = loadstring(item.action)
-        if not dump then
-          vim.cmd(item.action)
-        else
-          dump()
-        end
-      end, { buffer = config.bufnr, nowait = true, silent = true })
-    elseif item.key and type(item.action) == 'function' then
-      vim.keymap.set(
-        'n',
-        item.key,
-        item.action,
-        { buffer = config.bufnr, nowait = true, silent = true }
-      )
+    local line = (item.icon or '') .. item.desc
+    if item.key then
+      line = line .. (' '):rep(3)
+      if type(item.action) == 'string' then
+        vim.keymap.set('n', item.key, function()
+          local dump = loadstring(item.action)
+          if not dump then
+            vim.cmd(item.action)
+          else
+            dump()
+          end
+        end, { buffer = config.bufnr, nowait = true, silent = true })
+      elseif type(item.action) == 'function' then
+        vim.keymap.set(
+          'n',
+          item.key,
+          item.action,
+          { buffer = config.bufnr, nowait = true, silent = true }
+        )
+      end
     end
+
+    if item.keymap then
+      line = line .. (' '):rep(#item.keymap)
+    end
+    table.insert(lines, line)
+    table.insert(lines, '')
   end
+
   lines = utils.element_align(lines)
   lines = utils.center_align(lines)
 

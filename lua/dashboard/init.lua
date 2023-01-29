@@ -245,7 +245,7 @@ end
 
 function db.setup(opts)
   opts = opts or {}
-  ctx.opts = vim.tbl_extend('force', default_options(), opts)
+  ctx.opts = vim.tbl_deep_extend('force', default_options(), opts)
 end
 
 return setmetatable(ctx, db)
