@@ -21,7 +21,6 @@ local function generate_center(config)
            item.action,
           { buffer = config.bufnr, nowait = true, silent = true }
       )
-      { buffer = config.bufnr, nowait = true, silent = true })
     end
   end
   lines = utils.element_align(lines)
