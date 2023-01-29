@@ -110,7 +110,7 @@ local function generate_center(config)
       elseif type(config.center[index].action) == 'function' then
         config.center[index].action()
       else
-        print("Error with action, check your config")
+        print('Error with action, check your config')
       end
     end
   end, { buffer = config.bufnr, nowait = true, silent = true })
