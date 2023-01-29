@@ -10,7 +10,7 @@ local function generate_center(config)
   do
     table.insert(lines, item.icon and item.icon .. item.desc or item.desc)
     table.insert(lines, '')
-    if item.key and type(item.action) == "string" then
+    if item.key and type(item.action) == 'string' then
       vim.keymap.set('n', item.key, function()
         vim.cmd(item.action)
       end, { buffer = config.bufnr, nowait = true, silent = true })
