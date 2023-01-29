@@ -107,7 +107,7 @@ local function generate_center(config)
     if index and config.center[index].action then
       if type(config.center[index].action) == "string" then
         vim.cmd(config.center[index].action)
-      elseif type(config.center[index].action) == "function" then
+      elseif type(config.center[index].action) == 'function' then
         config.center[index].action()
       else
         print("Error with action, check your config")
