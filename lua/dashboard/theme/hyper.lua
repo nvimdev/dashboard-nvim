@@ -297,11 +297,10 @@ local function gen_center(plist, config)
 end
 
 local function gen_footer(config)
-  local footer = vim.tbl_extend('force', {
-    '',
+  local footer = config.footer or {
     '',
     ' 🚀 Sharp tools make good work.',
-  }, config.footer or {})
+  }
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
