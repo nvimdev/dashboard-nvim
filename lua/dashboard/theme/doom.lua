@@ -20,7 +20,7 @@ local function generate_center(config)
            item.key,
            item.action,
           { buffer = config.bufnr, nowait = true, silent = true }
-      )
+        )
     end
   end
   lines = utils.element_align(lines)
