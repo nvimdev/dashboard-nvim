@@ -15,7 +15,12 @@ local function generate_center(config)
         vim.cmd(item.action)
       end, { buffer = config.bufnr, nowait = true, silent = true })
     elseif item.key and type(item.action) == "function" then
-      vim.keymap.set('n', item.key, item.action,
+        vim.keymap.set(
+           'n',
+           item.key,
+           item.action,
+          { buffer = config.bufnr, nowait = true, silent = true }
+      )
       { buffer = config.bufnr, nowait = true, silent = true })
     end
   end
