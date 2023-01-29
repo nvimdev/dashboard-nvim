@@ -105,7 +105,7 @@ local function generate_center(config)
     local curline = api.nvim_win_get_cursor(0)[1]
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
-      if type(config.center[index].action) == "string" then
+      if type(config.center[index].action) == 'string' then
         vim.cmd(config.center[index].action)
       elseif type(config.center[index].action) == 'function' then
         config.center[index].action()
