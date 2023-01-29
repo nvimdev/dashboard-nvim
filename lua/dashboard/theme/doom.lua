@@ -14,13 +14,13 @@ local function generate_center(config)
       vim.keymap.set('n', item.key, function()
         vim.cmd(item.action)
       end, { buffer = config.bufnr, nowait = true, silent = true })
-    elseif item.key and type(item.action) == "function" then
-        vim.keymap.set(
-           'n',
-           item.key,
-           item.action,
-          { buffer = config.bufnr, nowait = true, silent = true }
-        )
+    elseif item.key and type(item.action) == 'function' then
+      vim.keymap.set(
+        'n',
+        item.key,
+        item.action,
+        { buffer = config.bufnr, nowait = true, silent = true }
+      )
     end
   end
   lines = utils.element_align(lines)
