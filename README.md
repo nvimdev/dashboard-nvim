@@ -205,7 +205,7 @@ db.setup({
         keymap = 'SPC f d',
         action = 'lua print(3)'
       },
-    }
+    },
     footer = {}  --your footer
   }
 })
