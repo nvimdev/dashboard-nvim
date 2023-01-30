@@ -90,15 +90,13 @@ config = {
   },
   packages = { 
     enable = true, -- show how many plugins neovim loaded
-    top_padding = 1,
-    bottom_padding = 1
+    top_padding = 1, -- Adds padding above the loaded packages message.
+    bottom_padding = 1 -- Adds padding below the loaded packages message.
   }, 
   -- limit how many projects list, action when you press key or enter it will run this action.
   project = { limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
-  loaded_top_padding = 1, -- Adds padding above the loaded packages message.
-  loaded_bottom_padding = 1, -- Adds padding below the loaded packages message.
 }
 ```
 
