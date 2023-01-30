@@ -144,4 +144,23 @@ function utils.generate_truncateline(cells)
   return char:rep(math.floor(cells / vim.api.nvim_strwidth(char)))
 end
 
+--- Add padding to the table.
+---@param tbl Table Table to be padded.
+---@param pad_element any Element to be used for padding.
+---@param count any Amount of padding elements to add.
+---@param front boolean Should padding be added to front of the table?
+---@return any Return The table passed in.
+function utils.pad(tbl, pad_element, count, front)
+    if front then
+        for _ = 1,count do
+            table.insert(tbl, 1, pad_element)
+        end
+    else
+        for _ = 1,count do
+            table.insert(tbl, pad_element)
+        end
+    end
+    return tbl
+end
+
 return utils
