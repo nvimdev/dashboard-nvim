@@ -88,11 +88,17 @@ config = {
     -- action can be a function type
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
-  packages = { enable = true }, -- show how many plugins neovim loaded
+  packages = { 
+    enable = true, -- show how many plugins neovim loaded
+    top_padding = 1,
+    bottom_padding = 1
+  }, 
   -- limit how many projects list, action when you press key or enter it will run this action.
   project = { limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
+  loaded_top_padding = 1, -- Adds padding above the loaded packages message.
+  loaded_bottom_padding = 1, -- Adds padding below the loaded packages message.
 }
 ```
 
