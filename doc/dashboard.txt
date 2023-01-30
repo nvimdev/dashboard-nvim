@@ -222,7 +222,7 @@ Doom
           {
             icon = ' ',
             icon_hl = 'Title',
-            desc = 'Find File',
+            desc = 'Find File           ',
             desc_hl = 'String',
             key = 'b',
             keymap = 'SPC f f',
@@ -236,7 +236,7 @@ Doom
             keymap = 'SPC f d',
             action = 'lua print(3)'
           },
-        }
+        },
         footer = {}  --your footer
       }
     })
