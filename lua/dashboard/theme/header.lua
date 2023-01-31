@@ -73,9 +73,8 @@ local function default_header()
 end
 
 local function pad_header(config)
-    local pad = require('dashboard.utils').pad
     local bottom_padding = config.header_bottom_padding or 1
-    pad(config.header, '', bottom_padding, false)
+    utils.pad(config.header, '', bottom_padding, false)
 end
 
 local function week_header(concat, append)
