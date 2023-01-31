@@ -302,9 +302,11 @@ end
 
 local function gen_footer(config)
   local footer = config.footer or {
-    '',
     ' 🚀 Sharp tools make good work.',
   }
+
+  local top_padding = config.footer_top_padding or 1
+  utils.pad(config.footer, '', top_padding, true)
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))

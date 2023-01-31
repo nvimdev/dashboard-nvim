@@ -84,7 +84,7 @@ when use `hyper` theme the available options in `config` is
 
 ```lua
 config = {
-  header_bottom_padding = 1,
+  header_bottom_padding = 1, -- Add padding below the header.
   shortcut = {
     -- action can be a function type
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
@@ -98,6 +98,7 @@ config = {
   project = { limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
+  footer_top_padding = 1 -- Add padding above the footer.
 }
 ```
 
