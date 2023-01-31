@@ -299,18 +299,17 @@ local function gen_center(plist, config)
   end
 end
 
-local function gen_footer(config)
-  local footer = config.footer or {
-    ' 🚀 Sharp tools make good work.',
-  }
-
+local function init_footer(config)
+  if not config.footer then config.footer = { ' 🚀 Sharp tools make good work.' } end
   local top_padding = config.footer_top_padding or 1
   utils.pad(config.footer, '', top_padding, true)
+end
 
+local function gen_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(config.footer))
 
-  for i, _ in pairs(footer) do
+  for i, _ in pairs(config.footer) do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i, 0, -1)
   end
 end
@@ -359,8 +358,18 @@ local function theme_instance(config)
   end)
 end
 
-return setmetatable({}, {
+local function init(config)
+    init_footer(config)
+    require('dashboard.theme.header').init_header(config)
+end
+
+local meta_table = setmetatable({}, {
   __call = function(_, t)
     theme_instance(t)
   end,
 })
+
+return {
+    init = init,
+    meta_table = meta_table
+}

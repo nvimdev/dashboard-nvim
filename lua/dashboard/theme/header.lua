@@ -85,30 +85,34 @@ local function week_header(concat, append)
   return tbl
 end
 
-local function generate_header(config)
-  local top_padding = config.header_top_padding or 1
+local function init_header(config)
+  if not config.command then
+    config.header = config.week_header
+        and config.week_header.enable
+        and week_header(config.week_header.concat, config.week_header.append)
+      or (config.header or default_header())
+  end
+
+  local top_padding = config.header_top_padding or
+    math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
   local bottom_padding = config.header_bottom_padding or 1
+  utils.pad(config.header, '', top_padding, true)
+  utils.pad(config.header, '', bottom_padding, false)
+end
+
+local function generate_header(config)
   if not vim.bo[config.bufnr].modifiable then
     vim.bo[config.bufnr].modifiable = true
   end
   if not config.command then
-    local header = config.week_header
-        and config.week_header.enable
-        and week_header(config.week_header.concat, config.week_header.append)
-      or (config.header or default_header())
+    api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(config.header))
 
-    utils.pad(header, '', top_padding, true)
-    utils.pad(header, '', bottom_padding, false)
-    api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
-
-    for i, _ in ipairs(header) do
+    for i, _ in ipairs(config.header) do
       vim.api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardHeader', i - 1, 0, -1)
     end
     return
   end
 
-  utils.pad(config.header, '', top_padding, true)
-  utils.pad(config.header, '', bottom_padding, false)
   local empty_table = utils.generate_empty_table(config.file_height + 4)
   api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
   local preview = require('dashboard.preview')
@@ -121,4 +125,5 @@ end
 
 return {
   generate_header = generate_header,
+  init_header = init_header
 }

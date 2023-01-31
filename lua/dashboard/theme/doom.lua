@@ -175,8 +175,16 @@ local function theme_instance(config)
   api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
 end
 
-return setmetatable({}, {
+local function init(config)
+end
+
+meta_table = setmetatable({}, {
   __call = function(_, t)
     return theme_instance(t)
   end,
 })
+
+return {
+  meta_table = meta_table,
+  init = init
+}
