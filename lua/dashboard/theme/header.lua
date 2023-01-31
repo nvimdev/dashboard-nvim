@@ -82,11 +82,11 @@ local function week_header(concat, append)
   if append then
     vim.list_extend(tbl, append)
   end
-  table.insert(tbl, '')
   return tbl
 end
 
 local function generate_header(config)
+  local top_padding = config.header_top_padding or 1
   local bottom_padding = config.header_bottom_padding or 1
   if not vim.bo[config.bufnr].modifiable then
     vim.bo[config.bufnr].modifiable = true
@@ -97,6 +97,7 @@ local function generate_header(config)
         and week_header(config.week_header.concat, config.week_header.append)
       or (config.header or default_header())
 
+    utils.pad(header, '', top_padding, true)
     utils.pad(header, '', bottom_padding, false)
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
 
@@ -106,6 +107,7 @@ local function generate_header(config)
     return
   end
 
+  utils.pad(config.header, '', top_padding, true)
   utils.pad(config.header, '', bottom_padding, false)
   local empty_table = utils.generate_empty_table(config.file_height + 4)
   api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
