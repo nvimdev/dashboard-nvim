@@ -94,8 +94,6 @@ local function init_header(config)
   end
 
   local top_padding = config.header_top_padding or 1
-  print(api.nvim_buf_line_count(0))
-    -- math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
   local bottom_padding = config.header_bottom_padding or 1
   utils.pad(config.header, '', top_padding, true)
   utils.pad(config.header, '', bottom_padding, false)
