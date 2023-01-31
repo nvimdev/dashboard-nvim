@@ -88,6 +88,12 @@ local function default_header()
   }
 end
 
+local function pad_header(config)
+    local pad = require('dashboard.utils').pad
+    local bottom_padding = config.header_bottom_padding or 1
+    pad(config.header, '', bottom_padding, false)
+end
+
 local function week_header(concat, append)
   local week = week_ascii_text()
   local daysoftheweek =
@@ -103,6 +109,7 @@ local function week_header(concat, append)
 end
 
 local function generate_header(config)
+  pad_header(config)
   if not vim.bo[config.bufnr].modifiable then
     vim.bo[config.bufnr].modifiable = true
   end

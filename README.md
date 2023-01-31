@@ -84,6 +84,7 @@ when use `hyper` theme the available options in `config` is
 
 ```lua
 config = {
+  header_bottom_padding = 1,
   shortcut = {
     -- action can be a function type
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
