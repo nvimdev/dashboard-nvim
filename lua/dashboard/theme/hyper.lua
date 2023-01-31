@@ -117,7 +117,6 @@ local function project_list(config, callback)
         reverse(res)
       end
       table.insert(res, 1, config.project.icon .. config.project.label)
-      table.insert(res, 1, '')
       table.insert(res, '')
       callback(res)
     end)
@@ -210,13 +209,13 @@ local function gen_center(plist, config)
   plist = utils.center_align(plist)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line + 1, 0, -1)
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line, 0, -1)
   local _, scol = plist[2]:find('%s+')
   api.nvim_buf_add_highlight(
     config.bufnr,
     0,
     'DashboardProjectTitleIcon',
-    first_line + 1,
+    first_line,
     0,
     scol + #config.project.icon
   )
@@ -228,7 +227,7 @@ local function gen_center(plist, config)
       config.bufnr,
       0,
       'DashboardProjectIcon',
-      first_line + i - 1,
+      first_line + i - 2,
       0,
       start_col + 3
     )
