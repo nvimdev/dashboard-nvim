@@ -72,11 +72,6 @@ local function default_header()
   }
 end
 
-local function pad_header(config)
-    local bottom_padding = config.header_bottom_padding or 1
-    utils.pad(config.header, '', bottom_padding, false)
-end
-
 local function week_header(concat, append)
   local week = week_ascii_text()
   local daysoftheweek =
@@ -92,7 +87,7 @@ local function week_header(concat, append)
 end
 
 local function generate_header(config)
-  pad_header(config)
+  local bottom_padding = config.header_bottom_padding or 1
   if not vim.bo[config.bufnr].modifiable then
     vim.bo[config.bufnr].modifiable = true
   end
@@ -101,6 +96,8 @@ local function generate_header(config)
         and config.week_header.enable
         and week_header(config.week_header.concat, config.week_header.append)
       or (config.header or default_header())
+
+    utils.pad(header, '', bottom_padding, false)
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
 
     for i, _ in ipairs(header) do
@@ -109,6 +106,7 @@ local function generate_header(config)
     return
   end
 
+  utils.pad(config.header, '', bottom_padding, false)
   local empty_table = utils.generate_empty_table(config.file_height + 4)
   api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(empty_table))
   local preview = require('dashboard.preview')
