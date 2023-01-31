@@ -20,12 +20,14 @@ local function generate_center(config)
       { desc = 'Please config your own center section', key = 'p' },
     }
 
-  align_desc(config.center)
-
+  local counts = {}
   for _, item in pairs(center) do
+    local count = item.keymap and #item.keymap or 0
     local line = (item.icon or '') .. item.desc
+
     if item.key then
-      line = line .. (' '):rep(#item.key + 3)
+      line = line .. (' '):rep(#item.key + 4)
+      count = count + #item.key + 3
       if type(item.action) == 'string' then
         vim.keymap.set('n', item.key, function()
           local dump = loadstring(item.action)
@@ -48,15 +50,18 @@ local function generate_center(config)
     if item.keymap then
       line = line .. (' '):rep(#item.keymap)
     end
+
     table.insert(lines, line)
     table.insert(lines, '')
+    table.insert(counts, count)
+    table.insert(counts, 0)
   end
 
   lines = utils.element_align(lines)
   lines = utils.center_align(lines)
-  lines = vim.tbl_map(function(k)
-    return k:sub(1, #k - 4)
-  end, lines)
+  for i, count in ipairs(counts) do
+    lines[i] = lines[i]:sub(1, #lines[i] - count)
+  end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
