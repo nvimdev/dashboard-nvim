@@ -25,7 +25,7 @@ local function generate_center(config)
   for _, item in pairs(center) do
     local line = (item.icon or '') .. item.desc
     if item.key then
-      line = line .. (' '):rep(3)
+      line = line .. (' '):rep(#item.key + 3)
       if type(item.action) == 'string' then
         vim.keymap.set('n', item.key, function()
           local dump = loadstring(item.action)
@@ -54,6 +54,9 @@ local function generate_center(config)
 
   lines = utils.element_align(lines)
   lines = utils.center_align(lines)
+  lines = vim.tbl_map(function(k)
+    return k:sub(1, #k - 4)
+  end, lines)
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
