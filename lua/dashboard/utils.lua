@@ -160,7 +160,6 @@ function utils.pad(tbl, pad_element, count, front)
             table.insert(tbl, pad_element)
         end
     end
-    return tbl
 end
 
 return utils

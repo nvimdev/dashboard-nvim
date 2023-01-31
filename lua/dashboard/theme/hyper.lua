@@ -69,9 +69,9 @@ local function load_packages(config)
   }
 
   local bottom_padding = packages.bottom_padding or 0
-  lines = utils.pad(lines, '', bottom_padding, false)
+  utils.pad(lines, '', bottom_padding, false)
   local top_padding = packages.top_padding or 1
-  lines = utils.pad(lines, '', top_padding, true)
+  utils.pad(lines, '', top_padding, true)
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(lines))
