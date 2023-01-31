@@ -68,7 +68,7 @@ local function load_packages(config)
     'neovim loaded ' .. utils.get_packages_count() .. ' packages',
   }
 
-  local bottom_padding = packages.bottom_padding or 0
+  local bottom_padding = packages.bottom_padding or 1
   utils.pad(lines, '', bottom_padding, false)
   local top_padding = packages.top_padding or 1
   utils.pad(lines, '', top_padding, true)
