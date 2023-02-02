@@ -32,7 +32,7 @@ local function week_ascii_text()
       '╚███╔███╔╝███████╗██████╔╝██║ ╚████║███████╗███████║██████╔╝██║  ██║   ██║   ',
       '',
     },
-    ['Thrusday'] = {
+    ['Thursday'] = {
       '',
       '████████╗██╗  ██╗██╗   ██╗██████╗ ███████╗██████╗  █████╗ ██╗   ██╗',
       '╚══██╔══╝██║  ██║██║   ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝',
@@ -91,9 +91,8 @@ end
 local function week_header(concat, append)
   local week = week_ascii_text()
   local daysoftheweek =
-    { 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thrusday', 'Friday', 'Saturday' }
+    { 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' }
   local day = daysoftheweek[os.date('*t').wday]
-  print(day)
   local tbl = week[day]
   table.insert(tbl, os.date('%Y-%m-%d %H:%M:%S ') .. (concat or ''))
   if append then
