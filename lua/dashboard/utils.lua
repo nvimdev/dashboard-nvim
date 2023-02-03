@@ -1,7 +1,7 @@
 local uv = vim.loop
 local utils = {}
 
-utils.is_win = uv.os_uname().version == 'WindowsNT'
+utils.is_win = uv.os_uname().sysname == 'Windows_NT'
 
 function utils.path_join(...)
   local path_sep = utils.is_win and '\\' or '/'
