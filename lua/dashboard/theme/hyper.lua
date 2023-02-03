@@ -174,7 +174,7 @@ end
 local function map_key(config, key, content)
   keymap.set('n', key, function()
     local text = content or api.nvim_get_current_line()
-    local scol = text:find('%p')
+    local scol = utils.is_win and text:find('%w') or text:find('%p')
     text = text:sub(scol)
     local tbl = vim.split(text, '%s', { trimempty = true })
     local path = tbl[#tbl]
