@@ -10,7 +10,7 @@ local function gen_shortcut(config)
   }
 
   if vim.tbl_isempty(shortcut) then
-    shortcut = {}
+    return
   end
 
   local lines = ''
