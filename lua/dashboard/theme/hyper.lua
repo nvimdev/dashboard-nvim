@@ -28,7 +28,7 @@ local function gen_shortcut(config)
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, -1, false)[1]
   local start = line:find('[^%s]') - 1
   for _, item in pairs(shortcut) do
-    local _end = start + api.nvim_strwidth(item.desc) + 2
+    local _end = start + #item.desc
     if item.key then
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
@@ -177,7 +177,7 @@ end
 local function map_key(config, key, content)
   keymap.set('n', key, function()
     local text = content or api.nvim_get_current_line()
-    local scol = text:find('%p')
+    local scol = utils.is_win and text:find('%w') or text:find('%p')
     text = text:sub(scol)
     local tbl = vim.split(text, '%s', { trimempty = true })
     local path = tbl[#tbl]

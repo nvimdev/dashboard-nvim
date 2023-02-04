@@ -47,6 +47,9 @@ function view:preview_events()
 
   --refresh the preview window col position.
   local function refresh_preview_wincol()
+    if not self.preview_winid then
+      return
+    end
     local winconfig = api.nvim_win_get_config(self.preview_winid)
     local cur_width = api.nvim_win_get_width(self.main_winid)
     if cur_width ~= self.win_width then
