@@ -28,7 +28,7 @@ local function gen_shortcut(config)
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, -1, false)[1]
   local start = line:find('[^%s]') - 1
   for _, item in pairs(shortcut) do
-    local _end = start + api.nvim_strwidth(item.desc) + 2
+    local _end = start + #item.desc
     if item.key then
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
