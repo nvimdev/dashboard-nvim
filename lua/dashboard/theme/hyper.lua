@@ -251,7 +251,7 @@ local function gen_center(plist, config)
   end
 
   -- initialize the cursor pos
-  api.nvim_win_set_cursor(config.winid, { first_line + 3, start_col + 4 })
+  api.nvim_win_set_cursor(config.winid, { first_line + 2, start_col + 4 })
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardMruTitle', first_line + plist_len, 0, -1)
   api.nvim_buf_add_highlight(
