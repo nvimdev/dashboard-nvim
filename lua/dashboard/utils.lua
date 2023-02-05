@@ -1,4 +1,5 @@
 local uv = vim.loop
+local api = vim.api
 local utils = {}
 
 utils.is_win = uv.os_uname().sysname == 'Windows_NT'
@@ -160,6 +161,10 @@ function utils.pad(tbl, pad_element, count, front)
             table.insert(tbl, pad_element)
         end
     end
+end
+
+function utils.calc_top_padding(config)
+  return math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
 end
 
 return utils
