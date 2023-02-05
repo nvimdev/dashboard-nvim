@@ -32,6 +32,9 @@ function au.register_lsp_root(path)
             assert(not err, err)
             local before = assert(loadstring(data))
             local plist = before()
+            if #plist > 15 then
+              plist = vim.list_slice(plist, 15)
+            end
             plist = vim.tbl_filter(function(k)
               return not vim.tbl_contains(projects, k)
             end, plist or {})
