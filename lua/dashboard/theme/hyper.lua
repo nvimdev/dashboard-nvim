@@ -299,10 +299,16 @@ local function gen_center(plist, config)
   end
 end
 
-local function init_footer(config)
-  if not config.footer then config.footer = { ' 🚀 Sharp tools make good work.' } end
+local function init_footer(config, from_cache)
   local top_padding = config.footer_top_padding or 1
-  utils.pad(config.footer, '', top_padding, true)
+  if not config.footer then 
+    config.footer = { ' 🚀 Sharp tools make good work.' }
+    utils.pad(config.footer, '', top_padding, true)
+    return
+  end
+  if not from_cache then
+    utils.pad(config.footer, '', top_padding, true)
+  end
 end
 
 local function gen_footer(config)
@@ -361,9 +367,9 @@ local function theme_instance(config)
   end)
 end
 
-local function init(config)
-    init_footer(config)
-    require('dashboard.theme.header').init_header(config)
+local function init(config, from_cache)
+    init_footer(config, from_cache)
+    require('dashboard.theme.header').init_header(config, from_cache)
 end
 
 local meta_table = setmetatable({}, {

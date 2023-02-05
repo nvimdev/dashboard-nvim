@@ -86,16 +86,21 @@ local function week_header(concat, append)
   return tbl
 end
 
-local function init_header(config)
-  if not config.command then
+local function init_header(config, from_cache)
+  local bottom_padding = config.header_bottom_padding or 1
+
+  if not config.command and not config.header then
     config.header = config.week_header
         and config.week_header.enable
         and week_header(config.week_header.concat, config.week_header.append)
-      or (config.header or default_header())
+      or default_header()
+    utils.pad(config.header, '', bottom_padding, false)
+    return
   end
 
-  local bottom_padding = config.header_bottom_padding or 1
-  utils.pad(config.header, '', bottom_padding, false)
+  if not from_cache then
+    utils.pad(config.header, '', bottom_padding, false)
+  end
 end
 
 local function generate_header(config)

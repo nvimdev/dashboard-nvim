@@ -183,7 +183,7 @@ function db:load_theme(opts)
   end
 
   local theme = require('dashboard.theme.' .. opts.theme)
-  theme.init(config)
+  theme.init(config, not self.opts)
   theme.meta_table(config)
   self:cache_ui_options(opts)
 
