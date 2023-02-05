@@ -108,6 +108,7 @@ when use `doom` theme the available options in `config` is
 
 ```lua
 config = {
+  header_bottom_padding = 1, -- Add padding below the header.
   center = {
     {
       icon = '',
@@ -120,6 +121,7 @@ config = {
     },
   },
   footer = {},
+  footer_top_padding = 1 -- Add padding above the footer.
 }
 ```
 

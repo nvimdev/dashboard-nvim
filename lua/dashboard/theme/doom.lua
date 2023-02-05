@@ -63,6 +63,8 @@ local function generate_center(config)
     lines[i] = lines[i]:sub(1, #lines[i] - count)
   end
 
+  table.remove(lines, #lines)
+
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
 
@@ -162,12 +164,18 @@ local function generate_center(config)
   end, { buffer = config.bufnr, nowait = true, silent = true })
 end
 
+local function init_footer(config)
+  if not config.footer then
+    config.footer = { 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  end
+  local top_padding = config.footer_top_padding or 1
+  utils.pad(config.footer, '', top_padding, true)
+end
+
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = config.footer
-    or { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
-  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
-  for i = 1, #footer do
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(config.footer))
+  for i = 1, #config.footer do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
 end
@@ -177,13 +185,18 @@ local function theme_instance(config)
   require('dashboard.theme.header').generate_header(config)
   generate_center(config)
   generate_footer(config)
-  api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
+  local size = math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
+  local fill = utils.generate_empty_table(size)
+  api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
+  vim.bo[config.bufnr].modifiable = false
 end
 
 local function init(config)
+    init_footer(config)
+    require('dashboard.theme.header').init_header(config)
 end
 
-meta_table = setmetatable({}, {
+local meta_table = setmetatable({}, {
   __call = function(_, t)
     return theme_instance(t)
   end,
