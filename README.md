@@ -84,7 +84,6 @@ when use `hyper` theme the available options in `config` is
 
 ```lua
 config = {
-  header_top_padding = 1, -- Add padding below the header.
   header_bottom_padding = 1, -- Add padding below the header.
   shortcut = {
     -- action can be a function type

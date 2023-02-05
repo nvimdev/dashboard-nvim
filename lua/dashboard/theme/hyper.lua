@@ -353,10 +353,7 @@ local function theme_instance(config)
     gen_footer(config)
     map_key(config, '<CR>')
     require('dashboard.events').register_lsp_root(config.path)
-    local size = (not config.header_top_padding and
-      math.floor((api.nvim_win_get_height(0)
-      - api.nvim_buf_line_count(config.bufnr))/2))
-      or 0
+    local size = math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
     local fill = utils.generate_empty_table(size)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false

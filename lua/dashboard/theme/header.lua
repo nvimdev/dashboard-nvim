@@ -94,9 +94,7 @@ local function init_header(config)
       or (config.header or default_header())
   end
 
-  local top_padding = config.header_top_padding or 0
   local bottom_padding = config.header_bottom_padding or 1
-  utils.pad(config.header, '', top_padding, true)
   utils.pad(config.header, '', bottom_padding, false)
 end
 
