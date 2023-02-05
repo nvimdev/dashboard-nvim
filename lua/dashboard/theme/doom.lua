@@ -200,13 +200,9 @@ local function init(config, from_cache)
     require('dashboard.theme.header').init_header(config, from_cache)
 end
 
-local meta_table = setmetatable({}, {
-  __call = function(_, t)
-    return theme_instance(t)
+return setmetatable({}, {
+  __call = function(_, config, from_cache)
+    init(config, from_cache)
+    theme_instance(config)
   end,
 })
-
-return {
-  meta_table = meta_table,
-  init = init
-}

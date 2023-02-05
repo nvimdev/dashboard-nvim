@@ -182,15 +182,13 @@ function db:load_theme(opts)
     config = vim.tbl_extend('force', config, self.opts.preview)
   end
 
-  local theme = require('dashboard.theme.' .. opts.theme)
-  theme.init(config, not self.opts)
-  theme.meta_table(config)
+  require('dashboard.theme.' .. opts.theme)(config, not self.opts)
   self:cache_ui_options(opts)
 
   api.nvim_create_autocmd('VimResized', {
     buffer = self.bufnr,
     callback = function()
-      require('dashboard.theme.' .. opts.theme).meta_table(config)
+      require('dashboard.theme.' .. opts.theme)(config, false)
       vim.bo[self.bufnr].modifiable = false
     end,
   })
