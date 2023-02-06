@@ -237,7 +237,7 @@ local function gen_center(plist, config)
       -1
     )
     local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
-    if text and text:find('%w') then
+    if text and text:find('%w') and not text:find('empty') then
       local key = string.char(hotkey())
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
         virt_text = { { key, 'DashboardShortCut' } },
