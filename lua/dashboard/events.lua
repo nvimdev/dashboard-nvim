@@ -32,13 +32,13 @@ function au.register_lsp_root(path)
             assert(not err, err)
             local before = assert(loadstring(data))
             local plist = before()
-            if #plist > 15 then
-              plist = vim.list_slice(plist, 15)
-            end
             plist = vim.tbl_filter(function(k)
               return not vim.tbl_contains(projects, k)
             end, plist or {})
             plist = vim.list_extend(plist, projects)
+            if #plist > 15 then
+              plist = vim.list_slice(plist, 15)
+            end
             local fn = assert(loadstring('return ' .. vim.inspect(plist)))
             local dump = string.dump(fn)
             uv.fs_write(fd, dump, 0, function(err, _)
