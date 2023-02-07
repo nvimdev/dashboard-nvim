@@ -138,10 +138,11 @@ local function mru_list(config)
   for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local ft = vim.filetype.match({ filename = file })
     local icon, group = utils.get_icon(ft)
+    icon = icon or ' '
     if not utils.is_win then
       file = file:gsub(vim.env.HOME, '~')
     end
-    file = (icon or ' ') .. ' ' .. file
+    file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
     table.insert(list, (' '):rep(3) .. file)
   end
