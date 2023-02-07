@@ -1,18 +1,6 @@
 local api = vim.api
 local utils = require('dashboard.utils')
 
-local function align_desc(center)
-  local descs = {}
-  vim.tbl_map(function(k)
-    table.insert(descs, k.desc)
-  end, center)
-
-  descs = utils.element_align(descs)
-  for i, item in pairs(center) do
-    item.desc = descs[i]
-  end
-end
-
 local function generate_center(config)
   local lines = {}
   local center = config.center
@@ -164,7 +152,7 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = config.footer
+  local footer = type(config.footer) == 'function' and config.footer() or config.footer
     or { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
   for i = 1, #footer do
