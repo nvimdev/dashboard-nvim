@@ -37,10 +37,9 @@ function au.register_lsp_root(path)
             end, plist or {})
             plist = vim.list_extend(plist, projects)
             if #plist > 15 then
-              plist = vim.list_slice(plist, 15)
+              plist = vim.list_slice(plist, #plist - 14, #plist)
             end
-            local fn = assert(loadstring('return ' .. vim.inspect(plist)))
-            local dump = string.dump(fn)
+            local dump = 'return ' .. vim.inspect(plist)
             uv.fs_write(fd, dump, 0, function(err, _)
               assert(not err, err)
               uv.fs_close(fd)
