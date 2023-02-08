@@ -222,7 +222,7 @@ local function gen_center(plist, config)
 
   local hotkey = gen_hotkey(config)
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
-  for i = 3, plist_len do
+  for i = 2, plist_len do
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
