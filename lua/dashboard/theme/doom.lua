@@ -152,7 +152,8 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = type(config.footer) == 'function' and config.footer() or config.footer
+  local footer = type(config.footer) == 'function' and config.footer()
+    or config.footer
     or { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
   for i = 1, #footer do
