@@ -178,11 +178,12 @@ function db:get_opts(callback)
 end
 
 function db:load_theme(opts)
-  local config = vim.tbl_extend(
-    'force',
-    opts.config,
-    { path = cache_path(), bufnr = self.bufnr, winid = self.winid }
-  )
+  local config = vim.tbl_extend('force', opts.config, {
+    path = cache_path(),
+    bufnr = self.bufnr,
+    winid = self.winid,
+    confirm_key = opts.confirm_key or nil,
+  })
 
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, self.opts.preview)

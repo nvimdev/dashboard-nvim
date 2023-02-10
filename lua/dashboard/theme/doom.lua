@@ -130,7 +130,7 @@ local function generate_center(config)
     })
   end, 0)
 
-  vim.keymap.set('n', '<CR>', function()
+  vim.keymap.set('n', config.confirm_key or '<CR>', function()
     local curline = api.nvim_win_get_cursor(0)[1]
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
