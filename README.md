@@ -20,9 +20,10 @@
 {
   'glepnir/dashboard-nvim',
   event = 'VimEnter',
-  opts = {
-    -- config
-  },
+  config = function()
+    require('dashboard').setup {
+      -- config
+    }
   dependencies = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
