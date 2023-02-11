@@ -15,7 +15,7 @@ local function gen_shortcut(config)
 
   local lines = ''
   for _, item in pairs(shortcut) do
-    local str = item.desc
+    local str = item.icon and item.icon .. item.desc or item.desc
     if item.key then
       str = str .. '[' .. item.key .. ']'
     end
@@ -28,7 +28,7 @@ local function gen_shortcut(config)
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, -1, false)[1]
   local start = line:find('[^%s]') - 1
   for _, item in pairs(shortcut) do
-    local _end = start + #item.desc
+    local _end = start + (item.icon and #(item.icon .. item.desc) or #item.desc)
     if item.key then
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
@@ -44,6 +44,7 @@ local function gen_shortcut(config)
         end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
+
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
@@ -52,6 +53,17 @@ local function gen_shortcut(config)
       start,
       _end
     )
+
+    if item.icon then
+      api.nvim_buf_add_highlight(
+        config.bufnr,
+        0,
+        item.icon_hl or 'DashboardShortCutIcon',
+        first_line,
+        start,
+        start + #item.icon
+      )
+    end
     start = _end + 2
   end
 end
