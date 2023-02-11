@@ -177,11 +177,11 @@ local function map_key(config, key, content)
     local text = content or api.nvim_get_current_line()
     local scol = utils.is_win and text:find('%w') or text:find('%p')
     text = text:sub(scol)
-    local tbl = vim.split(text, '%s', { trimempty = true })
-    local path = tbl[#tbl]
+    local path = vim.trim(text)
     path = vim.fs.normalize(path)
     path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
+      path = vim.fn.fnameescape(path)
       vim.cmd(config.project.action .. path)
     else
       vim.cmd('edit ' .. path)
