@@ -44,6 +44,7 @@ Fancy and Blazing Fast start screen plugin of neovim
         require('dashboard').setup {
           -- config
         }
+      end,
       dependencies = { {'nvim-tree/nvim-web-devicons'}}
     }
 <
