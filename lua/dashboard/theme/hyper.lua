@@ -197,6 +197,12 @@ local function map_key(config, key, content)
       vim.cmd(config.project.action .. path)
     else
       vim.cmd('edit ' .. path)
+      local root = utils.get_vcs_root()
+      if #root > 0 then
+        vim.cmd('lcd ' .. vim.fn.fnamemodify(root[#root], ':h'))
+      else
+        vim.cmd('lcd ' .. vim.fn.fnamemodify(path, ':h'))
+      end
     end
   end, { buffer = config.bufnr, silent = true, nowait = true })
 end

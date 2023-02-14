@@ -144,4 +144,16 @@ function utils.generate_truncateline(cells)
   return char:rep(math.floor(cells / vim.api.nvim_strwidth(char)))
 end
 
+function utils.get_vcs_root(buf)
+  buf = buf or 0
+  local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ':p:h')
+  local patterns = { '.git', '.hg', '.bzr', '.svn' }
+  for _, pattern in pairs(patterns) do
+    local root = vim.fs.find(pattern, { path = path, upward = true, stop = vim.env.HOME })
+    if root then
+      return root
+    end
+  end
+end
+
 return utils
