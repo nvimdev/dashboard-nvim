@@ -3,11 +3,11 @@ local utils = require('dashboard.utils')
 local ns = api.nvim_create_namespace('dashboard')
 
 local function gen_shortcut(config)
-  local shortcut = vim.tbl_extend('force', {
+  local shortcut = config.shortcut or {
     { desc = '[  Github]', group = 'DashboardShortCut' },
     { desc = '[  glepnir]', group = 'DashboardShortCut' },
     { desc = '[  0.2.3]', group = 'DashboardShortCut' },
-  }, config.shortcut or {})
+  }
 
   if vim.tbl_isempty(shortcut) then
     shortcut = {}
