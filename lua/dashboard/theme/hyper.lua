@@ -200,7 +200,6 @@ local function map_key(config, key, content)
       elseif type(config.project.action) == "string" then
           local dump = loadstring(config.project.action)
           if not dump then
-                    print(config.project.action .. path)
             vim.cmd(config.project.action .. path)
           else
             dump(path)
