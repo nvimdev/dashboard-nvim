@@ -198,7 +198,13 @@ local function map_key(config, key, content)
       if type(config.project.action) == "function" then
         config.project.action(path)
       elseif type(config.project.action) == "string" then
-        vim.cmd(config.project.action .. path)
+          local dump = loadstring(config.project.action)
+          if not dump then
+                    print(config.project.action .. path)
+            vim.cmd(config.project.action .. path)
+          else
+            dump(path)
+          end
       end
     else
       vim.cmd('edit ' .. path)

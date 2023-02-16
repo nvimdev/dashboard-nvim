@@ -91,7 +91,8 @@ config = {
     { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
-  -- limit how many projects list, action when you press key or enter it will run this action. path is this project path.
+  -- limit how many projects list, action when you press key or enter it will run this action. 
+  -- @path param in action func is this project's path.
   project = {
       limit = 8,
       icon = 'your icon',
