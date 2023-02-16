@@ -101,7 +101,7 @@ local function project_list(config, callback)
     limit = 8,
     icon = ' ',
     icon_hl = 'DashboardRecentProjectIcon',
-    action = function(path) vim.cmd("Telescope find_files cwd=" .. path) end,
+    action = "Telescope find_files cwd=",
     label = ' Recent Projects:',
   }, config.project or {})
 
@@ -195,15 +195,15 @@ local function map_key(config, key, content)
     path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
       path = vim.fn.fnameescape(path)
-      if type(config.project.action) == "function" then
+      if type(config.project.action) == 'function' then
         config.project.action(path)
-      elseif type(config.project.action) == "string" then
-          local dump = loadstring(config.project.action)
-          if not dump then
-            vim.cmd(config.project.action .. path)
-          else
-            dump(path)
-          end
+      elseif type(config.project.action) == 'string' then
+        local dump = loadstring(config.project.action)
+        if not dump then
+          vim.cmd(config.project.action .. path)
+        else
+          dump(path)
+        end
       end
     else
       vim.cmd('edit ' .. path)
