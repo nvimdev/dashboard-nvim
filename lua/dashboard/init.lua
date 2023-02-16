@@ -135,6 +135,12 @@ function db:cache_opts()
     end
   end
 
+  if self.opts.config.project and type(self.opts.config.project.action) == 'function' then
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local dump = assert(string.dump(self.opts.config.project.action))
+    self.opts.config.project.action = dump
+  end
+
   if self.opts.config.center then
     for _, item in pairs(self.opts.config.center) do
       if type(item.action) == 'function' then

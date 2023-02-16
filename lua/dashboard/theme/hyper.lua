@@ -195,7 +195,16 @@ local function map_key(config, key, content)
     path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
       path = vim.fn.fnameescape(path)
-      vim.cmd(config.project.action .. path)
+      if type(config.project.action) == 'function' then
+        config.project.action(path)
+      elseif type(config.project.action) == 'string' then
+        local dump = loadstring(config.project.action)
+        if not dump then
+          vim.cmd(config.project.action .. path)
+        else
+          dump(path)
+        end
+      end
     else
       vim.cmd('edit ' .. path)
       local root = utils.get_vcs_root()
