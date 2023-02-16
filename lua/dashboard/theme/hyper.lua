@@ -101,7 +101,7 @@ local function project_list(config, callback)
     limit = 8,
     icon = ' ',
     icon_hl = 'DashboardRecentProjectIcon',
-    action = "Telescope find_files cwd=",
+    action = 'Telescope find_files cwd=',
     label = ' Recent Projects:',
   }, config.project or {})
 

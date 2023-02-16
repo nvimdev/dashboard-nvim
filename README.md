@@ -96,7 +96,7 @@ config = {
     limit = 8,
     icon = 'your icon',
     label = '',
-    action = function(path) vim.cmd("Telescope find_files cwd=" .. path) end,
+    action = function(path) vim.cmd('Telescope find_files cwd=' .. path) end,
   },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
