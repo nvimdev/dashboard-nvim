@@ -135,6 +135,12 @@ function db:cache_opts()
     end
   end
 
+  if self.opts.config.project and type(self.opts.config.project.action) == 'function' then
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local dump = assert(string.dump(self.opts.config.project.action))
+    self.opts.config.project.action = dump
+  end
+
   if self.opts.config.center then
     for _, item in pairs(self.opts.config.center) do
       if type(item.action) == 'function' then
@@ -143,6 +149,12 @@ function db:cache_opts()
         item.action = dump
       end
     end
+  end
+
+  if self.opts.config.footer and type(self.opts.config.footer) == 'function' then
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local dump = assert(string.dump(self.opts.config.footer))
+    self.opts.config.footer = dump
   end
 
   local dump = vim.json.encode(self.opts)
@@ -172,11 +184,12 @@ function db:get_opts(callback)
 end
 
 function db:load_theme(opts)
-  local config = vim.tbl_extend(
-    'force',
-    opts.config,
-    { path = cache_path(), bufnr = self.bufnr, winid = self.winid }
-  )
+  local config = vim.tbl_extend('force', opts.config, {
+    path = cache_path(),
+    bufnr = self.bufnr,
+    winid = self.winid,
+    confirm_key = opts.confirm_key or nil,
+  })
 
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, self.opts.preview)

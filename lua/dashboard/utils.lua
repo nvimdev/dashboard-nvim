@@ -167,4 +167,16 @@ function utils.calc_top_padding(config)
   return math.floor((api.nvim_win_get_height(0) - api.nvim_buf_line_count(config.bufnr))/2)
 end
 
+function utils.get_vcs_root(buf)
+  buf = buf or 0
+  local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ':p:h')
+  local patterns = { '.git', '.hg', '.bzr', '.svn' }
+  for _, pattern in pairs(patterns) do
+    local root = vim.fs.find(pattern, { path = path, upward = true, stop = vim.env.HOME })
+    if root then
+      return root
+    end
+  end
+end
+
 return utils

@@ -1,18 +1,6 @@
 local api = vim.api
 local utils = require('dashboard.utils')
 
-local function align_desc(center)
-  local descs = {}
-  vim.tbl_map(function(k)
-    table.insert(descs, k.desc)
-  end, center)
-
-  descs = utils.element_align(descs)
-  for i, item in pairs(center) do
-    item.desc = descs[i]
-  end
-end
-
 local function generate_center(config)
   local lines = {}
   local center = config.center
@@ -144,7 +132,7 @@ local function generate_center(config)
     })
   end, 0)
 
-  vim.keymap.set('n', '<CR>', function()
+  vim.keymap.set('n', config.confirm_key or '<CR>', function()
     local curline = api.nvim_win_get_cursor(0)[1]
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
@@ -171,6 +159,11 @@ local function init_footer(config, from_cache)
     utils.pad(config.footer, '', top_padding, true)
     return
   end
+  if type(config.footer) == 'function' then
+    config.footer = config.footer()
+    utils.pad(config.footer, '', top_padding, true)
+    return
+  end
   if not from_cache then
     utils.pad(config.footer, '', top_padding, true)
   end
@@ -178,8 +171,8 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(config.footer))
-  for i = 1, #config.footer do
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
+  for i = 1, #footer do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
 end

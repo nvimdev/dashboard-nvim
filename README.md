@@ -20,9 +20,11 @@
 {
   'glepnir/dashboard-nvim',
   event = 'VimEnter',
-  opts = {
-    -- config
-  },
+  config = function()
+    require('dashboard').setup {
+      -- config
+    }
+  end,
   dependencies = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
@@ -95,6 +97,8 @@ config = {
     bottom_padding = 1 -- Adds padding below the loaded packages message.
   }, 
   -- limit how many projects list, action when you press key or enter it will run this action.
+  -- action can be a functino type, e.g.
+  -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
   project = { limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
@@ -142,7 +146,7 @@ all highlight groups
 DashboardHeader DashboardFooter
 -- Hyper theme
 DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
-DashboardMruTitle DashboardMruIcon DashboardFiles 
+DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShotCutIcon
 -- Doome theme
 DashboardDesc DashboardKey DashboardIcon DashboardShotCut
 ```
@@ -164,7 +168,9 @@ example config of screenshot
       shortcut = {
         { desc = ' Update', group = '@property', action = 'Lazy update', key = 'u' },
         {
-          desc = ' Files',
+          icon = ' ',
+          icon_hl = '@variable',
+          desc = 'Files',
           group = 'Label',
           action = 'Telescope find_files',
           key = 'f',

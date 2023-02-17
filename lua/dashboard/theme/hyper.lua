@@ -3,11 +3,12 @@ local utils = require('dashboard.utils')
 local ns = api.nvim_create_namespace('dashboard')
 
 local function gen_shortcut(config)
-  local shortcut = config.shortcut or {
-    { desc = '[  Github]', group = 'DashboardShortCut' },
-    { desc = '[  glepnir]', group = 'DashboardShortCut' },
-    { desc = '[  0.2.3]', group = 'DashboardShortCut' },
-  }
+  local shortcut = config.shortcut
+    or {
+      { desc = '[  Github]', group = 'DashboardShortCut' },
+      { desc = '[  glepnir]', group = 'DashboardShortCut' },
+      { desc = '[  0.2.3]', group = 'DashboardShortCut' },
+    }
 
   if vim.tbl_isempty(shortcut) then
     return
@@ -15,7 +16,7 @@ local function gen_shortcut(config)
 
   local lines = ''
   for _, item in pairs(shortcut) do
-    local str = item.desc
+    local str = item.icon and item.icon .. item.desc or item.desc
     if item.key then
       str = str .. '[' .. item.key .. ']'
     end
@@ -28,7 +29,7 @@ local function gen_shortcut(config)
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, -1, false)[1]
   local start = line:find('[^%s]') - 1
   for _, item in pairs(shortcut) do
-    local _end = start + #item.desc
+    local _end = start + (item.icon and #(item.icon .. item.desc) or #item.desc)
     if item.key then
       _end = _end + api.nvim_strwidth(item.key) + 2
       keymap.set('n', item.key, function()
@@ -44,6 +45,7 @@ local function gen_shortcut(config)
         end
       end, { buffer = config.bufnr, nowait = true, silent = true })
     end
+
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
@@ -52,6 +54,17 @@ local function gen_shortcut(config)
       start,
       _end
     )
+
+    if item.icon then
+      api.nvim_buf_add_highlight(
+        config.bufnr,
+        0,
+        item.icon_hl or 'DashboardShortCutIcon',
+        first_line,
+        start,
+        start + #item.icon
+      )
+    end
     start = _end + 2
   end
 end
@@ -141,10 +154,11 @@ local function mru_list(config)
   for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local ft = vim.filetype.match({ filename = file })
     local icon, group = utils.get_icon(ft)
+    icon = icon or ' '
     if not utils.is_win then
       file = file:gsub(vim.env.HOME, '~')
     end
-    file = (icon or ' ') .. ' ' .. file
+    file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
     table.insert(list, (' '):rep(3) .. file)
   end
@@ -179,14 +193,29 @@ local function map_key(config, key, content)
     local text = content or api.nvim_get_current_line()
     local scol = utils.is_win and text:find('%w') or text:find('%p')
     text = text:sub(scol)
-    local tbl = vim.split(text, '%s', { trimempty = true })
-    local path = tbl[#tbl]
+    local path = vim.trim(text)
     path = vim.fs.normalize(path)
     path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
-      vim.cmd(config.project.action .. path)
+      path = vim.fn.fnameescape(path)
+      if type(config.project.action) == 'function' then
+        config.project.action(path)
+      elseif type(config.project.action) == 'string' then
+        local dump = loadstring(config.project.action)
+        if not dump then
+          vim.cmd(config.project.action .. path)
+        else
+          dump(path)
+        end
+      end
     else
       vim.cmd('edit ' .. path)
+      local root = utils.get_vcs_root()
+      if #root > 0 then
+        vim.cmd('lcd ' .. vim.fn.fnamemodify(root[#root], ':h'))
+      else
+        vim.cmd('lcd ' .. vim.fn.fnamemodify(path, ':h'))
+      end
     end
   end, { buffer = config.bufnr, silent = true, nowait = true })
 end
@@ -240,7 +269,7 @@ local function gen_center(plist, config)
       -1
     )
     local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
-    if text and text:find('%w') then
+    if text and text:find('%w') and not text:find('empty') then
       local key = string.char(hotkey())
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
         virt_text = { { key, 'DashboardShortCut' } },
