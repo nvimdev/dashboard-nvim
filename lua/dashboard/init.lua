@@ -110,12 +110,19 @@ function db:cache_ui_options(opts)
 end
 
 function db:restore_options()
+  if self.user_cursor_line then
+    vim.opt.cursorline = self.user_cursor_line
+    self.user_cursor_line = nil
+  end
+
   if self.user_laststatus_value then
     vim.opt.laststatus = tonumber(self.user_laststatus_value)
+    self.user_laststatus_value = nil
   end
 
   if self.user_tabline_value then
     vim.opt.showtabline = tonumber(self.user_tabline_value)
+    self.user_tabline_value = nil
   end
 end
 
@@ -246,6 +253,7 @@ function db:instance()
   self.winid = api.nvim_get_current_win()
   api.nvim_win_set_buf(self.winid, self.bufnr)
 
+  self.user_cursor_line = vim.opt.cursorline:get()
   buf_local()
   if self.opts then
     self:load_theme(self.opts)
