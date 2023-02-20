@@ -96,7 +96,7 @@ config = {
   -- limit how many projects list, action when you press key or enter it will run this action.
   -- action can be a functino type, e.g.
   -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
-  project = { enable = true limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
+  project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
 }
