@@ -175,7 +175,7 @@ local function mru_list(config)
   return list, groups
 end
 
-local function gen_hotkey(config)
+local function letter_hotkey(config)
   local list = { 106, 107 }
   for _, item in pairs(config.shortcut or {}) do
     if item.key then
@@ -188,10 +188,25 @@ local function gen_hotkey(config)
       local key = math.random(97, 122)
       if not vim.tbl_contains(list, key) then
         table.insert(list, key)
-        return key
+        return string.char(key)
       end
     end
   end
+end
+
+local function number_hotkey()
+  local start = 0
+  return function()
+    start = start + 1
+    return start
+  end
+end
+
+local function gen_hotkey(config)
+  if config.shortcut_type == 'number' then
+    return number_hotkey()
+  end
+  return letter_hotkey(config)
 end
 
 local function map_key(config, key, content)
@@ -280,7 +295,7 @@ local function gen_center(plist, config)
       local text =
         api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
       if text and text:find('%w') and not text:find('empty') then
-        local key = string.char(hotkey())
+        local key = tostring(hotkey())
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
           virt_text = { { key, 'DashboardShortCut' } },
           virt_text_pos = 'eol',
@@ -329,7 +344,7 @@ local function gen_center(plist, config)
       false
     )[1]
     if text and text:find('%w') then
-      local key = string.char(hotkey())
+      local key = tostring(hotkey())
       api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
         virt_text = { { key, 'DashboardShortCut' } },
         virt_text_pos = 'eol',

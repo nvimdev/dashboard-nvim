@@ -34,6 +34,8 @@ end
 local function default_options()
   return {
     theme = 'hyper',
+    disable_move = false,
+    shortcut_type = 'letter',
     config = {
       week_header = {
         enable = false,
@@ -41,7 +43,6 @@ local function default_options()
         append = nil,
       },
     },
-    disable_move = false,
     hide = {
       statusline = true,
       tabline = true,
@@ -196,6 +197,7 @@ function db:load_theme(opts)
     bufnr = self.bufnr,
     winid = self.winid,
     confirm_key = opts.confirm_key or nil,
+    shortcut_type = opts.shortcut_type,
   })
 
   if #opts.preview.command > 0 then
