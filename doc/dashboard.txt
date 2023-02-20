@@ -1,4 +1,4 @@
-*dashboard.txt*          For Nvim 0.8.0          Last change: 2023 February 16
+*dashboard.txt*          For Nvim 0.8.0          Last change: 2023 February 20
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -6,20 +6,15 @@ Table of Contents                                *dashboard-table-of-contents*
 1. Feature                                                 |dashboard-feature|
 2. Install                                                 |dashboard-install|
 3. Configuration                                     |dashboard-configuration|
-  - Options                                                |dashboard-options|
-  - Theme config                                      |dashboard-theme-config|
+  - Options                                  |dashboard-configuration-options|
+  - Theme config                        |dashboard-configuration-theme-config|
 4. Backers                                                 |dashboard-backers|
 5. Donate                                                   |dashboard-donate|
 6. LICENSE                                                 |dashboard-license|
+Fancy and Blazing Fast start screen plugin of neovim  ----------------------------------- -----------------------------------
+                                      
 
-<h1 align="center">
-
-Fancy and Blazing Fast start screen plugin of neovim
-
-</h1>
-
-│
-
+  ----------------------------------- -----------------------------------
 
 ==============================================================================
 1. Feature                                                 *dashboard-feature*
@@ -35,8 +30,7 @@ Fancy and Blazing Fast start screen plugin of neovim
 
 - Lazy.nvim
 
-
->
+>lua
     {
       'glepnir/dashboard-nvim',
       event = 'VimEnter',
@@ -50,11 +44,9 @@ Fancy and Blazing Fast start screen plugin of neovim
 <
 
 
-
 - Packer
 
-
->
+>lua
     use {
       'glepnir/dashboard-nvim',
       event = 'VimEnter',
@@ -71,9 +63,10 @@ Fancy and Blazing Fast start screen plugin of neovim
 ==============================================================================
 3. Configuration                                     *dashboard-configuration*
 
-OPTIONS                                                    *dashboard-options*
 
->
+OPTIONS                                      *dashboard-configuration-options*
+
+>lua
     theme = 'hyper' --  theme is doom and hyper default is hyper
     config = {},    --  config used for theme
     hide = {
@@ -90,11 +83,11 @@ OPTIONS                                                    *dashboard-options*
 <
 
 
-THEME CONFIG                                          *dashboard-theme-config*
+THEME CONFIG                            *dashboard-configuration-theme-config*
 
 the `config` field is used for theme. general field
 
->
+>lua
     config = {
       header -- type is table def
       week_header = {
@@ -111,7 +104,7 @@ HYPER ~
 
 when use `hyper` theme the available options in `config` is
 
->
+>lua
     config = {
       shortcut = {
         -- action can be a function type
@@ -132,7 +125,7 @@ DOOM ~
 
 when use `doom` theme the available options in `config` is
 
->
+>lua
     config = {
       center = {
         {
@@ -149,10 +142,10 @@ when use `doom` theme the available options in `config` is
     }
 <
 
-
 notice if you don’t link config every highlight group. you can ignore this
 key. dashboard will use default highlight group like `DashboardKey/Icon/Desc`
 instead
+
 
 COMMANDS ~
 
@@ -180,9 +173,9 @@ EXAMPLE CONFIG ~
 
 example config of screenshot
 
-Hyper
+Hyper ~
 
->
+>lua
       db.setup({
         theme = 'hyper',
         config = {
@@ -216,10 +209,9 @@ Hyper
       })
 <
 
+Doom ~
 
-Doom
-
->
+>lua
     db.setup({
       theme = 'doom',
       config = {
@@ -248,8 +240,8 @@ Doom
     })
 <
 
-
 </details
+
 
 CHANGED ~
 
@@ -269,22 +261,28 @@ TODO ~
 ==============================================================================
 4. Backers                                                 *dashboard-backers*
 
-RakerZ <https://github.com/RakerZh>
+@RakerZh <https://github.com/RakerZh>
+
 
 ==============================================================================
 5. Donate                                                   *dashboard-donate*
 
-<img
-src='https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white'
-title=''/> <https://paypal.me/bobbyhub>
+<https://paypal.me/bobbyhub>
 
 If you’d like to support my work financially, buy me a drink through paypal
 <https://paypal.me/bobbyhub>
+
 
 ==============================================================================
 6. LICENSE                                                 *dashboard-license*
 
 MIT
+
+==============================================================================
+7. Links                                                     *dashboard-links*
+
+1. *@RakerZh*: 
+2. **: https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
