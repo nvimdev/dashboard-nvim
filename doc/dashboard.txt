@@ -138,6 +138,7 @@ when use `doom` theme the available options in `config` is
           key = 'shortcut key in dashboard buffer not keymap !!',
           key_hl = 'group',
           action = '',
+	  surroundings = '[]'
         },
       },
       footer = {},

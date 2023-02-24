@@ -156,4 +156,21 @@ function utils.get_vcs_root(buf)
   end
 end
 
+function utils.generate_surrounded_key(surroundings, key)
+  if surroundings == nil then
+    return '[' .. key .. ']'
+  end
+
+  if string.len(surroundings) ~= 2 and string.len(surroundings) ~= 0 then
+    print('Invalid `surroundings` property. It must be either an empty string or a two character string.')
+    return '[' .. key .. ']'
+  end
+
+  local surrounding_start = string.sub(surroundings, 1, 1)
+  local surrounding_end = string.sub(surroundings, 2, 2)
+  local key_content = surrounding_start .. key .. surrounding_end
+
+  return key_content
+end
+
 return utils

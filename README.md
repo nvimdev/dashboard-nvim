@@ -117,6 +117,7 @@ config = {
       key = 'shortcut key in dashboard buffer not keymap !!',
       key_hl = 'group',
       action = '',
+      surroundings = '[]' -- this can be either an empty string or a two character string
     },
   },
   footer = {},
