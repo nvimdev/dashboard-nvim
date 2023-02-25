@@ -244,6 +244,10 @@ end
 local function gen_center(plist, config)
   local mlist, mgroups = mru_list(config)
   local plist_len = #plist
+  if plist_len == 0 then
+    plist[#plist + 1] = ''
+    plist_len = 1
+  end
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.list_extend(plist, mlist)
   local max_len = utils.get_max_len(plist)
@@ -260,53 +264,50 @@ local function gen_center(plist, config)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
-  local _, scol = plist[(plist_len > 0 and 2 or 1)]:find('%s+')
+  local _, scol = plist[2]:find('%s+')
 
   local hotkey = gen_hotkey(config)
 
-  if #plist ~= 0 then
-    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line + 1, 0, -1)
+  api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardProjectTitle', first_line + 1, 0, -1)
+  api.nvim_buf_add_highlight(
+    config.bufnr,
+    0,
+    'DashboardProjectTitleIcon',
+    first_line + 1,
+    0,
+    scol + #config.project.icon
+  )
+
+  for i = 3, plist_len do
     api.nvim_buf_add_highlight(
       config.bufnr,
       0,
-      'DashboardProjectTitleIcon',
-      first_line + 1,
+      'DashboardProjectIcon',
+      first_line + i - 1,
       0,
-      scol + #config.project.icon
+      start_col + 3
     )
-
-    for i = 3, plist_len do
-      api.nvim_buf_add_highlight(
-        config.bufnr,
-        0,
-        'DashboardProjectIcon',
-        first_line + i - 1,
-        0,
-        start_col + 3
-      )
-      api.nvim_buf_add_highlight(
-        config.bufnr,
-        0,
-        'DashboardFiles',
-        first_line + i - 1,
-        start_col + 3,
-        -1
-      )
-      local text =
-        api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
-      if text and text:find('%w') and not text:find('empty') then
-        local key = tostring(hotkey())
-        api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
-          virt_text = { { key, 'DashboardShortCut' } },
-          virt_text_pos = 'eol',
-        })
-        map_key(config, key, text)
-      end
+    api.nvim_buf_add_highlight(
+      config.bufnr,
+      0,
+      'DashboardFiles',
+      first_line + i - 1,
+      start_col + 3,
+      -1
+    )
+    local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
+    if text and text:find('%w') and not text:find('empty') then
+      local key = tostring(hotkey())
+      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
+        virt_text = { { key, 'DashboardShortCut' } },
+        virt_text_pos = 'eol',
+      })
+      map_key(config, key, text)
     end
   end
 
   -- initialize the cursor pos
-  api.nvim_win_set_cursor(config.winid, { first_line + (plist_len > 0 and 3 or 2), start_col + 4 })
+  api.nvim_win_set_cursor(config.winid, { first_line + 3, start_col + 4 })
 
   api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardMruTitle', first_line + plist_len, 0, -1)
   api.nvim_buf_add_highlight(
@@ -345,7 +346,7 @@ local function gen_center(plist, config)
     )[1]
     if text and text:find('%w') then
       local key = tostring(hotkey())
-      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
+      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len + 1, 0, {
         virt_text = { { key, 'DashboardShortCut' } },
         virt_text_pos = 'eol',
       })
