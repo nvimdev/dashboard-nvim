@@ -224,7 +224,7 @@ db.setup({
 
 - Removed Session as a start screen plugin speed is first.if you want use session you can take a
   look at [glepnir/dbsession.nvim](https://github.com/glepnir/dbsession.nvim)
-- Removed Ueberzug script. since the ueberzug author delete the repo.
+- Removed Ueberzug script, as the Ueberzug author has deleted the repository.
 
 ### TODO
 
