@@ -269,10 +269,8 @@ TODO ~
 ==============================================================================
 5. Donate                                                   *dashboard-donate*
 
-<https://paypal.me/bobbyhub>
-
-If you’d like to support my work financially, buy me a drink through paypal
-<https://paypal.me/bobbyhub>
+If you’d like to support my work financially, buy me a drink through Github
+Sponsor or paypal <https://paypal.me/bobbyhub> <https://paypal.me/bobbyhub>
 
 
 ==============================================================================
