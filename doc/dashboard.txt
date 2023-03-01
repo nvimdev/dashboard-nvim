@@ -1,4 +1,4 @@
-*dashboard.txt*          For Nvim 0.8.0          Last change: 2023 February 26
+*dashboard.txt*            For Nvim 0.8.0           Last change: 2023 March 01
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -70,6 +70,7 @@ OPTIONS                                      *dashboard-configuration-options*
     theme = 'hyper' --  theme is doom and hyper default is hyper
     disable_move    --  defualt is false disable move keymap for hyper
     shortcut_type   --  shorcut type 'letter' or 'number'
+    change_to_vcs_root -- default is false,for open file in hyper mru. it will change to the root of vcs
     config = {},    --  config used for theme
     hide = {
       statusline    -- hide statusline default is true
