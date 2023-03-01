@@ -232,6 +232,9 @@ local function map_key(config, key, content)
     else
       vim.cmd('edit ' .. path)
       local root = utils.get_vcs_root()
+      if not config.change_to_vcs_root then
+        return
+      end
       if #root > 0 then
         vim.cmd('lcd ' .. vim.fn.fnamemodify(root[#root], ':h'))
       else
