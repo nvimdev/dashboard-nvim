@@ -369,7 +369,7 @@ local function gen_footer(config)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
 
   for i, _ in pairs(footer) do
-    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i, 0, -1)
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
 end
 
