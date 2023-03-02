@@ -219,6 +219,7 @@ local function map_key(config, key, content)
     path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
       path = vim.fn.fnameescape(path)
+      vim.cmd('lcd ' .. path)
       if type(config.project.action) == 'function' then
         config.project.action(path)
       elseif type(config.project.action) == 'string' then
