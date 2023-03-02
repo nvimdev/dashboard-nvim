@@ -359,10 +359,12 @@ local function gen_center(plist, config)
 end
 
 local function gen_footer(config)
-  local footer = config.footer or {
-    '',
-    ' 🚀 Sharp tools make good work.',
-  }
+  local footer = type(config.footer) == 'function' and config.footer()
+    or config.footer
+    or {
+      '',
+      ' 🚀 Sharp tools make good work.',
+    }
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
