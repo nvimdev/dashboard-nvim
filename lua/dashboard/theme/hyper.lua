@@ -359,12 +359,26 @@ local function gen_center(plist, config)
 end
 
 local function gen_footer(config)
-  local footer = type(config.footer) == 'function' and config.footer()
-    or config.footer
-    or {
-      '',
-      ' 🚀 Sharp tools make good work.',
-    }
+  local footer = {
+    '',
+    ' 🚀 Sharp tools make good work.',
+  }
+
+  -- NOTE: footer() reload from cache, footer had been convert into string, so convert footer() to function back
+  if type(config.footer) == 'string' then
+    local func = loadstring(config.footer)
+    if func then
+      footer = func()
+    end
+  end
+
+  if type(config.footer) == 'function' then
+    footer = config.footer()
+  end
+
+  if type(config.footer) == 'table' and config.footer ~= {} then
+    footer = config.footer
+  end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
