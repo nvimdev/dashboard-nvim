@@ -360,14 +360,24 @@ local function gen_center(plist, config)
 end
 
 local function gen_footer(config)
-  local footer = config.footer or {
+  local footer = {
     '',
     ' 🚀 Sharp tools make good work.',
   }
 
+  if type(config.footer) == 'string' then
+    local dump = loadstring(config.footer)
+    if dump then
+      footer = dump()
+    end
+  elseif type(config.footer) == 'function' then
+    footer = config.footer()
+  end
+
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
 
+  ---@diagnostic disable-next-line: param-type-mismatch
   for i, _ in pairs(footer) do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
