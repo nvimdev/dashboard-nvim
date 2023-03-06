@@ -37,6 +37,7 @@ local function default_options()
     disable_move = false,
     shortcut_type = 'letter',
     change_to_vcs_root = false,
+    buffer_name = 'Dashboard',
     config = {
       week_header = {
         enable = false,
@@ -192,6 +193,28 @@ function db:get_opts(callback)
   )
 end
 
+local function get_unique_buffer_name(opts)
+  local name2 = string.format(opts.buffer_name, 1)
+
+  if -1 == vim.fn.bufnr(name2) then
+    return name2
+  end
+
+  for i = 2, 9999, 1 do
+    local name2 = string.format(opts.buffer_name, i)
+    if name2 == opts.buffer_name then
+      name2 = opts.buffer_name .. '-' .. i
+    end
+
+    if -1 == vim.fn.bufnr(name2) then
+      return name2
+    end
+  end
+
+  -- if we are here, then it is bad ... but chances of getting here are very low
+  error('Unable to find unique name for the dashboard buffer')
+end
+
 function db:load_theme(opts)
   local config = vim.tbl_extend('force', opts.config, {
     path = cache_path(),
@@ -201,6 +224,8 @@ function db:load_theme(opts)
     shortcut_type = opts.shortcut_type,
     change_to_vcs_root = opts.change_to_vcs_root,
   })
+
+  vim.api.nvim_buf_set_name(self.bufnr, get_unique_buffer_name(opts))
 
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, self.opts.preview)
