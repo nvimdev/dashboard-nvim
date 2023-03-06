@@ -268,7 +268,7 @@ local function gen_center(plist, config)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
-  local _, scol = plist[2]:find('%s+')
+  local _, scol = plist[2]:find('%S')
 
   local hotkey = gen_hotkey(config)
 
