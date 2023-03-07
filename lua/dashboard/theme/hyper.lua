@@ -214,11 +214,9 @@ local function map_key(config, key, content)
     local text = content or api.nvim_get_current_line()
     local scol = utils.is_win and text:find('%w') or text:find('%p')
     text = text:sub(scol)
-    local path = vim.trim(text)
+    local path = text:sub(1, text:find('%w(%s+)$'))
     path = vim.fs.normalize(path)
-    path = vim.loop.fs_realpath(path)
     if vim.fn.isdirectory(path) == 1 then
-      path = vim.fn.fnameescape(path)
       vim.cmd('lcd ' .. path)
       if type(config.project.action) == 'function' then
         config.project.action(path)
