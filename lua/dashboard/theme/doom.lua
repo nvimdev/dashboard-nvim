@@ -108,7 +108,7 @@ local function generate_center(config)
 
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, first_line + 1, false)[1]
   local col = line:find('%w')
-  col = col and col - 1 or 0
+  col = col and col - 1 or 9999
   api.nvim_win_set_cursor(config.winid, { first_line + 1, col })
 
   local bottom = api.nvim_buf_line_count(config.bufnr)
