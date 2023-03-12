@@ -156,4 +156,10 @@ function utils.get_vcs_root(buf)
   end
 end
 
+local index = 0
+function utils.gen_bufname(prefix)
+  index = index + 1
+  return prefix .. '-' .. index
+end
+
 return utils

@@ -36,6 +36,7 @@ local function default_options()
     theme = 'hyper',
     disable_move = false,
     shortcut_type = 'letter',
+    buffer_name = 'Dashboard',
     change_to_vcs_root = false,
     config = {
       week_header = {
@@ -102,10 +103,12 @@ end
 -- or use DashboardNewFile command
 function db:cache_ui_options(opts)
   if opts.hide.statusline then
+    ---@diagnostic disable-next-line: param-type-mismatch
     self.user_laststatus_value = vim.opt.laststatus:get()
     vim.opt.laststatus = 0
   end
   if opts.hide.tabline then
+    ---@diagnostic disable-next-line: param-type-mismatch
     self.user_tabline_value = vim.opt.showtabline:get()
     vim.opt.showtabline = 0
   end
@@ -201,6 +204,8 @@ function db:load_theme(opts)
     shortcut_type = opts.shortcut_type,
     change_to_vcs_root = opts.change_to_vcs_root,
   })
+
+  api.nvim_buf_set_name(self.bufnr, utils.gen_bufname(opts.buffer_name))
 
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, self.opts.preview)
