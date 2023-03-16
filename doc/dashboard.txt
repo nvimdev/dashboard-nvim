@@ -1,4 +1,4 @@
-*dashboard.txt*            For Nvim 0.8.0           Last change: 2023 March 12
+*dashboard.txt*            For Nvim 0.8.0           Last change: 2023 March 16
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -271,7 +271,7 @@ TODO ~
 5. Donate                                                   *dashboard-donate*
 
 If you’d like to support my work financially, buy me a drink through Github
-Sponsor or paypal <https://paypal.me/bobbyhub> <https://paypal.me/bobbyhub>
+Sponsor or <https://paypal.me/bobbyhub>
 
 
 ==============================================================================
