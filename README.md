@@ -100,6 +100,7 @@ config = {
   project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { limit = 10, icon = 'your icon', label = '', },
   footer = {}, -- footer
+  exclude_letter = {'j', 'k'} -- Prevent generated characters from appearing in the Recent Projects and the Most Recent Files
 }
 ```
 

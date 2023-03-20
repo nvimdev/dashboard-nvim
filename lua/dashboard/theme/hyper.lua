@@ -176,7 +176,7 @@ local function mru_list(config)
 end
 
 local function letter_hotkey(config)
-  local list = { 106, 107 }
+  local list = config.exclude_letter or { 'j', 'k' }
   for _, item in pairs(config.shortcut or {}) do
     if item.key then
       table.insert(list, item.key:byte())
@@ -186,9 +186,10 @@ local function letter_hotkey(config)
   return function()
     while true do
       local key = math.random(97, 122)
-      if not vim.tbl_contains(list, key) then
-        table.insert(list, key)
-        return string.char(key)
+      local ch = string.char(key)
+      if not vim.tbl_contains(list, ch) then
+        table.insert(list, ch)
+        return ch;
       end
     end
   end
