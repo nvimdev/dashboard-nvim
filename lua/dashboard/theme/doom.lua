@@ -152,9 +152,10 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = type(config.footer) == 'function' and config.footer()
-    or config.footer
-    or { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  local footer = { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  if config.footer then
+    footer = type(config.footer) == 'function' and config.footer() or config.footer
+  end
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
   for i = 1, #footer do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
