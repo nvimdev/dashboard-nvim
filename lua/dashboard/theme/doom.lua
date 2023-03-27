@@ -108,7 +108,8 @@ local function generate_center(config)
 
   local line = api.nvim_buf_get_lines(config.bufnr, first_line, first_line + 1, false)[1]
   local col = line:find('%w')
-  api.nvim_win_set_cursor(config.winid, { first_line + 1, col - 1 })
+  col = col and col - 1 or 9999
+  api.nvim_win_set_cursor(config.winid, { first_line + 1, col })
 
   local bottom = api.nvim_buf_line_count(config.bufnr)
   vim.defer_fn(function()
@@ -125,7 +126,7 @@ local function generate_center(config)
           curline = curline + (before > curline and -1 or 1)
         end
         before = curline
-        api.nvim_win_set_cursor(config.winid, { curline, col - 1 })
+        api.nvim_win_set_cursor(config.winid, { curline, col })
       end,
     })
   end, 0)
@@ -161,6 +162,8 @@ local function generate_footer(config)
       if dump then
         footer = dump()
       end
+    elseif type(config.footer) == 'table' then
+      footer = config.footer
     end
   end
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
