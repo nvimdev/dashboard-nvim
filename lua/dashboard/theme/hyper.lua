@@ -189,7 +189,7 @@ local function letter_hotkey(config)
       local ch = string.char(key)
       if not vim.tbl_contains(list, ch) then
         table.insert(list, ch)
-        return ch;
+        return ch
       end
     end
   end
