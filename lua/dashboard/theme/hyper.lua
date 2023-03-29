@@ -370,6 +370,8 @@ local function gen_footer(config)
     end
   elseif type(config.footer) == 'function' then
     footer = config.footer()
+  elseif type(config.footer) == 'table' then
+    footer = config.footer
   end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
