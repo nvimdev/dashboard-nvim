@@ -412,6 +412,9 @@ end
 
 local function theme_instance(config)
   project_list(config, function(plist)
+    if not api.nvim_buf_is_valid(config.bufnr) then
+      return
+    end
     if config.disable_move then
       utils.disable_move_key(config.bufnr)
     end
