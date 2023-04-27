@@ -72,8 +72,8 @@ local function buf_local()
     ['relativenumber'] = false,
     ['spell'] = false,
     ['swapfile'] = false,
+    ['readonly'] = false,
     ['filetype'] = 'dashboard',
-    ['buftype'] = 'nofile',
     ['wrap'] = false,
     ['signcolumn'] = 'no',
     ['winbar'] = '',
@@ -205,7 +205,7 @@ function db:load_theme(opts)
     change_to_vcs_root = opts.change_to_vcs_root,
   })
 
-  api.nvim_buf_set_name(self.bufnr, utils.gen_bufname(opts.buffer_name))
+  -- api.nvim_buf_set_name(self.bufnr, utils.gen_bufname(opts.buffer_name))
 
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, opts.preview)
@@ -253,8 +253,7 @@ function db:instance()
   end
 
   if vim.fn.line2byte('$') ~= -1 then
-    vim.cmd('noautocmd')
-    self.bufnr = api.nvim_create_buf(true, true)
+    self.bufnr = api.nvim_create_buf(false, true)
   else
     self.bufnr = api.nvim_get_current_buf()
   end

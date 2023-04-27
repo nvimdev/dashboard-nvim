@@ -431,6 +431,7 @@ local function theme_instance(config)
     local fill = utils.generate_empty_table(size)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false
+    vim.bo[config.bufnr].modified = false
     project_delete()
   end)
 end

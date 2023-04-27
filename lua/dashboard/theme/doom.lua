@@ -178,6 +178,7 @@ local function theme_instance(config)
   generate_center(config)
   generate_footer(config)
   api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
+  api.nvim_set_option_value('modified', false, { buf = config.bufnr })
 end
 
 return setmetatable({}, {
