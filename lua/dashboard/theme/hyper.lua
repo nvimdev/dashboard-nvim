@@ -100,7 +100,7 @@ local function project_list(config, callback)
   config.project = vim.tbl_extend('force', {
     limit = 8,
     enable = true,
-    icon = ' ',
+    icon = '󰏓 ',
     icon_hl = 'DashboardRecentProjectIcon',
     action = 'Telescope find_files cwd=',
     label = ' Recent Projects:',
