@@ -1,21 +1,9 @@
 local api, fn = vim.api, vim.fn
-local utils = require('dashboard.utils')
+local util = require('dashboard.util')
 local ctx = {}
-local db = {}
-
-db.__index = db
-db.__newindex = function(t, k, v)
-  rawset(t, k, v)
-end
-
-local function clean_ctx()
-  for k, _ in pairs(ctx) do
-    ctx[k] = nil
-  end
-end
 
 local function cache_dir()
-  local dir = utils.path_join(vim.fn.stdpath('cache'), 'dashboard')
+  local dir = util.path_join(fn.stdpath('cache'), 'dashboard')
   if fn.isdirectory(dir) == 0 then
     fn.mkdir(dir, 'p')
   end
@@ -24,11 +12,11 @@ end
 
 local function cache_path()
   local dir = cache_dir()
-  return utils.path_join(dir, 'cache')
+  return util.path_join(dir, 'cache')
 end
 
 local function conf_cache_path()
-  return utils.path_join(cache_dir(), 'conf')
+  return util.path_join(cache_dir(), 'conf')
 end
 
 local function default_options()
@@ -77,12 +65,10 @@ local function buf_local()
     ['wrap'] = false,
     ['signcolumn'] = 'no',
     ['winbar'] = '',
+    ['stc'] = '',
   }
   for opt, val in pairs(opts) do
     vim.opt_local[opt] = val
-  end
-  if fn.has('nvim-0.9') == 1 then
-    vim.opt_local.stc = ''
   end
 end
 
@@ -181,7 +167,7 @@ function db:cache_opts()
 end
 
 function db:get_opts(callback)
-  utils.async_read(
+  util.async_read(
     conf_cache_path(),
     vim.schedule_wrap(function(data)
       if not data or #data == 0 then
@@ -263,18 +249,14 @@ function db:instance()
 
   self.user_cursor_line = vim.opt.cursorline:get()
   buf_local()
-  if self.opts then
-    self:load_theme(self.opts)
-  else
-    self:get_opts(function(obj)
-      self:load_theme(obj)
-    end)
-  end
 end
 
-function db.setup(opts)
-  opts = opts or {}
-  ctx.opts = vim.tbl_deep_extend('force', default_options(), opts)
+local function render_theme(conf) end
+
+local function setup(opts)
+  ctx.opts = opts or default_options()
 end
 
-return setmetatable(ctx, db)
+return {
+  setup = setup,
+}
