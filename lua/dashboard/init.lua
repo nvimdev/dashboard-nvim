@@ -1,184 +1,82 @@
 local api, fn = vim.api, vim.fn
 local util = require('dashboard.util')
-local ctx = {}
-
-local function cache_dir()
-  local dir = util.path_join(fn.stdpath('cache'), 'dashboard')
-  if fn.isdirectory(dir) == 0 then
-    fn.mkdir(dir, 'p')
-  end
-  return dir
-end
-
-local function cache_path()
-  local dir = cache_dir()
-  return util.path_join(dir, 'cache')
-end
-
-local function conf_cache_path()
-  return util.path_join(cache_dir(), 'conf')
-end
+local db = {}
+local instance = {}
 
 local function default_options()
   return {
     theme = 'hyper',
-    disable_move = false,
-    shortcut_type = 'letter',
-    buffer_name = 'Dashboard',
-    change_to_vcs_root = false,
-    config = {
-      week_header = {
-        enable = false,
-        concat = nil,
-        append = nil,
-      },
-    },
+    change_to_vcs_root = true,
     hide = {
       statusline = true,
       tabline = true,
+      cursorline = true,
     },
-    preview = {
-      command = '',
-      file_path = nil,
-      file_height = 0,
-      file_width = 0,
-    },
+    theme_config = {},
+    -- preview = {
+    --   command = '',
+    --   file_path = nil,
+    --   file_height = 0,
+    --   file_width = 0,
+    -- },
   }
+end
+
+function db:new()
+  local o = setmetatable({}, self)
+  self.__index = self
+  return o
 end
 
 local function buf_local()
-  local opts = {
-    ['bufhidden'] = 'wipe',
-    ['colorcolumn'] = '',
-    ['foldcolumn'] = '0',
-    ['matchpairs'] = '',
-    ['buflisted'] = false,
-    ['cursorcolumn'] = false,
-    ['cursorline'] = false,
-    ['list'] = false,
-    ['number'] = false,
-    ['relativenumber'] = false,
-    ['spell'] = false,
-    ['swapfile'] = false,
-    ['readonly'] = false,
-    ['filetype'] = 'dashboard',
-    ['wrap'] = false,
-    ['signcolumn'] = 'no',
-    ['winbar'] = '',
-    ['stc'] = '',
-  }
-  for opt, val in pairs(opts) do
-    vim.opt_local[opt] = val
-  end
+  vim.opt_local.bufhidden = 'wipe'
+  vim.opt_local.colorcolumn = ''
+  vim.opt_local.foldcolumn = '0'
+  vim.opt_local.matchpairs = ''
+  vim.opt_local.buflisted = false
+  vim.opt_local.cursorcolumn = false
+  vim.opt_local.cursorline = false
+  vim.opt_local.list = false
+  vim.opt_local.number = false
+  vim.opt_local.relativenumber = false
+  vim.opt_local.spell = false
+  vim.opt_local.swapfile = false
+  vim.opt_local.readonly = false
+  vim.opt_local.filetype = 'dashboard'
+  vim.opt_local.wrap = false
+  vim.opt_local.signcolumn = 'no'
+  vim.opt_local.winbar = ''
+  vim.opt_local.stc = ''
 end
 
-function db:new_file()
-  vim.cmd('enew')
-  if self.user_laststatus_value then
-    vim.opt_local.laststatus = self.user_laststatus_value
-    self.user_laststatus_value = nil
-  end
-
-  if self.user_tabline_value then
-    vim.opt_local.showtabline = self.user_showtabline_value
-    self.user_showtabline_value = nil
-  end
-end
-
--- cache the user options value restore after leave the dahsboard buffer
--- or use DashboardNewFile command
-function db:cache_ui_options(opts)
+function db:hide_options(opts)
   if opts.hide.statusline then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    self.user_laststatus_value = vim.opt.laststatus:get()
+    self.user_laststatus = util.get_global_option_value('laststatus')
     vim.opt.laststatus = 0
   end
+
   if opts.hide.tabline then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    self.user_tabline_value = vim.opt.showtabline:get()
+    self.user_tabline = util.get_global_option_value('showtabline')
     vim.opt.showtabline = 0
+  end
+
+  if opts.hide.cursorline then
+    self.user_cursorline = util.get_global_option_value('cursorline')
   end
 end
 
 function db:restore_options()
-  if self.user_cursor_line then
-    vim.opt.cursorline = self.user_cursor_line
-    self.user_cursor_line = nil
+  if self.user_cursorline then
+    vim.opt.cursorline = self.user_cursorline
   end
 
-  if self.user_laststatus_value then
-    vim.opt.laststatus = tonumber(self.user_laststatus_value)
-    self.user_laststatus_value = nil
+  if self.user_laststatus then
+    vim.opt.laststatus = tonumber(self.user_laststatus)
   end
 
-  if self.user_tabline_value then
-    vim.opt.showtabline = tonumber(self.user_tabline_value)
-    self.user_tabline_value = nil
+  if self.user_tabline then
+    vim.opt.showtabline = tonumber(self.user_tabline)
   end
-end
-
-function db:cache_opts()
-  if not self.opts then
-    return
-  end
-  local uv = vim.loop
-  local path = conf_cache_path()
-  if self.opts.config.shortcut then
-    for _, item in pairs(self.opts.config.shortcut) do
-      if type(item.action) == 'function' then
-        ---@diagnostic disable-next-line: param-type-mismatch
-        local dump = assert(string.dump(item.action))
-        item.action = dump
-      end
-    end
-  end
-
-  if self.opts.config.project and type(self.opts.config.project.action) == 'function' then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local dump = assert(string.dump(self.opts.config.project.action))
-    self.opts.config.project.action = dump
-  end
-
-  if self.opts.config.center then
-    for _, item in pairs(self.opts.config.center) do
-      if type(item.action) == 'function' then
-        ---@diagnostic disable-next-line: param-type-mismatch
-        local dump = assert(string.dump(item.action))
-        item.action = dump
-      end
-    end
-  end
-
-  if self.opts.config.footer and type(self.opts.config.footer) == 'function' then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local dump = assert(string.dump(self.opts.config.footer))
-    self.opts.config.footer = dump
-  end
-
-  local dump = vim.json.encode(self.opts)
-  uv.fs_open(path, 'w+', tonumber('664', 8), function(err, fd)
-    assert(not err, err)
-    ---@diagnostic disable-next-line: redefined-local
-    uv.fs_write(fd, dump, 0, function(err, _)
-      assert(not err, err)
-      uv.fs_close(fd)
-    end)
-  end)
-end
-
-function db:get_opts(callback)
-  util.async_read(
-    conf_cache_path(),
-    vim.schedule_wrap(function(data)
-      if not data or #data == 0 then
-        return
-      end
-      local obj = vim.json.decode(data)
-      if obj then
-        callback(obj)
-      end
-    end)
-  )
 end
 
 function db:load_theme(opts)
@@ -217,7 +115,6 @@ function db:load_theme(opts)
       if #bufs == 0 then
         self:cache_opts()
         self:restore_options()
-        clean_ctx()
         pcall(api.nvim_del_autocmd, opt.id)
       end
     end,
@@ -247,16 +144,21 @@ function db:instance()
   self.winid = api.nvim_get_current_win()
   api.nvim_win_set_buf(self.winid, self.bufnr)
 
-  self.user_cursor_line = vim.opt.cursorline:get()
   buf_local()
 end
 
-local function render_theme(conf) end
+local function render() end
 
 local function setup(opts)
-  ctx.opts = opts or default_options()
+  local async = require('dashboard.async')
+  print('start')
+  async.async_read('/Users/mathew/workspace/test/a.ts', function(res)
+    print(res)
+  end)
+  print('end')
 end
 
 return {
   setup = setup,
+  render = render,
 }

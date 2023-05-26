@@ -21,9 +21,24 @@ function util.path_sep()
   return path_sep
 end
 
---join path
+---join path
+---@return string
 function util.path_join(...)
   return table.concat({ ... }, util.path_sep())
+end
+
+---get dashboard cache path
+---@return string
+function util.cache_path()
+  local dir = util.path_join(fn.stdpath('cache'), 'dashboard')
+  if fn.isdirectory(dir) == 0 then
+    fn.mkdir(dir, 'p')
+  end
+  return dir
+end
+
+function util.get_global_option_value(name)
+  return api.nvim_get_option_value(name, { scope = 'global' })
 end
 
 local function get_max_len(lines)
@@ -121,22 +136,6 @@ function util.get_vcs_root(bufnr)
   end
 end
 
-function util.async_read(path, callback)
-  uv.fs_open(path, 'a+', 438, function(err, fd)
-    assert(not err, err)
-    uv.fs_fstat(fd, function(err, stat)
-      assert(not err, err)
-      uv.fs_read(fd, stat.size, 0, function(err, data)
-        assert(not err, err)
-        uv.fs_close(fd, function(err)
-          assert(not err, err)
-          callback(data)
-        end)
-      end)
-    end)
-  end)
-end
-
 function util.get_packer_count()
   local ok = pcall(require, 'packer')
   if ok then
@@ -162,10 +161,10 @@ end
 
 ---disable some vim move keys on buffer
 ---@param bufnr number
-function util.disable_move_keys(bufnr)
-  local keys = { 'w', 'f', 'b', 'h', 'j', 'k', 'l', '<Up>', '<Down>', '<Left>', '<Right>' }
+function util.disable_move_keys(bufnr, keys)
+  keys = keys or { 'w', 'f', 'b', 'h', 'j', 'k', 'l', '<Up>', '<Down>', '<Left>', '<Right>' }
   for _, key in ipairs(keys) do
-    api.nvim_buf_set_keymap(bufnr, 'n', key, '<Nope>', {})
+    api.nvim_buf_set_keymap(bufnr, 'n', key, '<Nop>', {})
   end
 end
 
