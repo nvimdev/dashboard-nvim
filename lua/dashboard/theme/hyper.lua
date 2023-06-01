@@ -100,7 +100,7 @@ local function project_list(config, callback)
   config.project = vim.tbl_extend('force', {
     limit = 8,
     enable = true,
-    icon = ' ',
+    icon = '󰏓 ',
     icon_hl = 'DashboardRecentProjectIcon',
     action = 'Telescope find_files cwd=',
     label = ' Recent Projects:',
@@ -371,6 +371,8 @@ local function gen_footer(config)
     end
   elseif type(config.footer) == 'function' then
     footer = config.footer()
+  elseif type(config.footer) == 'table' then
+    footer = config.footer
   end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
@@ -411,6 +413,9 @@ end
 
 local function theme_instance(config)
   project_list(config, function(plist)
+    if not api.nvim_buf_is_valid(config.bufnr) then
+      return
+    end
     if config.disable_move then
       utils.disable_move_key(config.bufnr)
     end
@@ -427,6 +432,7 @@ local function theme_instance(config)
     local fill = utils.generate_empty_table(size)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false
+    vim.bo[config.bufnr].modified = false
     project_delete()
   end)
 end
