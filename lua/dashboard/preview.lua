@@ -99,15 +99,15 @@ function view:preview_events()
     desc = 'Dashboard close or regenerate preview window',
   })
 
-  local function winresized()
-    api.nvim_create_autocmd('WinResized', {
-      group = group,
-      callback = function()
-        refresh_preview_wincol()
-      end,
-      desc = ' Dashboard preview window resized for nvim 0.9',
-    })
-  end
+  -- local function winresized()
+  --   api.nvim_create_autocmd('WinResized', {
+  --     group = group,
+  --     callback = function()
+  --       refresh_preview_wincol()
+  --     end,
+  --     desc = ' Dashboard preview window resized for nvim 0.9',
+  --   })
+  -- end
 
   api.nvim_create_autocmd('VimResized', {
     group = group,

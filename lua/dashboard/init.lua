@@ -214,13 +214,13 @@ function db:load_theme(opts)
   require('dashboard.theme.' .. opts.theme)(config)
   self:cache_ui_options(opts)
 
-  api.nvim_create_autocmd('VimResized', {
-    buffer = self.bufnr,
-    callback = function()
-      require('dashboard.theme.' .. opts.theme)(config)
-      vim.bo[self.bufnr].modifiable = false
-    end,
-  })
+  -- api.nvim_create_autocmd('VimResized', {
+  --   buffer = self.bufnr,
+  --   callback = function()
+  --     require('dashboard.theme.' .. opts.theme)(config)
+  --     vim.bo[self.bufnr].modifiable = false
+  --   end,
+  -- })
 
   api.nvim_create_autocmd('BufEnter', {
     callback = function(opt)
