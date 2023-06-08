@@ -164,7 +164,7 @@ end
 function util.disable_move_keys(bufnr, keys)
   keys = keys or { 'w', 'f', 'b', 'h', 'j', 'k', 'l', '<Up>', '<Down>', '<Left>', '<Right>' }
   for _, key in ipairs(keys) do
-    api.nvim_buf_set_keymap(bufnr, 'n', key, '<Nop>', {})
+    api.nvim_buf_set_keymap(bufnr, 'n', key, '<Nope>', {})
   end
 end
 
