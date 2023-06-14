@@ -1,4 +1,4 @@
-*dashboard.txt*             For Nvim 0.8.0            Last change: 2023 May 03
+*dashboard.txt*            For Nvim 0.8.0            Last change: 2023 June 14
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -19,14 +19,12 @@ Fancy and Blazing Fast start screen plugin of neovim  --------------------------
 ==============================================================================
 1. Feature                                                 *dashboard-feature*
 
-
 - Low memory usage. dashboard does not store the all user configs in memory like header etc these string will take some memory. now it will be clean after you open a file. you can still use dashboard command to open a new one , then dashboard will read the config from cache.
 - Blazing fast
 
 
 ==============================================================================
 2. Install                                                 *dashboard-install*
-
 
 - Lazy.nvim
 
@@ -42,7 +40,6 @@ Fancy and Blazing Fast start screen plugin of neovim  --------------------------
       dependencies = { {'nvim-tree/nvim-web-devicons'}}
     }
 <
-
 
 - Packer
 
@@ -152,7 +149,6 @@ instead
 
 COMMANDS ~
 
-
 - `Dashboard` open dashboard
 - `DbProjectDelete count` delete project in cache works for hyper theme. count is number
 
@@ -248,14 +244,12 @@ Doom ~
 
 CHANGED ~
 
-
 - Removed Session as a start screen plugin speed is first.if you want use session you can take a
     look at glepnir/dbsession.nvim <https://github.com/glepnir/dbsession.nvim>
 - Removed Ueberzug script, as the Ueberzug author has deleted the repository.
 
 
 TODO ~
-
 
 - I will write a plugin to implement some popular terminal evaluators image protocol then I think
     can make it work with dashboard
