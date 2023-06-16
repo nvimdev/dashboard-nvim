@@ -5,15 +5,4 @@ end
 
 vim.g.loaded_dashboard = 1
 
-vim.api.nvim_create_autocmd('UIEnter', {
-  group = vim.api.nvim_create_augroup('Dashboard', { clear = true }),
-  callback = function()
-    if vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1 then
-      require('dashboard').render()
-    end
-  end,
-})
-
-vim.api.nvim_create_user_command('Dashboard', function()
-  require('dashboard').instance()
-end, {})
+vim.api.nvim_create_user_command('Dashboard', function() end, {})

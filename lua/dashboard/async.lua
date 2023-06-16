@@ -26,9 +26,9 @@ local function fs_module(filename)
   local fs = {}
   local task = {}
 
-  function fs:open()
+  function fs:open(flag)
     task[#task + 1] = function(callback)
-      uv.fs_open(filename, 'r', 438, function(err, fd)
+      uv.fs_open(filename, flag, tonumber('644', 8), function(err, fd)
         assert(not err)
         self.fd = fd
         callback(fd)
@@ -60,10 +60,12 @@ local function fs_module(filename)
   end
 
   function fs:write(content)
-    local data = vim.json.encode(content)
     task[#task + 1] = function()
-      uv.fs_write(self.fd, data, function(err)
+      uv.fs_write(self.fd, content, function(err, bytes)
         assert(not err)
+        if bytes == 0 then
+          print('note write 0 bytes')
+        end
         assert(uv.fs_close(self.fd))
       end)
     end
@@ -74,7 +76,7 @@ local function fs_module(filename)
     async(function()
       for i, t in ipairs(task) do
         local res = await(t)
-        if i == #task then
+        if i == #task and callback then
           callback(res)
         end
       end
@@ -86,15 +88,17 @@ end
 
 local function async_read(filename, callback)
   local fs = fs_module(filename)
-  fs:open():size():read():run(callback)
+  fs:open('r'):size():read():run(callback)
 end
 
-local function async_write(filename, content, callback)
+local function async_write(filename, content)
   local fs = fs_module(filename)
-  fs:open():size():write(content):run(callback)
+  fs:open('w'):size():write(content):run()
 end
 
 return {
+  async = async,
+  await = await,
   async_read = async_read,
   async_write = async_write,
 }

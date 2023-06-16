@@ -85,22 +85,12 @@ end
 
 ---@param ft string
 ---@return table|nil
-function util.get_icon(ft)
+function util.get_devicons_icon(ft)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
     return nil
   end
   return devicons.get_icon_by_filetype(ft, { default = true })
-end
-
----get the most recently files list
----@return table
-function util.get_mru_list()
-  local mru = {}
-  for _, item in ipairs(vim.v.oldfiles or {}) do
-    mru[#mru + 1] = item
-  end
-  return mru
 end
 
 ---generate an empty table by given capacity
@@ -133,38 +123,6 @@ function util.get_vcs_root(bufnr)
       res[#res] = nil
       return table.concat(res, sep)
     end
-  end
-end
-
-function util.get_packer_count()
-  local ok = pcall(require, 'packer')
-  if ok then
-    ---@diagnostic disable-next-line: undefined-global
-    return #vim.tbl_keys(packer_plugins)
-  end
-end
-
-function util.get_lazy_count()
-  local status, lazy = pcall(require, 'lazy')
-  if status then
-    return lazy.stats().count
-  end
-end
-
-function util.read_project_cache(path)
-  local fd = assert(uv.fs_open(path, 'r', tonumber('644', 8)))
-  local stat = uv.fs_fstat(fd)
-  local chunk = uv.fs_read(fd, stat.size, 0)
-  local dump = assert(loadstring(chunk))
-  return dump()
-end
-
----disable some vim move keys on buffer
----@param bufnr number
-function util.disable_move_keys(bufnr, keys)
-  keys = keys or { 'w', 'f', 'b', 'h', 'j', 'k', 'l', '<Up>', '<Down>', '<Left>', '<Right>' }
-  for _, key in ipairs(keys) do
-    api.nvim_buf_set_keymap(bufnr, 'n', key, '<Nope>', {})
   end
 end
 

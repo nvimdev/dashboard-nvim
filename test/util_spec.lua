@@ -56,33 +56,9 @@ describe('util functions', function()
     }, tbl)
   end)
 
-  it('util.get_mru_list', function()
-    vim.v.oldfiles = {
-      '/Users/runner/test/foo.lua',
-      '/Users/runner/test/bar.lua',
-    }
-    same({
-      '/Users/runner/test/foo.lua',
-      '/Users/runner/test/bar.lua',
-    }, util.get_mru_list())
-  end)
-
   it('util.get_vcs_root', function()
     vim.api.nvim_buf_set_name(bufnr, 'test.lua')
     local root = util.get_vcs_root(bufnr)
     eq(vim.loop.cwd(), root)
-  end)
-
-  it('util.disable_move_keys', function()
-    util.disable_move_keys(bufnr)
-    local maps = vim.api.nvim_buf_get_keymap(bufnr, 'n')
-
-    local wmap
-    for _, map in ipairs(maps) do
-      if map.lhs == 'w' then
-        wmap = map
-      end
-    end
-    eq('<lt>Nope>', wmap.rhs)
   end)
 end)
