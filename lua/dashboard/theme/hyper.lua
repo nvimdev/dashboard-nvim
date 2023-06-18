@@ -108,6 +108,7 @@ local function project_list(config, callback)
 
   local function read_project(data)
     local res = {}
+    data = string.gsub(data, '%z', '')
     local dump = assert(loadstring(data))
     local list = dump()
     if list then
