@@ -153,7 +153,25 @@ end
 
 local function generate_footer(config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
-  local footer = { '', '', 'neovim loaded ' .. utils.get_packages_count() .. ' packages' }
+  local package_manager_stats = utils.get_package_manager_stats()
+  local footer = {}
+  if package_manager_stats.name == 'lazy' then
+    footer = {
+      '',
+      '',
+      'Startuptime: ' .. package_manager_stats.time .. ' ms',
+      'Plugins: '
+        .. package_manager_stats.loaded
+        .. ' loaded / '
+        .. package_manager_stats.count
+        .. ' installed',
+    }
+  else
+    footer = {
+      '',
+      'neovim loaded ' .. package_manager_stats.count .. ' plugins',
+    }
+  end
   if config.footer then
     if type(config.footer) == 'function' then
       footer = config.footer()
