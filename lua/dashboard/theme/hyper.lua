@@ -77,10 +77,24 @@ local function load_packages(config)
     return
   end
 
-  local lines = {
-    '',
-    'neovim loaded ' .. utils.get_packages_count() .. ' packages',
-  }
+  local package_manager_stats = utils.get_package_manager_stats()
+  local lines = {}
+  if package_manager_stats.name == 'lazy' then
+    lines = {
+      '',
+      'Startuptime: ' .. package_manager_stats.time .. ' ms',
+      'Plugins: '
+        .. package_manager_stats.loaded
+        .. ' loaded / '
+        .. package_manager_stats.count
+        .. ' installed',
+    }
+  else
+    lines = {
+      '',
+      'neovim loaded ' .. package_manager_stats.count .. ' plugins',
+    }
+  end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(lines))

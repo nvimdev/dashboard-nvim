@@ -112,18 +112,22 @@ function utils.get_mru_list()
   return mru
 end
 
-function utils.get_packages_count()
-  local count = 0
+function utils.get_package_manager_stats()
+  local package_manager_stats = { name = '', count = 0, loaded = 0, time = 0 }
   ---@diagnostic disable-next-line: undefined-global
   if packer_plugins then
+    package_manager_stats.name = 'packer'
     ---@diagnostic disable-next-line: undefined-global
-    count = #vim.tbl_keys(packer_plugins)
+    package_manager_stats.count = #vim.tbl_keys(packer_plugins)
   end
   local status, lazy = pcall(require, 'lazy')
   if status then
-    count = lazy.stats().count
+    package_manager_stats.name = 'lazy'
+    package_manager_stats.loaded = lazy.stats().loaded
+    package_manager_stats.count = lazy.stats().count
+    package_manager_stats.time = lazy.stats().startuptime
   end
-  return count
+  return package_manager_stats
 end
 
 --- generate an empty table by length
