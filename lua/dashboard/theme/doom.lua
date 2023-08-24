@@ -114,6 +114,9 @@ local function generate_center(config)
   local bottom = api.nvim_buf_line_count(config.bufnr)
   vim.defer_fn(function()
     local before = 0
+    if api.nvim_get_current_buf() ~= config.bufnr then
+      return
+    end
     api.nvim_create_autocmd('CursorMoved', {
       buffer = config.bufnr,
       callback = function()
