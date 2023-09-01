@@ -205,8 +205,6 @@ function db:load_theme(opts)
     change_to_vcs_root = opts.change_to_vcs_root,
   })
 
-  -- api.nvim_buf_set_name(self.bufnr, utils.gen_bufname(opts.buffer_name))
-
   if #opts.preview.command > 0 then
     config = vim.tbl_extend('force', config, opts.preview)
   end
@@ -252,7 +250,7 @@ function db:instance()
     return
   end
 
-  if vim.fn.line2byte('$') ~= -1 then
+  if not utils.buf_is_empty(0) then
     self.bufnr = api.nvim_create_buf(false, true)
   else
     self.bufnr = api.nvim_get_current_buf()
