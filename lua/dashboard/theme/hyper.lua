@@ -447,6 +447,13 @@ local function theme_instance(config)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false
     vim.bo[config.bufnr].modified = false
+    --defer until next event loop
+    vim.defer_fn(function()
+      api.nvim_exec_autocmds('User', {
+        pattern = 'DashboardLoaded',
+        modeline = false,
+      })
+    end, 0)
     project_delete()
   end)
 end
