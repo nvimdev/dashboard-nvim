@@ -122,6 +122,7 @@ local function project_list(config, callback)
 
   local function read_project(data)
     local res = {}
+    data = string.gsub(data, '%z', '')
     local dump = assert(loadstring(data))
     local list = dump()
     if list then
@@ -480,6 +481,13 @@ local function theme_instance(config)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false
     vim.bo[config.bufnr].modified = false
+    --defer until next event loop
+    vim.schedule(function()
+      api.nvim_exec_autocmds('User', {
+        pattern = 'DashboardLoaded',
+        modeline = false,
+      })
+    end)
     project_delete()
   end)
 end
