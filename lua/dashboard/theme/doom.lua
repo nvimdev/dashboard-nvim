@@ -201,12 +201,12 @@ local function theme_instance(config)
   api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
   api.nvim_set_option_value('modified', false, { buf = config.bufnr })
   --defer until next event loop
-  vim.defer_fn(function()
+  vim.schedule(function()
     api.nvim_exec_autocmds('User', {
       pattern = 'DashboardLoaded',
       modeline = false,
     })
-  end, 0)
+  end)
 end
 
 return setmetatable({}, {

@@ -448,12 +448,12 @@ local function theme_instance(config)
     vim.bo[config.bufnr].modifiable = false
     vim.bo[config.bufnr].modified = false
     --defer until next event loop
-    vim.defer_fn(function()
+    vim.schedule(function()
       api.nvim_exec_autocmds('User', {
         pattern = 'DashboardLoaded',
         modeline = false,
       })
-    end, 0)
+    end)
     project_delete()
   end)
 end
