@@ -61,13 +61,13 @@ function utils.center_align(tbl)
   return centered_lines
 end
 
-function utils.get_icon(ft)
+function utils.get_icon(filename)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
     vim.notify('[dashboard.nvim] not found nvim-web-devicons')
     return nil
   end
-  return devicons.get_icon_by_filetype(ft, { default = true })
+  return devicons.get_icon(filename, nil, { default = true })
 end
 
 function utils.read_project_cache(path)
