@@ -191,10 +191,10 @@ local function mru_list(config)
 end
 
 local function shuffle_table(table)
-    for i = #table, 2, -1 do
-        local j = math.random(i)
-        table[i], table[j] = table[j], table[i]
-    end
+  for i = #table, 2, -1 do
+    local j = math.random(i)
+    table[i], table[j] = table[j], table[i]
+  end
 end
 
 local function letter_hotkey(config)
