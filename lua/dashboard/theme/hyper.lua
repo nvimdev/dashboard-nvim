@@ -190,21 +190,55 @@ local function mru_list(config)
   return list, groups
 end
 
+local function shuffle_table(table)
+  for i = #table, 2, -1 do
+    local j = math.random(i)
+    table[i], table[j] = table[j], table[i]
+  end
+end
+
 local function letter_hotkey(config)
+  -- Reserve j, k keys to move up and down.
   local list = { 106, 107 }
+
   for _, item in pairs(config.shortcut or {}) do
     if item.key then
       table.insert(list, item.key:byte())
     end
   end
+
+  -- Create key table, fill it with unused characters.
+  local unused_keys = {}
+  -- a - z
+  for key = 97, 122 do
+    if not vim.tbl_contains(list, key) then
+      table.insert(unused_keys, key)
+    end
+  end
+  -- TODO: Allow generation of upper case characters?
+  --       Maybe upper characters could be used only after all lowercase ones are exhausted?
+  -- A - Z
+  -- for key = 65, 90 do
+  --   if not vim.tbl_contains(list, key) then
+  --     table.insert(unused_keys, key)
+  --   end
+  -- end
+
+  -- Shuffle the unused_keys table.
   math.randomseed(os.time())
+  shuffle_table(unused_keys)
+
+  local fallback_hotkey = 0
+
   return function()
-    while true do
-      local key = math.random(97, 122)
-      if not vim.tbl_contains(list, key) then
-        table.insert(list, key)
-        return string.char(key)
-      end
+    if #unused_keys ~= 0 then
+      -- Pop an unused key to use it as a hotkey.
+      local key = table.remove(unused_keys, 1)
+      return string.char(key)
+    else
+      -- All keys are already used. Fallback to the number generation.
+      fallback_hotkey = fallback_hotkey + 1
+      return fallback_hotkey
     end
   end
 end
