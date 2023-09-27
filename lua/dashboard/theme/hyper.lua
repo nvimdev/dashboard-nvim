@@ -207,6 +207,8 @@ local function letter_hotkey(config)
     end
   end
 
+  math.randomseed(os.time())
+
   -- Create key table, fill it with unused characters.
   local unused_keys = {}
   -- a - z
@@ -215,18 +217,23 @@ local function letter_hotkey(config)
       table.insert(unused_keys, key)
     end
   end
-  -- TODO: Allow generation of upper case characters?
-  --       Maybe upper characters could be used only after all lowercase ones are exhausted?
-  -- A - Z
-  -- for key = 65, 90 do
-  --   if not vim.tbl_contains(list, key) then
-  --     table.insert(unused_keys, key)
-  --   end
-  -- end
 
-  -- Shuffle the unused_keys table.
-  math.randomseed(os.time())
   shuffle_table(unused_keys)
+
+  local unused_uppercase_keys = {}
+  -- A - Z
+  for key = 65, 90 do
+    if not vim.tbl_contains(list, key) then
+      table.insert(unused_uppercase_keys, key)
+    end
+  end
+
+  shuffle_table(unused_uppercase_keys)
+
+  -- Push shuffled uppercase keys after the lowercase ones
+  for _, key in pairs(unused_uppercase_keys) do
+    table.insert(unused_keys, key)
+  end
 
   local fallback_hotkey = 0
 
