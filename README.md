@@ -141,9 +141,9 @@ all highlight groups
 DashboardHeader DashboardFooter
 -- Hyper theme
 DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
-DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShotCutIcon
+DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
 -- Doome theme
-DashboardDesc DashboardKey DashboardIcon DashboardShotCut
+DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 ```
 
 ### Example config
