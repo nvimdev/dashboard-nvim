@@ -1,4 +1,4 @@
-*dashboard.txt*          For Nvim 0.8.0         Last change: 2023 September 27
+*dashboard.txt*          For Nvim 0.8.0         Last change: 2023 September 30
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -162,9 +162,9 @@ all highlight groups
     DashboardHeader DashboardFooter
     -- Hyper theme
     DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
-    DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShotCutIcon
+    DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
     -- Doome theme
-    DashboardDesc DashboardKey DashboardIcon DashboardShotCut
+    DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 <
 
 
