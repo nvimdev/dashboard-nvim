@@ -1,4 +1,5 @@
 local api = vim.api
+local db = require('dashboard')
 
 local view = {}
 
@@ -74,31 +75,6 @@ function view:preview_events()
     end
   end
 
-  api.nvim_create_autocmd('BufEnter', {
-    group = group,
-    callback = function(opt)
-      local ignored = { 'prompt', 'nofile' }
-      if vim.tbl_contains(ignored, vim.bo[opt.buf].buftype) then
-        return
-      end
-
-      if
-        vim.bo[opt.buf].filetype ~= 'dashboard'
-        and opt.buf ~= self.preview_bufnr
-        and self.winid
-        and api.nvim_win_is_valid(self.preview_winid)
-      then
-        api.nvim_win_close(self.preview_winid, true)
-        self.preview_winid = nil
-        self.preview_bufnr = nil
-        self.main_winid = nil
-        self.win_width = nil
-        pcall(api.nvim_del_augroup_by_id, group)
-      end
-    end,
-    desc = 'Dashboard close or regenerate preview window',
-  })
-
   local function winresized()
     api.nvim_create_autocmd('WinResized', {
       group = group,
@@ -140,6 +116,21 @@ function view:open_preview(opt)
   end)
   self.main_winid = api.nvim_get_current_win()
   self.win_width = api.nvim_win_get_width(self.main_winid)
+
+  api.nvim_create_autocmd('BufWipeout', {
+    buffer = db.bufnr,
+    callback = function()
+      if self.winid and api.nvim_win_is_valid(self.preview_winid) then
+        api.nvim_win_close(self.preview_winid, true)
+        self.preview_winid = nil
+        self.preview_bufnr = nil
+        self.main_winid = nil
+        self.win_width = nil
+      end
+    end,
+    once = true,
+    desc = 'make preview have same lifetime with dashboard buffer',
+  })
 
   self:preview_events()
 end
