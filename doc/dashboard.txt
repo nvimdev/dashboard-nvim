@@ -1,4 +1,4 @@
-*dashboard.txt*           For Nvim 0.8.0          Last change: 2023 October 11
+*dashboard.txt*           For Nvim 0.8.0          Last change: 2023 October 16
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -30,7 +30,7 @@ Fancy and Blazing Fast start screen plugin of neovim  --------------------------
 
 >lua
     {
-      'glepnir/dashboard-nvim',
+      'nvimdev/dashboard-nvim',
       event = 'VimEnter',
       config = function()
         require('dashboard').setup {
@@ -45,7 +45,7 @@ Fancy and Blazing Fast start screen plugin of neovim  --------------------------
 
 >lua
     use {
-      'glepnir/dashboard-nvim',
+      'nvimdev/dashboard-nvim',
       event = 'VimEnter',
       config = function()
         require('dashboard').setup {
