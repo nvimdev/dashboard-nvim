@@ -18,7 +18,7 @@
 
 ```lua
 {
-  'glepnir/dashboard-nvim',
+  'nvimdev/dashboard-nvim',
   event = 'VimEnter',
   config = function()
     require('dashboard').setup {
@@ -33,7 +33,7 @@
 
 ```lua
 use {
-  'glepnir/dashboard-nvim',
+  'nvimdev/dashboard-nvim',
   event = 'VimEnter',
   config = function()
     require('dashboard').setup {
