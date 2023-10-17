@@ -94,10 +94,10 @@ local function generate_center(config)
         if config.center[idx].keymap then
           table.insert(virt_tbl, { config.center[idx].keymap, 'DashboardShortCut' })
         end
-        table.insert(
-          virt_tbl,
-          { ' [' .. config.center[idx].key .. ']', config.center[idx].key_hl or 'DashboardKey' }
-        )
+        table.insert(virt_tbl, {
+          string.format(config.center[idx].key_format or ' [%s]', config.center[idx].key),
+          config.center[idx].key_hl or 'DashboardKey',
+        })
         api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
           virt_text_pos = 'eol',
           virt_text = virt_tbl,
