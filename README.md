@@ -222,7 +222,7 @@ db.setup({
   }
 })
 ```
-</details
+</details>
 
 ### Changed
 
@@ -234,6 +234,24 @@ db.setup({
 
 - I will write a plugin to implement some popular terminal evaluators image protocol then I think
   can make it work with dashboard
+
+## Callbacks
+
+use `setup_callbacks` to setup functions called on entering / leaving dashboard
+
+```lua
+require('dashboard').setup {
+  -- config
+}
+require('dashboard').setup_callbacks({
+  enter = function()
+    -- called on entering dashboard
+  end,
+  leave = function()
+    -- called on leaving dashboard
+  end,
+})
+```
 
 # Backers
 
