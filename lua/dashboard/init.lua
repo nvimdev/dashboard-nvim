@@ -2,6 +2,7 @@ local api, fn = vim.api, vim.fn
 local utils = require('dashboard.utils')
 local ctx = {}
 local db = {}
+local callbacks = {}
 
 db.__index = db
 db.__newindex = function(t, k, v)
@@ -196,6 +197,9 @@ function db:get_opts(callback)
 end
 
 function db:load_theme(opts)
+  if callbacks.enter then
+    callbacks.enter()
+  end
   local config = vim.tbl_extend('force', opts.config, {
     path = cache_path(),
     bufnr = self.bufnr,
@@ -231,6 +235,9 @@ function db:load_theme(opts)
         self:restore_options()
         clean_ctx()
         pcall(api.nvim_del_autocmd, opt.id)
+        if callbacks.leave then
+          callbacks.leave()
+        end
       end
     end,
     desc = '[Dashboard] clean dashboard data reduce memory',
@@ -273,6 +280,10 @@ end
 function db.setup(opts)
   opts = opts or {}
   ctx.opts = vim.tbl_deep_extend('force', default_options(), opts)
+end
+
+function db.setup_callbacks(opts)
+  callbacks = opts
 end
 
 return setmetatable(ctx, db)
