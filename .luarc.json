@@ -1,0 +1,8 @@
+{
+    "workspace.library": [
+        "/Users/jack/.local/share/nvim/lazy/neodev.nvim/types/nightly",
+        "/opt/homebrew/Cellar/neovim/HEAD-4c32927/share/nvim/runtime/lua",
+        "/Users/jack/dev/nvim-plugins/dashboard-nvim/lua",
+        "${3rd}/luv/library"
+    ]
+}
