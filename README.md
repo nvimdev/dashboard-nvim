@@ -98,7 +98,7 @@ config = {
   -- action can be a functino type, e.g.
   -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
   project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
-  mru = { limit = 10, icon = 'your icon', label = '', },
+  mru = { limit = 10, icon = 'your icon', label = '', cwd_only = false },
   footer = {}, -- footer
 }
 ```

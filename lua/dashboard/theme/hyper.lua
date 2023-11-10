@@ -1,4 +1,4 @@
-local api, keymap = vim.api, vim.keymap
+local api, keymap, uv = vim.api, vim.keymap, vim.loop
 local utils = require('dashboard.utils')
 local ns = api.nvim_create_namespace('dashboard')
 
@@ -163,6 +163,7 @@ local function mru_list(config)
     limit = 10,
     icon_hl = 'DashboardMruIcon',
     label = ' Most Recent Files:',
+    cwd_only = false,
   }, config.mru or {})
 
   local list = {
@@ -171,6 +172,16 @@ local function mru_list(config)
 
   local groups = {}
   local mlist = utils.get_mru_list()
+
+  if config.mru.cwd_only then
+    local cwd = uv.cwd()
+    mlist = vim.tbl_filter(function(file)
+      local file_dir = vim.fn.fnamemodify(file, ':p:h')
+      if file_dir and cwd then
+        return file_dir:find(cwd, 1, true) == 1
+      end
+    end, mlist)
+  end
 
   for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local filename = vim.fn.fnamemodify(file, ':t')
