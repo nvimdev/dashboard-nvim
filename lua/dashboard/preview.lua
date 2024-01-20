@@ -133,6 +133,7 @@ function view:open_preview(opt)
   })
 
   self:preview_events()
+  return self.preview_bufnr, self.preview_winid
 end
 
 return view

@@ -485,7 +485,7 @@ local function theme_instance(config)
     if config.disable_move then
       utils.disable_move_key(config.bufnr)
     end
-    require('dashboard.theme.header').generate_header(config)
+    local _, preview_winid = require('dashboard.theme.header').generate_header(config)
     gen_shortcut(config)
     load_packages(config)
     gen_center(plist, config)
@@ -499,6 +499,14 @@ local function theme_instance(config)
     api.nvim_buf_set_lines(config.bufnr, 0, 0, false, fill)
     vim.bo[config.bufnr].modifiable = false
     vim.bo[config.bufnr].modified = false
+
+    -- re-set the position of preview window with top padding = size
+    if preview_winid then
+      local winconfig = api.nvim_win_get_config(preview_winid)
+      winconfig.row = size + 2
+      api.nvim_win_set_config(preview_winid, winconfig)
+    end
+
     --defer until next event loop
     vim.schedule(function()
       api.nvim_exec_autocmds('User', {
