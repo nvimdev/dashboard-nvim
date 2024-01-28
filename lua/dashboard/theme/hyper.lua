@@ -187,8 +187,10 @@ local function mru_list(config)
     local filename = vim.fn.fnamemodify(file, ':t')
     local icon, group = utils.get_icon(filename)
     icon = icon or ' '
-    if not utils.is_win then
-      file = file:gsub(vim.env.HOME, '~')
+    if config.mru.cwd_only then
+      file = vim.fn.fnamemodify(file, ':.')
+    elseif not utils.is_win then
+      file = vim.fn.fnamemodify(file, ':~')
     end
     file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
@@ -279,8 +281,15 @@ end
 local function map_key(config, key, content)
   keymap.set('n', key, function()
     local text = content or api.nvim_get_current_line()
-    local scol = utils.is_win and text:find('%w') or text:find('%p')
-    text = text:sub(scol)
+
+    if config.mru.cwd_only then
+      local scol = text:find(' %w')
+      text = text:sub(scol)
+    else
+      local scol = utils.is_win and text:find('%w') or text:find('%p')
+      text = text:sub(scol)
+    end
+
     local path = text:sub(1, text:find('%w(%s+)$'))
     path = vim.fs.normalize(path)
     if vim.fn.isdirectory(path) == 1 then
