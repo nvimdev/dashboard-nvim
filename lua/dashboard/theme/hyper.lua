@@ -284,15 +284,11 @@ local function map_key(config, key, content)
     local scol = utils.is_win and text:find('%w') or text:find('%p')
     local path = nil
 
-    if scol ~= nil then
-      local is_tilde = text:sub(scol, scol) == '~'
-
-      if not is_tilde then
-        scol = text:find('%w')
+    if scol ~= nil then -- scol == nil if pressing enter in empty space
+      if text:sub(scol, scol + 1) ~= '~/' then -- is relative path
+        scol = math.min(text:find('%w'), text:find('%p'))
       end
-
       text = text:sub(scol)
-
       path = text:sub(1, text:find('%w(%s+)$'))
       path = vim.fs.normalize(path)
     end
@@ -312,7 +308,7 @@ local function map_key(config, key, content)
         end
       end
     else
-      vim.cmd('edit ' .. path)
+      vim.cmd('edit ' .. vim.fn.fnameescape(path))
       local root = utils.get_vcs_root()
       if not config.change_to_vcs_root then
         return
