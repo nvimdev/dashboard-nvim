@@ -281,18 +281,25 @@ end
 local function map_key(config, key, content)
   keymap.set('n', key, function()
     local text = content or api.nvim_get_current_line()
+    local scol = utils.is_win and text:find('%w') or text:find('%p')
+    local path = nil
 
-    if config.mru.cwd_only then
-      local scol = text:find(' %w')
+    if scol ~= nil then
+      local is_tilde = text:sub(scol, scol) == '~'
+
+      if not is_tilde then
+        scol = text:find('%w')
+      end
+
       text = text:sub(scol)
-    else
-      local scol = utils.is_win and text:find('%w') or text:find('%p')
-      text = text:sub(scol)
+
+      path = text:sub(1, text:find('%w(%s+)$'))
+      path = vim.fs.normalize(path)
     end
 
-    local path = text:sub(1, text:find('%w(%s+)$'))
-    path = vim.fs.normalize(path)
-    if vim.fn.isdirectory(path) == 1 then
+    if path == nil then
+      vim.cmd('enew')
+    elseif vim.fn.isdirectory(path) == 1 then
       vim.cmd('lcd ' .. path)
       if type(config.project.action) == 'function' then
         config.project.action(path)
