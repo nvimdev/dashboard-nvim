@@ -9,7 +9,8 @@ local function generate_center(config)
     }
 
   local counts = {}
-  for _, item in pairs(center) do
+  local icons_offsets = {}
+  for item_idx, item in pairs(center) do
     local count = item.keymap and #item.keymap or 0
     local line = (item.icon or '') .. item.desc
 
@@ -39,6 +40,10 @@ local function generate_center(config)
       line = line .. (' '):rep(#item.keymap)
     end
 
+    if item.icon_offset then
+      table.insert(icons_offsets, { item_idx * 2 - 1, item.icon_offset })
+    end
+
     table.insert(lines, line)
     table.insert(lines, '')
     table.insert(counts, count)
@@ -56,6 +61,11 @@ local function generate_center(config)
 
   if not config.center then
     return
+  end
+
+  local col_offsets = {}
+  for _, offset in pairs(icons_offsets) do
+    col_offsets[offset[1] + first_line] = offset[2]
   end
 
   local ns = api.nvim_create_namespace('DashboardDoom')
@@ -129,7 +139,11 @@ local function generate_center(config)
           curline = curline + (before > curline and -1 or 1)
         end
         before = curline
-        api.nvim_win_set_cursor(config.winid, { curline, col })
+        if not col_offsets[curline] then
+          api.nvim_win_set_cursor(config.winid, { curline, col })
+        else
+          api.nvim_win_set_cursor(config.winid, { curline, col + col_offsets[curline] })
+        end
       end,
     })
   end, 0)

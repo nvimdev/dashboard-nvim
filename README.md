@@ -113,6 +113,7 @@ config = {
     {
       icon = '',
       icon_hl = 'group',
+      icon_offset = 0, -- Use for non-standard width glyphs to fix the cursor column position at the menu entry
       desc = 'description',
       desc_hl = 'group',
       key = 'shortcut key in dashboard buffer not keymap !!',
