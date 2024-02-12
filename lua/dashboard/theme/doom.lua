@@ -133,7 +133,7 @@ local function generate_center(config)
         -- FIX: #422: In Lua the length of a string is the numbers of bytes not
         -- the number of characters.
         local curline_str = api.nvim_buf_get_lines(config.bufnr, curline - 1, curline, false)[1]
-        local delta = curline_str:len() - vim.api.nvim_strwidth(curline_str) - 2
+        local delta = curline_str:len() - api.nvim_strwidth(curline_str) - 2
         api.nvim_win_set_cursor(config.winid, { curline, col + delta })
       end,
     })
