@@ -129,7 +129,12 @@ local function generate_center(config)
           curline = curline + (before > curline and -1 or 1)
         end
         before = curline
-        api.nvim_win_set_cursor(config.winid, { curline, col })
+
+        -- FIX: #422: In Lua the length of a string is the numbers of bytes not
+        -- the number of characters.
+        local curline_str = api.nvim_buf_get_lines(config.bufnr, curline - 1, curline, false)[1]
+        local delta = curline_str:len() - api.nvim_strwidth(curline_str) - 2
+        api.nvim_win_set_cursor(config.winid, { curline, col + delta })
       end,
     })
   end, 0)
