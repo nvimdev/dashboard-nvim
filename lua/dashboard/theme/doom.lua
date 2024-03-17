@@ -16,6 +16,7 @@ local function generate_center(config)
     if item.key then
       line = line .. (' '):rep(#item.key + 4)
       count = count + #item.key + 3
+      local desc = 'Dashboard-action: ' .. item.desc:gsub('^%s+', '')
       keymap.set('n', item.key, function()
         if type(item.action) == 'string' then
           local dump = loadstring(item.action)
@@ -27,7 +28,7 @@ local function generate_center(config)
         elseif type(item.action) == 'function' then
           item.action()
         end
-      end, { buffer = config.bufnr, nowait = true, silent = true })
+      end, { buffer = config.bufnr, nowait = true, silent = true, desc = desc })
     end
 
     if item.keymap then
