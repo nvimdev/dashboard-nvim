@@ -1,4 +1,4 @@
-local api = vim.api
+local api, keymap = vim.api, vim.keymap
 local utils = require('dashboard.utils')
 
 local function generate_center(config)
@@ -16,23 +16,19 @@ local function generate_center(config)
     if item.key then
       line = line .. (' '):rep(#item.key + 4)
       count = count + #item.key + 3
-      if type(item.action) == 'string' then
-        vim.keymap.set('n', item.key, function()
+      local desc = 'Dashboard-action: ' .. item.desc:gsub('^%s+', '')
+      keymap.set('n', item.key, function()
+        if type(item.action) == 'string' then
           local dump = loadstring(item.action)
           if not dump then
             vim.cmd(item.action)
           else
             dump()
           end
-        end, { buffer = config.bufnr, nowait = true, silent = true })
-      elseif type(item.action) == 'function' then
-        vim.keymap.set(
-          'n',
-          item.key,
-          item.action,
-          { buffer = config.bufnr, nowait = true, silent = true }
-        )
-      end
+        elseif type(item.action) == 'function' then
+          item.action()
+        end
+      end, { buffer = config.bufnr, nowait = true, silent = true, desc = desc })
     end
 
     if item.keymap then
@@ -140,7 +136,7 @@ local function generate_center(config)
     })
   end, 0)
 
-  vim.keymap.set('n', config.confirm_key or '<CR>', function()
+  keymap.set('n', config.confirm_key or '<CR>', function()
     local curline = api.nvim_win_get_cursor(0)[1]
     local index = pos_map[curline - first_line]
     if index and config.center[index].action then
