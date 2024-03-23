@@ -498,7 +498,9 @@ local function theme_instance(config)
       utils.disable_move_key(config.bufnr)
     end
     require('dashboard.theme.header').generate_header(config)
-    gen_shortcut(config)
+    if not config.shortcut or not vim.tbl_isempty(config.shortcut) then
+      gen_shortcut(config)
+    end
     load_packages(config)
     gen_center(plist, config)
     gen_footer(config)
