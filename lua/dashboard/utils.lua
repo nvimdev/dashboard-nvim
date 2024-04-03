@@ -172,4 +172,25 @@ function utils.buf_is_empty(bufnr)
     and vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == ''
 end
 
+local last_footer_size = nil
+function utils.add_update_footer_command(bufnr, footer)
+  vim.api.nvim_create_user_command('DashboardUpdateFooter', function(args)
+    if last_footer_size == nil then
+      last_footer_size = #footer
+    end
+
+    local first_line = vim.api.nvim_buf_line_count(bufnr)
+    vim.api.nvim_buf_set_lines(
+      bufnr,
+      first_line - last_footer_size,
+      -1,
+      false,
+      utils.center_align(args.fargs)
+    )
+    vim.bo[bufnr].modified = false
+
+    last_footer_size = #args.fargs -- For future calculation of size
+  end, { nargs = '*' })
+end
+
 return utils

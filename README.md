@@ -132,6 +132,7 @@ dashboard will use default highlight group like `DashboardKey/Icon/Desc` instead
 
 - `Dashboard` open dashboard
 - `DbProjectDelete count` delete project in cache works for hyper theme. count is number
+- `DashboardUpdateFooter` updates the content of the Footer
 
 ### Highlight
 
