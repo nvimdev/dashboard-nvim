@@ -193,6 +193,8 @@ local function generate_footer(config)
   for i = 1, #footer do
     api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
   end
+
+  utils.add_update_footer_command(config.bufnr, footer)
 end
 
 ---@private
