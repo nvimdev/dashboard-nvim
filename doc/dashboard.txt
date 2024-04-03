@@ -1,4 +1,4 @@
-*dashboard.txt*            For Nvim 0.8.0           Last change: 2024 March 26
+*dashboard.txt*            For Nvim 0.8.0           Last change: 2024 April 03
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -11,6 +11,7 @@ Table of Contents                                *dashboard-table-of-contents*
 4. Backers                                                 |dashboard-backers|
 5. Donate                                                   |dashboard-donate|
 6. LICENSE                                                 |dashboard-license|
+7. Links                                                     |dashboard-links|
 Fancy and Blazing Fast start screen plugin of neovim  ----------------------------------- -----------------------------------
                                       
 
@@ -152,6 +153,7 @@ COMMANDS ~
 
 - `Dashboard` open dashboard
 - `DbProjectDelete count` delete project in cache works for hyper theme. count is number
+- `DashboardUpdateFooter` updates the content of the Footer
 
 
 HIGHLIGHT ~
