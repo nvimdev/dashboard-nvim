@@ -180,6 +180,7 @@ function utils.add_update_footer_command(bufnr, footer)
     end
 
     local first_line = vim.api.nvim_buf_line_count(bufnr)
+    vim.bo[bufnr].modifiable = true
     vim.api.nvim_buf_set_lines(
       bufnr,
       first_line - last_footer_size,
@@ -187,6 +188,7 @@ function utils.add_update_footer_command(bufnr, footer)
       false,
       utils.center_align(args.fargs)
     )
+    vim.bo[bufnr].modifiable = false
     vim.bo[bufnr].modified = false
 
     last_footer_size = #args.fargs -- For future calculation of size
