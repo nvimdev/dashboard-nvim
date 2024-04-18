@@ -24,7 +24,7 @@ function au.register_lsp_root(path)
 
       -- callback hell holy shit but simply than write a async await lib
       -- also I don't link to add a thirdpart plugin. this is just a small code
-      uv.fs_open(path, 'rs+', 438, function(err, fd)
+      uv.fs_open(path, 'r+', 384, function(err, fd)
         assert(not err, err)
         uv.fs_fstat(fd, function(err, stat)
           assert(not err, err)
