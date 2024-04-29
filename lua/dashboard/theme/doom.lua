@@ -117,6 +117,11 @@ local function generate_center(config)
     api.nvim_create_autocmd('CursorMoved', {
       buffer = config.bufnr,
       callback = function()
+        local buf = api.nvim_win_get_buf(0)
+        if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'dashboard' then
+          return
+        end
+
         local curline = api.nvim_win_get_cursor(0)[1]
         if curline < first_line + 1 then
           curline = bottom - 1
