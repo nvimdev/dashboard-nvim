@@ -1,4 +1,4 @@
-*dashboard.txt*            For Nvim 0.8.0           Last change: 2024 April 18
+*dashboard.txt*            For Nvim 0.8.0           Last change: 2024 April 29
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
