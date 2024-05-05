@@ -1,16 +1,16 @@
 -- version 0.2.3
 
-vim.api.nvim_create_augroup('dashboard', { clear = true })
+local g = vim.api.nvim_create_augroup('dashboard', { clear = true })
 
 vim.api.nvim_create_autocmd('StdinReadPre', {
-  group = 'dashboard',
+  group = g,
   callback = function()
     vim.g.read_from_stdin = 1
   end,
 })
 
 vim.api.nvim_create_autocmd('UIEnter', {
-  group = 'dashboard',
+  group = g,
   callback = function()
     if
       vim.fn.argc() == 0
