@@ -1,14 +1,22 @@
 -- version 0.2.3
-if vim.g.loaded_dashboard then
-  return
-end
 
-vim.g.loaded_dashboard = 1
+local g = vim.api.nvim_create_augroup('dashboard', { clear = true })
+
+vim.api.nvim_create_autocmd('StdinReadPre', {
+  group = g,
+  callback = function()
+    vim.g.read_from_stdin = 1
+  end,
+})
 
 vim.api.nvim_create_autocmd('UIEnter', {
-  group = vim.api.nvim_create_augroup('Dashboard', { clear = true }),
+  group = g,
   callback = function()
-    if vim.fn.argc() == 0 and vim.api.nvim_buf_get_name(0) == '' then
+    if
+      vim.fn.argc() == 0
+      and vim.api.nvim_buf_get_name(0) == ''
+      and vim.g.read_from_stdin == nil
+    then
       require('dashboard'):instance()
     end
   end,
