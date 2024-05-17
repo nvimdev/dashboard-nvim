@@ -1,11 +1,13 @@
 local api, lsp, uv = vim.api, vim.lsp, vim.loop
 local au = {}
+local get_lsp_clients = vim.fn.has('nvim-0.10') == 1 and vim.lsp.get_clients
+  or lsp.get_active_clients
 
 function au.register_lsp_root(path)
   api.nvim_create_autocmd('VimLeavePre', {
     callback = function()
       local projects = {}
-      for _, client in pairs(lsp.get_active_clients() or {}) do
+      for _, client in pairs(get_lsp_clients() or {}) do
         local root_dir = client.config.root_dir
         if root_dir and not vim.tbl_contains(projects, root_dir) then
           table.insert(projects, root_dir)
