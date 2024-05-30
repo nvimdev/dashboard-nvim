@@ -88,46 +88,34 @@ end
 
 function db:new_file()
   vim.cmd('enew')
-  if self.user_laststatus_value then
-    vim.opt_local.laststatus = self.user_laststatus_value
-    self.user_laststatus_value = nil
-  end
-
-  if self.user_tabline_value then
-    vim.opt_local.showtabline = self.user_showtabline_value
-    self.user_showtabline_value = nil
-  end
 end
 
--- cache the user options value restore after leave the dahsboard buffer
--- or use DashboardNewFile command
-function db:cache_ui_options(opts)
+function db:save_user_options()
+  self.user_cursor_line = vim.opt.cursorline:get()
+  self.user_laststatus_value = vim.opt.laststatus:get()
+  self.user_tabline_value = vim.opt.showtabline:get()
+end
+
+function db:set_ui_options(opts)
   if opts.hide.statusline then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    self.user_laststatus_value = vim.opt.laststatus:get()
     vim.opt.laststatus = 0
   end
   if opts.hide.tabline then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    self.user_tabline_value = vim.opt.showtabline:get()
     vim.opt.showtabline = 0
   end
 end
 
-function db:restore_options()
+function db:restore_user_options(opts)
   if self.user_cursor_line then
     vim.opt.cursorline = self.user_cursor_line
-    self.user_cursor_line = nil
   end
 
-  if self.user_laststatus_value then
+  if opts.hide.statusline and self.user_laststatus_value then
     vim.opt.laststatus = tonumber(self.user_laststatus_value)
-    self.user_laststatus_value = nil
   end
 
-  if self.user_tabline_value then
+  if opts.hide.tabline and self.user_tabline_value then
     vim.opt.showtabline = tonumber(self.user_tabline_value)
-    self.user_tabline_value = nil
   end
 end
 
@@ -210,7 +198,8 @@ function db:load_theme(opts)
   end
 
   require('dashboard.theme.' .. opts.theme)(config)
-  self:cache_ui_options(opts)
+
+  self:set_ui_options(opts)
 
   api.nvim_create_autocmd('VimResized', {
     buffer = self.bufnr,
@@ -222,13 +211,30 @@ function db:load_theme(opts)
 
   api.nvim_create_autocmd('BufEnter', {
     callback = function(opt)
+      if vim.bo.filetype == 'dashboard' then
+        self:set_ui_options(opts)
+        return
+      end
+
       local bufs = api.nvim_list_bufs()
+
       bufs = vim.tbl_filter(function(k)
         return vim.bo[k].filetype == 'dashboard'
       end, bufs)
+
+      -- restore the user's UI settings is no dashboard buffers are visible
+      local wins = api.nvim_tabpage_list_wins(0)
+      wins = vim.tbl_filter(function(k)
+        return vim.tbl_contains(bufs, api.nvim_win_get_buf(k))
+      end, wins)
+
+      if #wins == 0 then
+        self:restore_user_options(opts)
+      end
+
+      -- clean up if there are no dashboard buffers at all
       if #bufs == 0 then
         self:cache_opts()
-        self:restore_options()
         clean_ctx()
         pcall(api.nvim_del_autocmd, opt.id)
       end
@@ -259,7 +265,8 @@ function db:instance()
   self.winid = api.nvim_get_current_win()
   api.nvim_win_set_buf(self.winid, self.bufnr)
 
-  self.user_cursor_line = vim.opt.cursorline:get()
+  self:save_user_options()
+
   buf_local()
   if self.opts then
     self:load_theme(self.opts)
