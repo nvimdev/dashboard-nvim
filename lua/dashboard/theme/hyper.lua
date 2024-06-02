@@ -175,7 +175,7 @@ local function mru_list(config)
 
   if config.mru.cwd_only then
     local cwd = uv.cwd()
-    local sep = package.config:sub(1, 1) -- Get platform-specific directory separator
+    local sep = utils.is_win and '\\' or '/'
     local cwd_with_sep = cwd .. sep
     mlist = vim.tbl_filter(function(file)
       local file_dir = vim.fn.fnamemodify(file, ':p:h')
