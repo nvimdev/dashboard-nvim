@@ -178,7 +178,7 @@ local function mru_list(config)
     local sep = utils.is_win and '\\' or '/'
     local cwd_with_sep = cwd .. sep
     mlist = vim.tbl_filter(function(file)
-      local file_dir = vim.fn.fnamemodify(file, ':p:h')
+      local file_dir = vim.fn.fnamemodify(file, ':p:h') .. sep
       if file_dir and cwd then
         return file_dir:sub(1, #cwd_with_sep) == cwd_with_sep
       end
