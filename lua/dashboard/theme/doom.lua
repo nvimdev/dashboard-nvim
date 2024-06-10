@@ -118,7 +118,7 @@ local function generate_center(config)
       buffer = config.bufnr,
       callback = function()
         local buf = api.nvim_win_get_buf(0)
-        if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'dashboard' then
+        if vim.api.nvim_get_option_value('filetype', { buf = buf }) ~= 'dashboard' then
           return
         end
 
