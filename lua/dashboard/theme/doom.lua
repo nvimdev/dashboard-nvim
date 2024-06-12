@@ -118,7 +118,7 @@ local function generate_center(config)
       buffer = config.bufnr,
       callback = function()
         local buf = api.nvim_win_get_buf(0)
-        if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'dashboard' then
+        if vim.api.nvim_get_option_value('filetype', { buf = buf }) ~= 'dashboard' then
           return
         end
 
@@ -132,11 +132,14 @@ local function generate_center(config)
         end
         before = curline
 
-        -- FIX: #422: In Lua the length of a string is the numbers of bytes not
+        -- FIX: #422: In Lua the length of a string is the number of bytes not
         -- the number of characters.
         local curline_str = api.nvim_buf_get_lines(config.bufnr, curline - 1, curline, false)[1]
-        local delta = col_width - api.nvim_strwidth(curline_str:sub(1, col + 1))
-        api.nvim_win_set_cursor(config.winid, { curline, col + delta })
+        local offset = col_width - api.nvim_strwidth(curline_str:sub(1, col + 1))
+        if offset < 0 then
+          offset = 0
+        end
+        api.nvim_win_set_cursor(config.winid, { curline, col + offset })
       end,
     })
   end, 0)
