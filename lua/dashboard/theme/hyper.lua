@@ -174,13 +174,11 @@ local function mru_list(config)
   local mlist = utils.get_mru_list()
 
   if config.mru.cwd_only then
-    local cwd = uv.cwd()
-    local sep = '/'
-    local cwd_with_sep = cwd .. sep
+    local cwd_filtered = uv.cwd():gsub('[\\/]', '')
     mlist = vim.tbl_filter(function(file)
-      local file_dir = vim.fn.fnamemodify(file, ':p:h') .. sep
-      if file_dir and cwd then
-        return file_dir:sub(1, #cwd_with_sep) == cwd_with_sep
+      local file_dir_filtered = vim.fn.fnamemodify(file, ':p:h'):gsub('[\\/]', '')
+      if file_dir_filtered and cwd_filtered then
+        return file_dir_filtered:find(cwd_filtered, 1, true) == 1
       end
     end, mlist)
   end
