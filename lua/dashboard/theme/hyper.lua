@@ -175,7 +175,7 @@ local function mru_list(config)
 
   if config.mru.cwd_only then
     local cwd = uv.cwd()
-    local sep = (utils.is_win and not vim.o.shellslash) and '\\' or '/'
+    local sep = '/'
     local cwd_with_sep = cwd .. sep
     mlist = vim.tbl_filter(function(file)
       local file_dir = vim.fn.fnamemodify(file, ':p:h') .. sep
