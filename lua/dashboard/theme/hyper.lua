@@ -174,11 +174,14 @@ local function mru_list(config)
   local mlist = utils.get_mru_list()
 
   if config.mru.cwd_only then
-    local cwd_filtered = uv.cwd():gsub('[\\/]', '')
+    local cwd = uv.cwd()
+    -- get separator from the first file
+    local sep = mlist[1]:match('[\\/]')
+    local cwd_with_sep = cwd:gsub('[\\/]', sep) .. sep
     mlist = vim.tbl_filter(function(file)
-      local file_dir_filtered = vim.fn.fnamemodify(file, ':p:h'):gsub('[\\/]', '')
-      if file_dir_filtered and cwd_filtered then
-        return file_dir_filtered:sub(1, #cwd_filtered) == cwd_filtered
+      local file_dir = vim.fn.fnamemodify(file, ':p:h')
+      if file_dir and cwd_with_sep then
+        return file_dir:sub(1, #cwd_with_sep) == cwd_with_sep
       end
     end, mlist)
   end
