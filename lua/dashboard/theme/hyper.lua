@@ -178,7 +178,7 @@ local function mru_list(config)
     mlist = vim.tbl_filter(function(file)
       local file_dir_filtered = vim.fn.fnamemodify(file, ':p:h'):gsub('[\\/]', '')
       if file_dir_filtered and cwd_filtered then
-        return file_dir_filtered:find(cwd_filtered, 1, true) == 1
+        return file_dir_filtered:sub(1, #cwd_filtered) == cwd_filtered
       end
     end, mlist)
   end
