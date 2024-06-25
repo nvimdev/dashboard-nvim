@@ -64,7 +64,6 @@ end
 function utils.get_icon(filename)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
-    vim.notify('[dashboard.nvim] not found nvim-web-devicons')
     return nil
   end
   return devicons.get_icon(filename, nil, { default = true })
