@@ -36,6 +36,7 @@ local function default_options()
     theme = 'hyper',
     disable_move = false,
     shortcut_type = 'letter',
+    shuffle_letter = false,
     buffer_name = 'Dashboard',
     change_to_vcs_root = false,
     config = {
@@ -190,6 +191,7 @@ function db:load_theme(opts)
     winid = self.winid,
     confirm_key = opts.confirm_key or nil,
     shortcut_type = opts.shortcut_type,
+    shuffle_letter = opts.shuffle_letter,
     change_to_vcs_root = opts.change_to_vcs_root,
   })
 

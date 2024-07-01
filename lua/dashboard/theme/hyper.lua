@@ -216,6 +216,7 @@ end
 local function letter_hotkey(config)
   -- Reserve j, k keys to move up and down.
   local list = { 106, 107 }
+  local shuffle = config.shuffle_letter
 
   for _, item in pairs(config.shortcut or {}) do
     if item.key then
@@ -234,7 +235,7 @@ local function letter_hotkey(config)
     end
   end
 
-  shuffle_table(unused_keys)
+  if shuffle then shuffle_table(unused_keys) end
 
   local unused_uppercase_keys = {}
   -- A - Z
@@ -244,7 +245,7 @@ local function letter_hotkey(config)
     end
   end
 
-  shuffle_table(unused_uppercase_keys)
+  if shuffle then shuffle_table(unused_uppercase_keys) end
 
   -- Push shuffled uppercase keys after the lowercase ones
   for _, key in pairs(unused_uppercase_keys) do
