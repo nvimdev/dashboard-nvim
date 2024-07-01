@@ -235,7 +235,9 @@ local function letter_hotkey(config)
     end
   end
 
-  if shuffle then shuffle_table(unused_keys) end
+  if shuffle then
+    shuffle_table(unused_keys)
+  end
 
   local unused_uppercase_keys = {}
   -- A - Z
@@ -245,7 +247,9 @@ local function letter_hotkey(config)
     end
   end
 
-  if shuffle then shuffle_table(unused_uppercase_keys) end
+  if shuffle then
+    shuffle_table(unused_uppercase_keys)
+  end
 
   -- Push shuffled uppercase keys after the lowercase ones
   for _, key in pairs(unused_uppercase_keys) do
