@@ -137,7 +137,7 @@ local function generate_center(config)
         local curline_str = api.nvim_buf_get_lines(config.bufnr, curline - 1, curline, false)[1]
         local offset = col_width - api.nvim_strwidth(curline_str:sub(1, col + 1))
         if offset < 0 then
-          offset = 0
+          offset = -1
         end
         api.nvim_win_set_cursor(config.winid, { curline, col + offset })
       end,
