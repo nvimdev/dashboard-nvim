@@ -77,7 +77,6 @@ local function buf_local()
     ['filetype'] = 'dashboard',
     ['wrap'] = false,
     ['signcolumn'] = 'no',
-    ['winbar'] = '',
   }
   for opt, val in pairs(opts) do
     vim.opt_local[opt] = val
@@ -95,6 +94,7 @@ function db:save_user_options()
   self.user_cursor_line = vim.opt.cursorline:get()
   self.user_laststatus_value = vim.opt.laststatus:get()
   self.user_tabline_value = vim.opt.showtabline:get()
+  self.user_winbar_value = vim.opt.winbar:get()
 end
 
 function db:set_ui_options(opts)
@@ -103,6 +103,9 @@ function db:set_ui_options(opts)
   end
   if opts.hide.tabline then
     vim.opt.showtabline = 0
+  end
+  if opts.hide.winbar then
+    vim.opt.winbar = ''
   end
 end
 
@@ -117,6 +120,10 @@ function db:restore_user_options(opts)
 
   if opts.hide.tabline and self.user_tabline_value then
     vim.opt.showtabline = tonumber(self.user_tabline_value)
+  end
+
+  if opts.hide.winbar and self.user_winbar_value then
+    vim.opt.winbar = self.user_winbar_value
   end
 end
 
