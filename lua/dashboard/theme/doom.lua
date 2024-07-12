@@ -135,11 +135,12 @@ local function generate_center(config)
         -- FIX: #422: In Lua the length of a string is the number of bytes not
         -- the number of characters.
         local curline_str = api.nvim_buf_get_lines(config.bufnr, curline - 1, curline, false)[1]
-        local offset = col_width - api.nvim_strwidth(curline_str:sub(1, col + 1))
-        if offset < 0 then
-          offset = 0
+        local strwidth = api.nvim_strwidth(curline_str:sub(1, col + 1))
+        local col_with_offset = col + col_width - strwidth
+        if col_with_offset < 0 then
+          col_with_offset = 0
         end
-        api.nvim_win_set_cursor(config.winid, { curline, col + offset })
+        api.nvim_win_set_cursor(config.winid, { curline, col_with_offset })
       end,
     })
   end, 0)
