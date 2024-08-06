@@ -1,7 +1,7 @@
 local api, keymap = vim.api, vim.keymap
 local utils = require('dashboard.utils')
 
-local function generate_center(config)
+local function gen_center(config)
   local lines = {}
   local center = config.center
     or {
@@ -165,13 +165,18 @@ local function generate_center(config)
   end, { buffer = config.bufnr, nowait = true, silent = true })
 end
 
-local function generate_footer(config)
-  local first_line = api.nvim_buf_line_count(config.bufnr)
+local function load_packages(config)
+  local packages = config.packages or {
+    enable = true,
+  }
+  if not packages.enable then
+    return
+  end
+
   local package_manager_stats = utils.get_package_manager_stats()
-  local footer = {}
+  local lines = {}
   if package_manager_stats.name == 'lazy' then
-    footer = {
-      '',
+    lines = {
       '',
       'Startuptime: ' .. package_manager_stats.time .. ' ms',
       'Plugins: '
@@ -181,38 +186,52 @@ local function generate_footer(config)
         .. ' installed',
     }
   else
-    footer = {
+    lines = {
       '',
       'neovim loaded ' .. package_manager_stats.count .. ' plugins',
     }
   end
+
+  local first_line = api.nvim_buf_line_count(config.bufnr)
+  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(lines))
+
+  for i, _ in pairs(lines) do
+    api.nvim_buf_add_highlight(config.bufnr, 0, 'Comment', first_line + i - 1, 0, -1)
+  end
+
+  return lines
+end
+
+local function gen_footer(config)
+  local lines = {} ---@type table?
   if config.footer then
     if type(config.footer) == 'function' then
-      footer = config.footer()
+      lines = config.footer()
     elseif type(config.footer) == 'string' then
       local dump = loadstring(config.footer)
       if dump then
-        footer = dump()
+        lines = dump()
       end
     elseif type(config.footer) == 'table' then
-      footer = config.footer
+      lines = config.footer
     end
+    local first_line = api.nvim_buf_line_count(config.bufnr)
+    api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(lines))
+    for i = 1, #lines do
+      api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
+    end
+  else
+    lines = load_packages(config)
   end
-  api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, utils.center_align(footer))
-  for i = 1, #footer do
-    api.nvim_buf_add_highlight(config.bufnr, 0, 'DashboardFooter', first_line + i - 1, 0, -1)
-  end
-
-  utils.add_update_footer_command(config.bufnr, footer)
+  utils.add_update_footer_command(config.bufnr, lines) -- ?
 end
 
----@private
 local function theme_instance(config)
   require('dashboard.theme.header').generate_header(config)
-  generate_center(config)
-  generate_footer(config)
-  api.nvim_set_option_value('modifiable', false, { buf = config.bufnr })
-  api.nvim_set_option_value('modified', false, { buf = config.bufnr })
+  gen_center(config)
+  gen_footer(config)
+  vim.bo[config.bufnr].modifiable = false
+  vim.bo[config.bufnr].modified = false
   --defer until next event loop
   vim.schedule(function()
     api.nvim_exec_autocmds('User', {

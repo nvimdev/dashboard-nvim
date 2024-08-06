@@ -145,7 +145,7 @@ DashboardHeader DashboardFooter
 -- Hyper theme
 DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
 DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
--- Doome theme
+-- Doom theme
 DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 ```
 
