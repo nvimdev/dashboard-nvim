@@ -1,7 +1,7 @@
 local api, keymap = vim.api, vim.keymap
 local utils = require('dashboard.utils')
 
-local function gen_center(config)
+local function center_entry_list(config)
   local lines = {}
   local center = config.center
     or {
@@ -46,6 +46,12 @@ local function gen_center(config)
   for i, count in ipairs(counts) do
     lines[i] = lines[i]:sub(1, #lines[i] - count)
   end
+
+  return lines
+end
+
+local function gen_center(config)
+  local lines = center_entry_list(config)
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, lines)
