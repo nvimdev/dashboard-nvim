@@ -260,7 +260,7 @@ local function theme_instance(config)
   require('dashboard.theme.header').generate_header(config)
   vert_offset = api.nvim_buf_line_count(config.bufnr)
 
-  local lines = gen_center_base(config)
+  local lines = gen_center_base(config) or {}
   local footer_size = gen_footer(config)
   vertical_center(config)
   local actions_position_map = gen_center_highlights_and_keys(config, lines)
