@@ -105,7 +105,7 @@ local function gen_center_base(config)
   if not config.center then
     local msg = utils.center_align({ 'Please config your own center section', '' })
     api.nvim_buf_set_lines(config.bufnr, vert_offset, -1, false, msg)
-    return
+    return {}
   end
 
   local lines = gen_center_icons_and_descriptions(config)
@@ -271,7 +271,7 @@ local function theme_instance(config)
 
   vim.bo[config.bufnr].modifiable = false
   vim.bo[config.bufnr].modified = false
-  --defer until next event loop
+  -- defer until next event loop
   vim.schedule(function()
     api.nvim_exec_autocmds('User', {
       pattern = 'DashboardLoaded',
