@@ -123,6 +123,7 @@ config = {
     },
   },
   footer = {},
+  vertical_center = true, -- Center the Dashboard on the vertical (from top to bottom)
 }
 ```
 
