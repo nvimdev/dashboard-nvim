@@ -243,7 +243,7 @@ local function gen_footer(config)
 end
 
 local function vertical_center(config)
-  if config.vertical_center == false then
+  if config.vertical_center ~= true then
     return
   end
 
