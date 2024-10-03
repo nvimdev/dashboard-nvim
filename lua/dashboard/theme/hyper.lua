@@ -267,6 +267,14 @@ local function letter_hotkey(config)
   end
 end
 
+local function number_hotkey()
+  local start = 0
+  return function()
+    start = start + 1
+    return start
+  end
+end
+
 local function gen_hotkey(config)
   if config.shortcut_type == 'number' then
     return number_hotkey()
