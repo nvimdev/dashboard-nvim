@@ -10,32 +10,32 @@ local function generate_center(config)
 
   local counts = {}
   for _, item in pairs(center) do
-    local count = item.keymap and #item.keymap or 0
-    local line = (item.icon or '') .. item.desc
-
-    if item.key then
-      line = line .. (' '):rep(#item.key + 4)
-      count = count + #item.key + 3
-      local desc = 'Dashboard-action: ' .. item.desc:gsub('^%s+', '')
-      keymap.set('n', item.key, function()
-        if type(item.action) == 'string' then
-          local dump = loadstring(item.action)
-          if not dump then
-            vim.cmd(item.action)
-          else
-            dump()
-          end
-        elseif type(item.action) == 'function' then
-          item.action()
-        end
-      end, { buffer = config.bufnr, nowait = true, silent = true, desc = desc })
-    end
-
-    if item.keymap then
-      line = line .. (' '):rep(#item.keymap)
-    end
-
     if item.cond == nil or item.cond then
+      local count = item.keymap and #item.keymap or 0
+      local line = (item.icon or '') .. item.desc
+
+      if item.key then
+        line = line .. (' '):rep(#item.key + 4)
+        count = count + #item.key + 3
+        local desc = 'Dashboard-action: ' .. item.desc:gsub('^%s+', '')
+        keymap.set('n', item.key, function()
+          if type(item.action) == 'string' then
+            local dump = loadstring(item.action)
+            if not dump then
+              vim.cmd(item.action)
+            else
+              dump()
+            end
+          elseif type(item.action) == 'function' then
+            item.action()
+          end
+        end, { buffer = config.bufnr, nowait = true, silent = true, desc = desc })
+      end
+
+      if item.keymap then
+        line = line .. (' '):rep(#item.keymap)
+      end
+
       table.insert(lines, line)
       table.insert(lines, '')
       table.insert(counts, count)
