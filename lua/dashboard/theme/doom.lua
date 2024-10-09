@@ -9,7 +9,8 @@ local function generate_center(config)
     }
 
   local counts = {}
-  for _, item in pairs(center) do
+  local to_remove = {}
+  for i, item in pairs(center) do
     if item.cond == nil or item.cond then
       local count = item.keymap and #item.keymap or 0
       local line = (item.icon or '') .. item.desc
@@ -40,7 +41,13 @@ local function generate_center(config)
       table.insert(lines, '')
       table.insert(counts, count)
       table.insert(counts, 0)
+    else
+      table.insert(to_remove, i)
     end
+  end
+
+  for i = #to_remove, 1, -1 do
+    table.remove(center, to_remove[i])
   end
 
   lines = utils.element_align(lines)
