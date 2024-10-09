@@ -35,10 +35,12 @@ local function generate_center(config)
       line = line .. (' '):rep(#item.keymap)
     end
 
-    table.insert(lines, line)
-    table.insert(lines, '')
-    table.insert(counts, count)
-    table.insert(counts, 0)
+    if item.cond == nil or item.cond then
+      table.insert(lines, line)
+      table.insert(lines, '')
+      table.insert(counts, count)
+      table.insert(counts, 0)
+    end
   end
 
   lines = utils.element_align(lines)
