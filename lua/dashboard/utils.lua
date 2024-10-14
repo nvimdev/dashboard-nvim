@@ -62,6 +62,13 @@ function utils.center_align(tbl)
 end
 
 function utils.get_icon(filename)
+  -- prefer mini.icons
+  local _, mini_icons = pcall(require, "mini.icons")
+  ---@diagnostic disable-next-line: undefined-field
+  if _G.MiniIcons then -- `_G.MiniIcons` is a better check to see if the module is setup
+    return mini_icons.get("file", filename)
+  end
+
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
     return nil
