@@ -354,6 +354,9 @@ local function gen_center(plist, config)
 
   local start_col = plist[plist_len + 2]:find('[^%s]') - 1
   local _, scol = plist[2]:find('%S')
+  if scol == nil then
+    scol = 0
+  end
 
   local hotkey = gen_hotkey(config)
 
