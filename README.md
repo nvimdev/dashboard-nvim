@@ -50,7 +50,6 @@ use {
 
 ```lua
 theme = 'hyper' --  theme is doom and hyper default is hyper
-disable_move    --  default is false disable move keymap for hyper
 shortcut_type   --  shorcut type 'letter' or 'number'
 shuffle_letter  --  default is true, shortcut 'letter' will be randomize, set to false to have ordered letter.
 change_to_vcs_root -- default is false,for open file in hyper mru. it will change to the root of vcs
