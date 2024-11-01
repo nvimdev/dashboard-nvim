@@ -164,7 +164,12 @@ local function mru_list(config)
     icon_hl = 'DashboardMruIcon',
     label = ' Most Recent Files:',
     cwd_only = false,
+    enable = true,
   }, config.mru or {})
+
+  if not config.mru.enable then
+    return {}, {}
+  end
 
   local list = {
     config.mru.icon .. config.mru.label,
@@ -352,10 +357,18 @@ local function gen_center(plist, config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  local start_col = plist[plist_len + 2]:find('[^%s]') - 1
+  if not config.project.enable and not config.mru.enable then
+    return
+  end
+
   local _, scol = plist[2]:find('%S')
   if scol == nil then
     scol = 0
+  end
+
+  local start_col = scol
+  if config.mru.enable then
+    start_col = plist[plist_len + 2]:find('[^%s]') - 1
   end
 
   local hotkey = gen_hotkey(config)
