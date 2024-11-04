@@ -120,6 +120,7 @@ config = {
       key_hl = 'group',
       key_format = ' [%s]', -- `%s` will be substituted with value of `key`
       action = '',
+      cond = nil, -- if a condition is given, show item if condition is true
     },
   },
   footer = {},
@@ -218,6 +219,13 @@ db.setup({
         keymap = 'SPC f d',
         key_format = ' %s', -- remove default surrounding `[]`
         action = 'lua print(3)'
+      },
+      {
+        icon = " ",
+        desc = " git",
+        key = "g"
+        action = "Neogit",
+        cond = cwd_is_git_repo() -- pass in a boolean value or define a custom function and call it
       },
     },
     footer = {}  --your footer
