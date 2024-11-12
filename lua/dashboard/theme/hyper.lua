@@ -326,7 +326,7 @@ local function map_key(config, key, content)
         end
       end
     else
-      vim.cmd('edit ' .. path)
+      vim.cmd('edit ' .. vim.fn.fnameescape(path))
       local root = utils.get_vcs_root()
       if not config.change_to_vcs_root then
         return
