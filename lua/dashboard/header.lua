@@ -109,13 +109,13 @@ local function parse_flf_header(sigil_string)
     if i == 6 then
       fig_header['comment_lines'] = tonumber(v)
     end
-    if i == 6 then
+    if i == 7 then
       fig_header['print_direction'] = tonumber(v)
     end
-    if i == 6 then
+    if i == 8 then
       fig_header['full_layout'] = tonumber(v)
     end
-    if i == 6 then
+    if i == 9 then
       fig_header['codetag_count'] = tonumber(v)
     end
     i = i + 1
