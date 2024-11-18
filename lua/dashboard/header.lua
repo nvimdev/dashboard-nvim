@@ -120,18 +120,21 @@ local function parse_flf_header(sigil_string)
     end
     i = i + 1
   end
-  print(' ')
   return fig_header
 end
 
 -- WARN :This is by no means full support for fliglet fonts.
 local function flf_table_gen(font_type)
   local flf_table = {}
-  local flf = io.open(font_type, 'r')
   local flf_header = nil
-  local value = flf:read('*l')
   local i = 1
   local byte = 32 -- start byte offsest to ascii space
+  local flf, flf_err = io.open(font_type, 'r')
+  if flf_err then
+    print(flf_err)
+    return default_header()
+  end
+  local value = flf:read('*l')
 
   while value do
     if flf_header == nil then
@@ -169,7 +172,7 @@ end
 
 local function custom_header(input, font_type)
   local input_bytes = string_to_bytes_list(input)
-  local font_path = './fonts/' .. font_type .. '.flf'
+  local font_path = utils.path_join(utils.get_plugin_path(), 'fonts', (font_type .. '.flf'))
   local tbl, head = flf_table_gen(font_path)
   local output = {}
   for i = 1, head['height'] do
@@ -177,7 +180,6 @@ local function custom_header(input, font_type)
     for _, v in pairs(input_bytes) do
       output[i] = output[i] .. tbl[v][i]
     end
-    print(output[i])
   end
   return output
 end
@@ -209,7 +211,6 @@ local function generate_header(config)
     else
       header = default_header()
     end
-    print(header)
     api.nvim_buf_set_lines(config.bufnr, 0, -1, false, utils.center_align(header))
 
     for i, _ in ipairs(header) do

@@ -8,6 +8,10 @@ function utils.path_join(...)
   return table.concat({ ... }, path_sep)
 end
 
+function utils.get_plugin_path()
+  return debug.getinfo(1).source:sub(2):match('(.*/)')
+end
+
 function utils.element_align(tbl)
   local lens = {}
   vim.tbl_map(function(k)
