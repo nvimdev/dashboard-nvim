@@ -1,4 +1,4 @@
-*dashboard.txt*           For Nvim 0.8.0          Last change: 2024 October 14
+*dashboard.txt*          For Nvim 0.8.0          Last change: 2024 November 02
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -118,7 +118,7 @@ when use `hyper` theme the available options in `config` is
       -- action can be a functino type, e.g.
       -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
       project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
-      mru = { limit = 10, icon = 'your icon', label = '', cwd_only = false },
+      mru = { enable = true, limit = 10, icon = 'your icon', label = '', cwd_only = false },
       footer = {}, -- footer
     }
 <
