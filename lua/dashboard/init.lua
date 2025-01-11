@@ -40,10 +40,12 @@ local function default_options()
     buffer_name = 'Dashboard',
     change_to_vcs_root = false,
     config = {
-      week_header = {
-        enable = false,
-        concat = nil,
-        append = nil,
+      header = {
+        type = 'defualt', --defualt, week, or custom
+        text = 'Custom Header', --custom option
+        font = 'ANSI Shadow', --custom font option
+        concat = nil, --week option
+        append = nil, --week option
       },
     },
     hide = {

@@ -525,7 +525,7 @@ local function theme_instance(config)
     if config.disable_move then
       utils.disable_move_key(config.bufnr)
     end
-    require('dashboard.theme.header').generate_header(config)
+    require('dashboard.header').generate_header(config)
     if not config.shortcut or not vim.tbl_isempty(config.shortcut) then
       gen_shortcut(config)
     end
