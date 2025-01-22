@@ -97,7 +97,7 @@ config = {
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
   -- limit how many projects list, action when you press key or enter it will run this action.
-  -- action can be a functino type, e.g.
+  -- action can be a function type, e.g.
   -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
   project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
   mru = { enable = true, limit = 10, icon = 'your icon', label = '', cwd_only = false },
@@ -124,6 +124,7 @@ config = {
     },
   },
   footer = {},
+  vertical_center = false, -- Center the Dashboard on the vertical (from top to bottom)
 }
 ```
 
@@ -146,7 +147,7 @@ DashboardHeader DashboardFooter
 -- Hyper theme
 DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
 DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
--- Doome theme
+-- Doom theme
 DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 ```
 

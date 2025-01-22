@@ -1,4 +1,4 @@
-*dashboard.txt*          For Nvim 0.8.0          Last change: 2024 November 02
+*dashboard.txt*           For Nvim 0.8.0          Last change: 2025 January 19
 
 ==============================================================================
 Table of Contents                                *dashboard-table-of-contents*
@@ -115,7 +115,7 @@ when use `hyper` theme the available options in `config` is
       },
       packages = { enable = true }, -- show how many plugins neovim loaded
       -- limit how many projects list, action when you press key or enter it will run this action.
-      -- action can be a functino type, e.g.
+      -- action can be a function type, e.g.
       -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
       project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
       mru = { enable = true, limit = 10, icon = 'your icon', label = '', cwd_only = false },
@@ -143,6 +143,7 @@ when use `doom` theme the available options in `config` is
         },
       },
       footer = {},
+      vertical_center = false, -- Center the Dashboard on the vertical (from top to bottom)
     }
 <
 
@@ -168,7 +169,7 @@ all highlight groups
     -- Hyper theme
     DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
     DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
-    -- Doome theme
+    -- Doom theme
     DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 <
 
