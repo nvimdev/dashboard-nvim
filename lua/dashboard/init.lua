@@ -37,7 +37,7 @@ local function default_options()
     disable_move = false,
     shortcut_type = 'letter',
     shuffle_letter = false,
-    letter_list = "abcdefghilmnopqrstuvwxyz",
+    letter_list = 'abcdefghilmnopqrstuvwxyz',
     buffer_name = 'Dashboard',
     change_to_vcs_root = false,
     config = {

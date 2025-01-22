@@ -234,7 +234,7 @@ local function letter_hotkey(config)
   -- Create key table, fill it with unused characters.
   local function collect_unused_keys(uppercase)
     local unused_keys = {}
-    for key in letter_list:gmatch(".") do
+    for key in letter_list:gmatch('.') do
       if uppercase then
         key = key:upper()
       end
