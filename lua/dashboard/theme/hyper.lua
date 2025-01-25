@@ -166,7 +166,12 @@ local function mru_list(config)
     icon_hl = 'DashboardMruIcon',
     label = ' Most Recent Files:',
     cwd_only = false,
+    enable = true,
   }, config.mru or {})
+
+  if not config.mru.enable then
+    return {}, {}
+  end
 
   local list = {
     config.mru.icon .. config.mru.label,
@@ -216,54 +221,50 @@ local function shuffle_table(table)
 end
 
 local function letter_hotkey(config)
-  -- Reserve j, k keys to move up and down.
-  local list = { 106, 107 }
+  local used_keys = {}
   local shuffle = config.shuffle_letter
+  local letter_list = config.letter_list
 
   for _, item in pairs(config.shortcut or {}) do
     if item.key then
-      table.insert(list, item.key:byte())
+      table.insert(used_keys, item.key:byte())
     end
   end
 
   math.randomseed(os.time())
 
   -- Create key table, fill it with unused characters.
-  local unused_keys = {}
-  -- a - z
-  for key = 97, 122 do
-    if not vim.tbl_contains(list, key) then
-      table.insert(unused_keys, key)
+  local function collect_unused_keys(uppercase)
+    local unused_keys = {}
+    for key in letter_list:gmatch('.') do
+      if uppercase then
+        key = key:upper()
+      end
+      key = key:byte()
+      if not vim.tbl_contains(used_keys, key) then
+        table.insert(unused_keys, key)
+      end
     end
-  end
-
-  if shuffle then
-    shuffle_table(unused_keys)
-  end
-
-  local unused_uppercase_keys = {}
-  -- A - Z
-  for key = 65, 90 do
-    if not vim.tbl_contains(list, key) then
-      table.insert(unused_uppercase_keys, key)
+    if shuffle then
+      shuffle_table(unused_keys)
     end
+    return unused_keys
   end
 
-  if shuffle then
-    shuffle_table(unused_uppercase_keys)
-  end
+  local unused_keys_lowercase = collect_unused_keys(false)
+  local unused_keys_uppercase = collect_unused_keys(true)
 
   -- Push shuffled uppercase keys after the lowercase ones
-  for _, key in pairs(unused_uppercase_keys) do
-    table.insert(unused_keys, key)
+  for _, key in pairs(unused_keys_uppercase) do
+    table.insert(unused_keys_lowercase, key)
   end
 
   local fallback_hotkey = 0
 
   return function()
-    if #unused_keys ~= 0 then
+    if #unused_keys_lowercase ~= 0 then
       -- Pop an unused key to use it as a hotkey.
-      local key = table.remove(unused_keys, 1)
+      local key = table.remove(unused_keys_lowercase, 1)
       return string.char(key)
     else
       -- All keys are already used. Fallback to the number generation.
@@ -354,8 +355,19 @@ local function gen_center(plist, config)
   local first_line = api.nvim_buf_line_count(config.bufnr)
   api.nvim_buf_set_lines(config.bufnr, first_line, -1, false, plist)
 
-  local start_col = plist[plist_len + 2]:find('[^%s]') - 1
+  if not config.project.enable and not config.mru.enable then
+    return
+  end
+
   local _, scol = plist[2]:find('%S')
+  if scol == nil then
+    scol = 0
+  end
+
+  local start_col = scol
+  if config.mru.enable then
+    start_col = plist[plist_len + 2]:find('[^%s]') - 1
+  end
 
   local hotkey = gen_hotkey(config)
 

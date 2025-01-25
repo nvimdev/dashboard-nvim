@@ -49,22 +49,23 @@ use {
 ## Options
 
 ```lua
-theme = 'hyper' --  theme is doom and hyper default is hyper
-disable_move    --  default is false disable move keymap for hyper
-shortcut_type   --  shorcut type 'letter' or 'number'
-shuffle_letter  --  default is true, shortcut 'letter' will be randomize, set to false to have ordered letter.
+theme = 'hyper'    -- theme is doom and hyper default is hyper
+disable_move       -- default is false disable move keymap for hyper
+shortcut_type      -- shortcut type 'letter' or 'number'
+shuffle_letter     -- default is false, shortcut 'letter' will be randomize, set to false to have ordered letter
+letter_list        -- default is a-z, excluding j and k
 change_to_vcs_root -- default is false,for open file in hyper mru. it will change to the root of vcs
-config = {},    --  config used for theme
+config = {},       -- config used for theme
 hide = {
-  statusline    -- hide statusline default is true
-  tabline       -- hide the tabline
-  winbar        -- hide winbar
+  statusline       -- hide statusline default is true
+  tabline          -- hide the tabline
+  winbar           -- hide winbar
 },
 preview = {
-  command       -- preview command
-  file_path     -- preview file path
-  file_height   -- preview file height
-  file_width    -- preview file width
+  command          -- preview command
+  file_path        -- preview file path
+  file_height      -- preview file height
+  file_width       -- preview file width
 },
 ```
 
@@ -97,10 +98,10 @@ config = {
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
   -- limit how many projects list, action when you press key or enter it will run this action.
-  -- action can be a functino type, e.g.
+  -- action can be a function type, e.g.
   -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
   project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
-  mru = { limit = 10, icon = 'your icon', label = '', cwd_only = false },
+  mru = { enable = true, limit = 10, icon = 'your icon', label = '', cwd_only = false },
   footer = {}, -- footer
 }
 ```
@@ -124,6 +125,7 @@ config = {
     },
   },
   footer = {},
+  vertical_center = false, -- Center the Dashboard on the vertical (from top to bottom)
 }
 ```
 
@@ -146,7 +148,7 @@ DashboardHeader DashboardFooter
 -- Hyper theme
 DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
 DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
--- Doome theme
+-- Doom theme
 DashboardDesc DashboardKey DashboardIcon DashboardShortCut
 ```
 

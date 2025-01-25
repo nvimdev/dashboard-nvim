@@ -37,6 +37,7 @@ local function default_options()
     disable_move = false,
     shortcut_type = 'letter',
     shuffle_letter = false,
+    letter_list = 'abcdefghilmnopqrstuvwxyz',
     buffer_name = 'Dashboard',
     change_to_vcs_root = false,
     config = {
@@ -199,6 +200,7 @@ function db:load_theme(opts)
     confirm_key = opts.confirm_key or nil,
     shortcut_type = opts.shortcut_type,
     shuffle_letter = opts.shuffle_letter,
+    letter_list = opts.letter_list,
     change_to_vcs_root = opts.change_to_vcs_root,
   })
 
