@@ -105,7 +105,11 @@ function utils.get_mru_list()
   local mru = {}
   for _, file in pairs(vim.v.oldfiles or {}) do
     if file and vim.fn.filereadable(file) == 1 then
-      table.insert(mru, file)
+      --- issue: https://github.com/nvimdev/dashboard-nvim/issues/338
+      local f = vim.fs.normalize(file, {})
+      if not vim.tbl_contains(mru, f, {}) then
+        table.insert(mru, f)
+      end
     end
   end
   return mru
