@@ -26,7 +26,7 @@ function utils.element_align(tbl)
 end
 
 function utils.get_max_len(contents)
-  assert(type(contents) == 'table', 'contents must be a table')
+  vim.validate('contents', contents, 'table')
   local cells = {}
   for _, v in pairs(contents) do
     table.insert(cells, vim.api.nvim_strwidth(v))
@@ -36,7 +36,7 @@ function utils.get_max_len(contents)
 end
 
 function utils.center_align(tbl)
-  assert(type(tbl) == 'table', 'tbl must be a table')
+  vim.validate('tbl', tbl, 'table')
   local function fill_sizes(lines)
     local fills = {}
     for _, line in pairs(lines) do
