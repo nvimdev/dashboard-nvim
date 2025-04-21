@@ -35,6 +35,7 @@ function utils.get_max_len(contents)
   return cells[#cells]
 end
 
+-- draw the graphics into the screen center
 function utils.center_align(tbl)
   vim.validate('tbl', tbl, 'table')
   local function fill_sizes(lines)
@@ -95,6 +96,7 @@ function utils.disable_move_key(bufnr)
   end, keys)
 end
 
+-- return the most recently files list
 function utils.get_mru_list()
   local mru = {}
   for _, file in pairs(vim.v.oldfiles or {}) do
@@ -107,8 +109,10 @@ end
 
 function utils.get_package_manager_stats()
   local package_manager_stats = { name = '', count = 0, loaded = 0, time = 0 }
+  ---@diagnostic disable-next-line: undefined-global
   if packer_plugins then
     package_manager_stats.name = 'packer'
+    ---@diagnostic disable-next-line: undefined-global
     package_manager_stats.count = #vim.tbl_keys(packer_plugins)
   end
   local status, lazy = pcall(require, 'lazy')
@@ -122,6 +126,7 @@ function utils.get_package_manager_stats()
   return package_manager_stats
 end
 
+--- generate an empty table by length
 function utils.generate_empty_table(length)
   local empty_tbl = {}
   if length == 0 then
@@ -181,7 +186,7 @@ function utils.add_update_footer_command(bufnr, footer)
     vim.bo[bufnr].modifiable = false
     vim.bo[bufnr].modified = false
 
-    last_footer_size = #args.fargs
+    last_footer_size = #args.fargs -- For future calculation of size
   end, { nargs = '*' })
 end
 
