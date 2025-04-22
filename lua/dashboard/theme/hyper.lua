@@ -89,6 +89,16 @@ local function load_packages(config)
         .. package_manager_stats.count
         .. ' installed',
     }
+  elseif package_manager_stats.name == 'strive' then
+    lines = {
+      '',
+      'Startuptime: ' .. package_manager_stats.time .. ' ms',
+      'Plugins: '
+        .. package_manager_stats.loaded
+        .. ' loaded / '
+        .. package_manager_stats.count
+        .. ' installed',
+    }
   else
     lines = {
       '',

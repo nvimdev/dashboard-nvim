@@ -123,6 +123,13 @@ function utils.get_package_manager_stats()
     package_manager_stats.count = stats.count
     package_manager_stats.time = stats.startuptime
   end
+  local ok = pcall(require, 'strive')
+  if ok then
+    package_manager_stats.name = 'strive'
+    package_manager_stats.loaded = vim.g.strive_loaded
+    package_manager_stats.time = vim.g.strive_startup_time
+    package_manager_stats.count = vim.g.strive_count
+  end
   return package_manager_stats
 end
 
@@ -164,7 +171,7 @@ end
 function utils.buf_is_empty(bufnr)
   bufnr = bufnr or 0
   return vim.api.nvim_buf_line_count(0) == 1
-      and vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == ''
+    and vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == ''
 end
 
 local last_footer_size = nil
