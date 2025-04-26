@@ -2,10 +2,20 @@ local uv = vim.loop
 local utils = {}
 
 utils.is_win = uv.os_uname().version:match('Windows')
+local is_nvim_11_or_newer = vim.version().minor >= 11 -- check nvim minor ver
 
 function utils.path_join(...)
   local path_sep = utils.is_win and '\\' or '/'
   return table.concat({ ... }, path_sep)
+end
+
+-- dynamically use correct validate form method
+local function validate_table(name, value)
+  if is_nvim_11_or_newer then
+    vim.validate(name, value, 'table')
+  else
+    vim.validate({ [name] = { value, 't' } })
+  end
 end
 
 function utils.element_align(tbl)
@@ -26,7 +36,7 @@ function utils.element_align(tbl)
 end
 
 function utils.get_max_len(contents)
-  vim.validate('contents', contents, 'table')
+  validate_table('contents', contents)
   local cells = {}
   for _, v in pairs(contents) do
     table.insert(cells, vim.api.nvim_strwidth(v))
@@ -37,7 +47,7 @@ end
 
 -- draw the graphics into the screen center
 function utils.center_align(tbl)
-  vim.validate('tbl', tbl, 'table')
+  validate_table('tbl', tbl)
   local function fill_sizes(lines)
     local fills = {}
     for _, line in pairs(lines) do
