@@ -2,7 +2,7 @@ local uv = vim.loop
 local utils = {}
 
 utils.is_win = uv.os_uname().version:match('Windows')
-local is_nvim_11_or_newer = vim.fn.has 'nvim-0.11' == 1
+local is_nvim_11_or_newer = vim.fn.has ('nvim-0.11') == 1
 
 function utils.path_join(...)
   local path_sep = utils.is_win and '\\' or '/'
