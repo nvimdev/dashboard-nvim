@@ -239,6 +239,12 @@ local function letter_hotkey(config)
     end
   end
 
+  local confirm_keys = type(config.confirm_key) == 'table' and config.confirm_key
+    or { config.confirm_key }
+  for _, key in ipairs(confirm_keys) do
+    table.insert(used_keys, key:byte())
+  end
+
   math.randomseed(os.time())
 
   -- Create key table, fill it with unused characters.
