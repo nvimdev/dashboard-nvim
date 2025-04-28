@@ -190,14 +190,13 @@ local function mru_list(config)
 
   if config.mru.cwd_only then
     local cwd = uv.cwd()
-    -- get separator from the first file
-    local sep = mlist[1]:match('[\\/]')
-    local cwd_with_sep = cwd:gsub('[\\/]', sep) .. sep
+    -- Normalize both paths to use forward slashes
+    cwd = vim.fn.fnamemodify(cwd, ':p')
     mlist = vim.tbl_filter(function(file)
-      local file_dir = vim.fn.fnamemodify(file, ':p:h')
-      if file_dir and cwd_with_sep then
-        return file_dir:sub(1, #cwd_with_sep) == cwd_with_sep
-      end
+      local file_path = vim.fn.fnamemodify(file, ':p')
+      local file_dir = vim.fn.fnamemodify(file_path, ':h') .. '/'
+      -- Ensure both paths end with separator and are normalized
+      return file_dir:sub(1, #cwd) == cwd
     end, mlist)
   end
 
