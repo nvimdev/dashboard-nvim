@@ -538,7 +538,11 @@ local function theme_instance(config)
     load_packages(config)
     gen_center(plist, config)
     gen_footer(config)
-    map_key(config, config.confirm_key or '<CR>')
+    local confirm_keys = type(config.confirm_key) == 'table' and config.confirm_key
+      or { config.confirm_key or '<CR>' }
+    for _, key in ipairs(confirm_keys) do
+      map_key(config, key)
+    end
     require('dashboard.events').register_lsp_root(config.path)
     local size = math.floor(vim.o.lines / 2)
       - math.ceil(api.nvim_buf_line_count(config.bufnr) / 2)
