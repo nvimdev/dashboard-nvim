@@ -138,9 +138,10 @@ local function project_list(config, callback)
     if list then
       list = vim.list_slice(list, #list - config.project.limit)
     end
+    local blank_size = config.shortcuts_left_side and 4 or 3
     for _, dir in ipairs(list or {}) do
       dir = dir:gsub(vim.env.HOME, '~')
-      table.insert(res, (' '):rep(3) .. ' ' .. dir)
+      table.insert(res, (' '):rep(blank_size) .. ' ' .. dir)
     end
 
     if #res == 0 then
@@ -200,6 +201,7 @@ local function mru_list(config)
     end, mlist)
   end
 
+  local blank_size = config.shortcuts_left_side and 4 or 3
   for _, file in pairs(vim.list_slice(mlist, 1, config.mru.limit)) do
     local filename = vim.fn.fnamemodify(file, ':t')
     local icon, group = utils.get_icon(filename)
@@ -211,7 +213,7 @@ local function mru_list(config)
     end
     file = icon .. ' ' .. file
     table.insert(groups, { #icon, group })
-    table.insert(list, (' '):rep(3) .. file)
+    table.insert(list, (' '):rep(blank_size) .. file)
   end
 
   if #list == 1 then
@@ -414,10 +416,17 @@ local function gen_center(plist, config)
     local text = api.nvim_buf_get_lines(config.bufnr, first_line + i - 1, first_line + i, false)[1]
     if text and text:find('%w') and not text:find('empty') then
       local key = tostring(hotkey())
-      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
-        virt_text = { { key, 'DashboardShortCut' } },
-        virt_text_pos = 'eol',
-      })
+      if config.shortcuts_left_side then
+        api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, start_col - 1, {
+          virt_text = { { key, 'DashboardShortCut' } },
+          virt_text_pos = 'inline',
+        })
+      else
+        api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i - 1, 0, {
+          virt_text = { { key, 'DashboardShortCut' } },
+          virt_text_pos = 'eol',
+        })
+      end
       map_key(config, key, text)
     end
   end
@@ -464,10 +473,17 @@ local function gen_center(plist, config)
     )[1]
     if text and text:find('%w') then
       local key = tostring(hotkey())
-      api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
-        virt_text = { { key, 'DashboardShortCut' } },
-        virt_text_pos = 'eol',
-      })
+      if config.shortcuts_left_side then
+        api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, start_col - 1, {
+          virt_text = { { key, 'DashboardShortCut' } },
+          virt_text_pos = 'inline',
+        })
+      else
+        api.nvim_buf_set_extmark(config.bufnr, ns, first_line + i + plist_len, 0, {
+          virt_text = { { key, 'DashboardShortCut' } },
+          virt_text_pos = 'eol',
+        })
+      end
       map_key(config, key, text)
     end
   end
