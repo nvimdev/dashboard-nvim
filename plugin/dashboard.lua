@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
   group = g,
   callback = function()
     for _, v in pairs(vim.v.argv) do
-      if v == "-" then
+      if v == '-' then
         vim.g.read_from_stdin = 1
         break
       end
