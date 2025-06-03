@@ -198,6 +198,7 @@ function db:load_theme(opts)
     bufnr = self.bufnr,
     winid = self.winid,
     confirm_key = opts.confirm_key or nil,
+    shortcuts_left_side = opts.shortcuts_left_side,
     shortcut_type = opts.shortcut_type,
     shuffle_letter = opts.shuffle_letter,
     letter_list = opts.letter_list,
