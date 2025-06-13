@@ -93,7 +93,8 @@ when use `hyper` theme the available options in `config` is
 config = {
   shortcut = {
     -- action can be a function type
-    { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
+    -- if hide == true, prevents the shortcut from being shown on the dashboard (defaults to false)
+    { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key', hide = boolean },
   },
   packages = { enable = true }, -- show how many plugins neovim loaded
   -- limit how many projects list, action when you press key or enter it will run this action.
