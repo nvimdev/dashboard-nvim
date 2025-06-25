@@ -6,9 +6,9 @@
 | ---   | ---   |
 | <center><img src="https://user-images.githubusercontent.com/41671631/215015845-b13343c4-427e-45d6-9f92-267ab909eff1.png" width=80% height=80%/></center>|<center> <img src="https://user-images.githubusercontent.com/41671631/214518543-d7d6afbf-f405-4a6f-a505-568c5a101e92.png" width=80% height=80%/> </center>|
 
-# Feature
+# Features
 
-- Low memory usage. dashboard does not store the all user configs in memory like header etc these string will take some memory. now it will be clean after you open a file. you can still use dashboard command to open a new one , then dashboard will read the config from cache.
+- Low memory usage. Dashboard does not store all user configs in memory (header, etc), these strings will take up some memory. Now it will be cleaned up after you open a file. You can still use the dashboard command to reopen dashboard, it will read the config file from cache.
 - Blazing fast
 
 
@@ -20,11 +20,9 @@
 {
   'nvimdev/dashboard-nvim',
   event = 'VimEnter',
-  config = function()
-    require('dashboard').setup {
-      -- config
-    }
-  end,
+  opts = {
+    -- config
+  }
   dependencies = { {'nvim-tree/nvim-web-devicons'}}
 }
 ```
