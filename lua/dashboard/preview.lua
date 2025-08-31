@@ -68,7 +68,9 @@ function view:preview_events()
         local new_win = vim.tbl_filter(function(k)
           return k ~= self.main_winid and k ~= self.preview_winid
         end, wins)[1]
-        winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
+        if type(winconfig.col) == 'table' and type(winconfig.col[false]) == 'number' then
+            winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
+        end
         api.nvim_win_set_config(self.preview_winid, winconfig)
         self.win_width = cur_width
       end
