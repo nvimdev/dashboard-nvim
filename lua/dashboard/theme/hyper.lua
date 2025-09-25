@@ -316,12 +316,17 @@ local function map_key(config, key, content)
       end
       text = text:sub(scol)
       path = text:sub(1, text:find('%w(%s+)$'))
+      if string.find(path, '[%]%[]') ~= nil then
+        vim.notify('Brackets in path names are not currently supported', vim.log.levels.ERROR)
+        return
+      end
       path = vim.fs.normalize(path)
     end
 
     if path == nil then
       vim.cmd('enew')
     elseif vim.fn.isdirectory(path) == 1 then
+      path = vim.fn.fnameescape(path)
       vim.cmd('lcd ' .. path)
       if type(config.project.action) == 'function' then
         config.project.action(path)
