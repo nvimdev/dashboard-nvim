@@ -16,11 +16,13 @@ local function gen_shortcut(config)
 
   local lines = ''
   for _, item in pairs(shortcut) do
-    local str = item.icon and item.icon .. item.desc or item.desc
-    if item.key then
-      str = str .. '[' .. item.key .. ']'
+    if not item.hide then
+      local str = item.icon and item.icon .. item.desc or item.desc
+      if item.key then
+        str = str .. '[' .. item.key .. ']'
+      end
+      lines = lines .. '  ' .. str
     end
-    lines = lines .. '  ' .. str
   end
 
   local first_line = api.nvim_buf_line_count(config.bufnr)
