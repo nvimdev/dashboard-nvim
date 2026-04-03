@@ -140,6 +140,20 @@ function utils.get_package_manager_stats()
     package_manager_stats.time = vim.g.strive_startup_time
     package_manager_stats.count = vim.g.strive_count
   end
+  if package_manager_stats.name == '' and vim.pack and type(vim.pack.get) == 'function' then
+    local ok, plugins = pcall(vim.pack.get, nil, { info = false })
+    if ok and type(plugins) == 'table' and #plugins > 0 then
+      package_manager_stats.name = 'vim.pack'
+      package_manager_stats.count = #plugins
+      local loaded = 0
+      for _, plugin in ipairs(plugins) do
+        if plugin.active then
+          loaded = loaded + 1
+        end
+      end
+      package_manager_stats.loaded = loaded
+    end
+  end
   return package_manager_stats
 end
 
