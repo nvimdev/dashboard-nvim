@@ -69,7 +69,7 @@ function view:preview_events()
           return k ~= self.main_winid and k ~= self.preview_winid
         end, wins)[1]
         if type(winconfig.col) == 'table' and type(winconfig.col[false]) == 'number' then
-            winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
+          winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
         end
         api.nvim_win_set_config(self.preview_winid, winconfig)
         self.win_width = cur_width
