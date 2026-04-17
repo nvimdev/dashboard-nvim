@@ -117,6 +117,50 @@ function utils.get_mru_list()
   return mru
 end
 
+local function get_nixvim_full_stats()
+  local nix_pack_dir = nil
+  for path in vim.o.packpath:gmatch('[^,]+') do
+    if path:find('-vim-pack-dir', 1, true) then
+      nix_pack_dir = path .. '/pack/myNeovimPackages'
+      break
+    end
+  end
+
+  if not nix_pack_dir then
+    return { count = 0, loaded = 0 }
+  end
+
+  local function scan_dir(type)
+    local count, loaded = 0, 0
+    local handle = uv.fs_scandir(nix_pack_dir .. '/' .. type)
+    if not handle then
+      return count, loaded
+    end
+    while true do
+      local name = uv.fs_scandir_next(handle)
+      if not name then
+        break
+      end
+      count = count + 1
+      for _, rtp_path in ipairs(vim.api.nvim_list_runtime_paths()) do
+        if rtp_path:find(name, 1, true) and not rtp_path:match('/after$') then
+          loaded = loaded + 1
+          break
+        end
+      end
+    end
+    return count, loaded
+  end
+
+  local start_total, start_loaded = scan_dir('start')
+  local opt_total, opt_loaded = scan_dir('opt')
+
+  return {
+    count = start_total + opt_total,
+    loaded = start_loaded + opt_loaded,
+  }
+end
+
 function utils.get_package_manager_stats()
   local package_manager_stats = { name = '', count = 0, loaded = 0, time = 0 }
   ---@diagnostic disable-next-line: undefined-global
@@ -153,6 +197,16 @@ function utils.get_package_manager_stats()
       end
       package_manager_stats.loaded = loaded
     end
+  end
+  if
+    package_manager_stats.name == ''
+    and not utils.is_win
+    and vim.o.packpath:match('/nix/store/.*%-vim%-pack%-dir') ~= nil
+  then
+    local nixvim_stats = get_nixvim_full_stats()
+    package_manager_stats.name = 'nixvim'
+    package_manager_stats.count = nixvim_stats.count
+    package_manager_stats.loaded = nixvim_stats.loaded
   end
   return package_manager_stats
 end
