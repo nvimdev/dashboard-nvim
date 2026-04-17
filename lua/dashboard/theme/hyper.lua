@@ -176,6 +176,7 @@ local function mru_list(config)
     label = ' Most Recent Files:',
     cwd_only = false,
     enable = true,
+    excluded_paths = {},
   }, config.mru or {})
 
   if not config.mru.enable then
@@ -198,6 +199,21 @@ local function mru_list(config)
       local file_dir = vim.fn.fnamemodify(file_path, ':h') .. '/'
       -- Ensure both paths end with separator and are normalized
       return file_dir:sub(1, #cwd) == cwd
+    end, mlist)
+  end
+
+  if next(config.mru.excluded_paths) ~= nil then -- check if table exists
+    mlist = vim.tbl_filter(function(file)
+      local file_path = vim.fn.fnamemodify(file, ':p')
+      local file_dir = vim.fn.fnamemodify(file_path, ':h') .. '/'
+      for _, exclude in ipairs(config.mru.excluded_paths) do
+        local exclude_path = vim.fn.fnamemodify(exclude, ':p')
+        local exclude_dir = vim.fn.fnamemodify(exclude_path, ':h') .. '/'
+        if file_dir:sub(1, #exclude_dir) == exclude_dir then
+          return false
+        end
+      end
+      return true
     end, mlist)
   end
 
