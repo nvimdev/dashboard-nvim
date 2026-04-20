@@ -525,22 +525,58 @@ local function project_delete()
       vim.schedule_wrap(function(data)
         local dump = assert(loadstring(data))
         local list = dump()
-        local count = tonumber(args.args)
-        if vim.tbl_count(list) < count then
-          return
+
+        local function write_list_to_file(new_list)
+          local str = 'return ' .. vim.inspect(new_list)
+          local handle = io.open(path, 'w+')
+          if not handle then
+            return
+          end
+          handle:write(str)
+          handle:close()
         end
-        list = vim.list_slice(list, count + 1)
-        local str = string.dump(assert(loadstring('return ' .. vim.inspect(list))))
-        local handle = io.open(path, 'w+')
-        if not handle then
-          return
+
+        if args.args == '' then
+          vim.ui.select(list, { prompt = 'Select projects to delete:' }, function(selected_item)
+            if selected_item then
+              local index_to_remove = -1
+              for i, item in ipairs(list) do
+                if item == selected_item then
+                  index_to_remove = i
+                  break
+                end
+              end
+
+              if index_to_remove ~= -1 then
+                table.remove(list, index_to_remove)
+                write_list_to_file(list)
+                vim.notify('Project deleted', vim.log.levels.INFO)
+              end
+            end
+          end)
+        else
+          -- In case if we want the old func
+          local count = tonumber(args.args)
+          if count then
+            if vim.tbl_count(list) < count then
+              vim.notify(
+                'the list has fewer projects than the number you provided',
+                vim.log.levels.WARN
+              )
+              return
+            end
+          else
+            vim.notify('Invalid args!!', vim.log.levels.WARN)
+            return
+          end
+          list = vim.list_slice(list, count + 1)
+          write_list_to_file(list)
+          vim.notify(string.format('%d projects deleted', count), vim.log.levels.INFO)
         end
-        handle:write(str)
-        handle:close()
       end)
     )
   end, {
-    nargs = '+',
+    nargs = '?',
   })
 end
 
