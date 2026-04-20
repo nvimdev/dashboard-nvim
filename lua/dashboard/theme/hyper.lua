@@ -322,13 +322,13 @@ local function map_key(config, key, content)
     if path == nil then
       vim.cmd('enew')
     elseif vim.fn.isdirectory(path) == 1 then
-      vim.cmd('lcd ' .. path)
+      vim.cmd('lcd ' .. vim.fn.fnameescape(path))
       if type(config.project.action) == 'function' then
         config.project.action(path)
       elseif type(config.project.action) == 'string' then
         local dump = loadstring(config.project.action)
         if not dump then
-          vim.cmd(config.project.action .. path)
+          vim.cmd(config.project.action .. vim.fn.fnameescape(path))
         else
           dump(path)
         end
@@ -340,9 +340,9 @@ local function map_key(config, key, content)
         return
       end
       if #root > 0 then
-        vim.cmd('lcd ' .. vim.fn.fnamemodify(root[#root], ':h'))
+        vim.cmd('lcd ' .. vim.fn.fnameescape(vim.fn.fnamemodify(root[#root], ':h')))
       else
-        vim.cmd('lcd ' .. vim.fn.fnamemodify(path, ':h'))
+        vim.cmd('lcd ' .. vim.fn.fnameescape(vim.fn.fnamemodify(path, ':h')))
       end
     end
   end, { buffer = config.bufnr, silent = true, nowait = true })
